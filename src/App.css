@@ -61,7 +61,7 @@ body {
   line-height: 1.38;
   letter-spacing: normal;
   text-align: left;
-  color: #fff;
+  /* color: #fff; */
 }
 
 .hero_section_content p {
@@ -73,7 +73,7 @@ body {
   line-height: 1.56;
   letter-spacing: normal;
   text-align: left;
-  color: #cececf;
+  /* color: #cececf; */
   width: 93%;
   margin-bottom: 29px;
 }
@@ -591,14 +591,16 @@ body {
     rgba(255, 198, 48, 0.3) 82%
   );
   border-image-slice: 1;
-  background-image: linear-gradient(to bottom, #17171a, #17171a),
+  background-image:
+    linear-gradient(to bottom, #17171a, #17171a),
     linear-gradient(130deg, #a1853a 0%, rgba(255, 198, 48, 0.3) 82%);
   background-origin: border-box;
   background-clip: content-box, border-box;
 }
 
 .fast_tranSsaction_card:hover {
-  background-image: linear-gradient(to bottom, #17171a, #17171a),
+  background-image:
+    linear-gradient(to bottom, #17171a, #17171a),
     linear-gradient(130deg, #bd7f10 0%, #bd7f10 82%);
 }
 
@@ -1268,7 +1270,7 @@ body {
   margin-left: 8px;
 }
 .text-whte {
-  color: #f3f3f3 !important; ;
+  color: #f3f3f3 !important;
 }
 
 .secuirty_box_title {
