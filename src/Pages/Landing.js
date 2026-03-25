@@ -245,7 +245,7 @@ export default function Landing() {
             opacity: 0, // Fade out
             ease: Power1.easeInOut,
           },
-          `+=${vsOpts.duration / vsOpts.slides.length}` // Delay for smooth transition
+          `+=${vsOpts.duration / vsOpts.slides.length}`, // Delay for smooth transition
         );
       } else {
         // Normal slide-up effect for all other slides
@@ -342,7 +342,7 @@ export default function Landing() {
             <div className="row">
               <div className="col-lg-6 " data-aos="fade-right">
                 <div className="hero_section_content ">
-                  <h1>
+                  <h1 >
                     {t("start_trading")}
                     <span
                       className={`crypto-span mar-lft  ${
