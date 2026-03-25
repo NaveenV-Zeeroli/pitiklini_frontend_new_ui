@@ -342,7 +342,7 @@ export default function Landing() {
             <div className="row">
               <div className="col-lg-6 " data-aos="fade-right">
                 <div className="hero_section_content ">
-                  <h1 >
+                  <h1 className="text-primary">
                     {t("start_trading")}
                     <span
                       className={`crypto-span mar-lft  ${
@@ -354,7 +354,7 @@ export default function Landing() {
                       {t("pitiklini")}
                     </span>
                   </h1>
-                  <p>{t("seamless_crypto_trading")}</p>
+                  <p className="text-primary">{t("seamless_crypto_trading")}</p>
                   <Link
                     to={loginCheck ? "/dashboard" : "/register"}
                     className="get_started_btn"
