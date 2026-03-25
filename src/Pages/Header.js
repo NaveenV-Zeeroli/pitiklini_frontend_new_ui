@@ -5,6 +5,8 @@ import Darklogo from "../assets/footer_logo.webp";
 import UserIcon from "../assets/account.webp";
 import Moment from "moment";
 import { socket } from "../context/socket";
+import HeaderLogo from "../assets/header_logo.png";
+import GlobalIcon from "../assets/icons/global.svg";
 
 import {
   AppBar,
@@ -355,7 +357,7 @@ const Header = () => {
                           />
                         ) : (
                           <img
-                            src={Lightlogo}
+                            src={HeaderLogo}
                             className="img-fluid"
                             alt="logo"
                           />
@@ -363,7 +365,7 @@ const Header = () => {
                       </Link>
 
                       <div className={`menu_new_typr ${classes.appBarItems}`}>
-                        <div class="btn-group more-wrapper">
+                        {/* <div class="btn-group more-wrapper">
                           <button
                             class="btn btn-secondary btn-lg dropdown-toggle more-select"
                             type="button"
@@ -395,7 +397,7 @@ const Header = () => {
                                   </div>
                                 </div>
                               </a>
-                              {/* <Link
+                               <Link
                                 to="/margin"
                                 className="nav-trade-links nav-trade-flex margin-cursor"
                               >
@@ -418,28 +420,52 @@ const Header = () => {
                                     </p>
                                   </div>
                                 </div>
-                              </Link> */}
+                              </Link>
                             </div>
                           </ul>
-                        </div>
+                        </div> */}
 
                         <Link
                           to="/market"
                           color="inherit"
-                          className="contact_button"
+                          className="contact_button px-4 uppercase font-bold"
                         >
                           {/* Market */}
                           {t("market")}
                         </Link>
+                        <Link
+                          to="/market"
+                          color="inherit"
+                          className="contact_button px-4 uppercase font-bold"
+                        >
+                          {/* Market */}
+                          {t("spot")}
+                        </Link>
+                        <Link
+                          to="/market"
+                          color="inherit"
+                          className="contact_button px-4 uppercase font-bold"
+                        >
+                          {/* Market */}
+                          {t("support")}
+                        </Link>
+                        <Link
+                          to="/market"
+                          color="inherit"
+                          className="contact_button px-4 uppercase font-bold"
+                        >
+                          {/* Market */}
+                          {t("blog")}
+                        </Link>
 
                         {/* {loginCheck ? ( */}
-                        <Link
+                        {/* <Link
                           to="/swap"
                           color="inherit"
-                          className="contact_button"
+                          className="contact_button  uppercase font-bold"
                         >
                           {t("convert")}
-                        </Link>
+                        </Link> */}
                         {/* ) : (
                           ""
                         )} */}
@@ -447,47 +473,47 @@ const Header = () => {
                         {/* <Link
                           to="/staking"
                           color="inherit"
-                          className="contact_button"
+                          className="contact_button uppercase font-bold"
                         >
                           Staking
                         </Link> */}
-                        <Link
+                        {/* <Link
                           to={isAuthenticated ? "/p2p" : "/login"}
                           color="inherit"
-                          className="contact_button"
+                          className="contact_button  uppercase font-bold"
                         >
                           {t("p2p")}
-                        </Link>
+                        </Link> */}
 
-                        <Link
+                        {/* <Link
                           to="/Checkout"
                           color="inherit"
-                          className="contact_button"
+                          className="contact_button  uppercase font-bold"
                         >
                           {t("fiat_deposit")}
-                        </Link>
+                        </Link> */}
 
-                        <Link
+                        {/* <Link
                           to="/internaltransfer"
                           color="inherit"
-                          className="contact_button"
+                          className="contact_button  uppercase font-bold"
                         >
                           {t("internal_transfer")}
                         </Link>
                         <Link
                           to="/fundtransfer"
                           color="inherit"
-                          className="contact_button"
+                          className="contact_button  uppercase font-bold"
                         >
                           {t("fundtranfer")}
                         </Link>
                         <Link
                           to="/recharge"
                           color="inherit"
-                          className="contact_button"
+                          className="contact_button  uppercase font-bold"
                         >
                           {t("recharge")}
-                        </Link>
+                        </Link> */}
 
                         {/* <GoogleTranslate />/ */}
                       </div>
@@ -696,7 +722,7 @@ const Header = () => {
                     {/* download */}
                     <div className="relative">
                       {/* Trigger dropdown on click */}
-                      <Link className="contact_button" onClick={toggleDropdown}>
+                      <Link className="mr-4" onClick={toggleDropdown}>
                         <img
                           src={require("../assets/Globe.png")}
                           width="28px"
@@ -823,8 +849,36 @@ const Header = () => {
                   </IconButton>
 
                   {/* {isAuthenticated ? ""  */}
+                   <div className="relative">
+                      {/* Trigger dropdown on click */}
+                      <Link className="contact_button" onClick={toggleDropdown}>
+                        <img
+                          src={GlobalIcon}
+                          width="22px"
+                          alt="Globe"
+                        />
+                      </Link>
 
-                  <div className={`menu_new_typr ${classes.appBarItems}`}>
+                      {/* Dropdown menu */}
+                      {isDropdownOpen && (
+                        <ul className="globe-lists">
+                          <li
+                            className="globe-options"
+                            onClick={() => handleLanguageChange("en")}
+                          >
+                            English
+                          </li>
+                          <li
+                            className="globe-options"
+                            onClick={() => handleLanguageChange("es")}
+                          >
+                            Spanish
+                          </li>
+                        </ul>
+                      )}
+                    </div>
+ 
+                  <div className={`flex justify-center rounded-[8px] px-4 ml-4 bg-primary text-black ${classes.appBarItems}`}>
                     {loginCheck ? (
                       ""
                     ) : (
@@ -832,11 +886,15 @@ const Header = () => {
                         <button className="head-btn-login">{t("login")}</button>
                       </Link>
                     )}
+                    <span className="text-black flex justify-center align-items-center">/</span>
                     {loginCheck ? (
                       ""
                     ) : (
+                      // <Link to="/register">
+                      //   <button className="head-btn">{t("register")}</button>
+                      // </Link>
                       <Link to="/register">
-                        <button className="head-btn">{t("register")}</button>
+                        <button className="head-btn capitalize">{t("signin")}</button>
                       </Link>
                     )}
                     {loginCheck ? (
@@ -911,33 +969,33 @@ const Header = () => {
                       ""
                     )}
 
-                    <span className="das mx-1">|</span>
 
                     {/* user profile */}
+                   
                     <>
-                      <h6
+                      {/* <h6
                         aria-controls="simple-menu"
                         aria-haspopup="true"
                         className=" head-drops cursor-pointer"
                         onClick={handleClick}
                       >
                         {loginCheck ? (
-                          // <img
-                          //   src={require("../assets/icons/profile_dark.webp")}
-                          //   width="30px"
-                          //   className="dark_display_none nav-primary-icons"
-                          // />
+                          <img
+                            src={require("../assets/icons/profile_dark.webp")}
+                            width="30px"
+                            className="dark_display_none nav-primary-icons"
+                          />
                           <span className="header-profile-wrap dark_display_none nav-primary-icons">
                             <i class="bi bi-person-circle"></i>
                           </span>
                         ) : (
                           ""
                         )}
-                        {/* <img
+                        <img
                           src={require("../assets/profile_dark.png")}
                           className="dark_profile "
-                        /> */}
-                      </h6>
+                        />
+                      </h6> */}
 
                       <Menu
                         id="simple-menu"
@@ -1107,34 +1165,7 @@ const Header = () => {
                       </Menu>
                     </>
 
-                    <div className="relative">
-                      {/* Trigger dropdown on click */}
-                      <Link className="contact_button" onClick={toggleDropdown}>
-                        <img
-                          src={require("../assets/Globe.png")}
-                          width="28px"
-                          alt="Globe"
-                        />
-                      </Link>
-
-                      {/* Dropdown menu */}
-                      {isDropdownOpen && (
-                        <ul className="globe-lists">
-                          <li
-                            className="globe-options"
-                            onClick={() => handleLanguageChange("en")}
-                          >
-                            English
-                          </li>
-                          <li
-                            className="globe-options"
-                            onClick={() => handleLanguageChange("es")}
-                          >
-                            Spanish
-                          </li>
-                        </ul>
-                      )}
-                    </div>
+                    
                     {/* download */}
                     {/* <Link
                       className="contact_button  nav-primary-icons margin-lr"
