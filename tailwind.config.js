@@ -21,6 +21,9 @@ module.exports = {
         "red-custom": "#E2464A",
         
       },
+      fontFamily: {
+        ibm: ["IBM Plex Sans", "sans-serif"],
+      },
     },
   },
   plugins: [],
