@@ -8,6 +8,8 @@ module.exports = {
         // Custom color names based on your requirements
         primary: "#BD7F10",
         secondary: "#FCFCFD",
+        black: "#18191D",
+        
 
         // Background with opacity (black at 50%)
         // You can use 'background' as a key name
@@ -16,6 +18,7 @@ module.exports = {
         // Custom semantic colors
         "green-custom": "#2FA766",
         "red-custom": "#E2464A",
+        
       },
     },
   },
