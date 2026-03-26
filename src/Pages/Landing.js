@@ -336,8 +336,31 @@ export default function Landing() {
           <Header />
         </section>
 
+<section className="fidex_hero_section">
+          <div className="container">
+            <div className="row">
+              <div className="">
+                <div className="hero_section_content my-20 w-full">
+                  <h1 className="text-secondary text-center text-[48px] mx-auto max-w-[750px]">
+                    {t("welcome_to")}
+                    <span
+                      className={`crypto-span mar-lft text-primary ${
+                        colorChanged
+                          ? "text-animate-inview text-animate"
+                          : "text-animate"
+                      }`}
+                    >
+                      {t("pitiklini")}
+                    </span>
+                  </h1>
+                  <p className="text-secondary text-[24px] text-center">{t("seize_the_moment")}</p>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </section>
         {/* hero */}
-        <section className="fidex_hero_section">
+        {/* <section className="fidex_hero_section">
           <div className="container">
             <div className="row">
               <div className="col-lg-6 " data-aos="fade-right">
@@ -366,13 +389,13 @@ export default function Landing() {
               </div>
               <div className="col-lg-6 flex-end " data-aos="fade-left">
                 <div className="hero_section_banner">
-                  {/* <img src={require("../assets/gif/mobile.gif")} /> */}
+                  {/* <img src={require("../assets/gif/mobile.gif")} /> 
                   <img src={require("../assets/new_hero.webp")} alt="" />
                 </div>
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* <section>
         <div className="morque_new_run">

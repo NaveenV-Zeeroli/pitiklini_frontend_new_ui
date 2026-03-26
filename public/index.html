@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon"  href="%PUBLIC_URL%/favicon.ico"  />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -31,6 +31,10 @@
 
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- larsseit font -->
     <link
@@ -78,7 +82,10 @@
       crossorigin="anonymous"
     ></script> -->
 
-    <script src="https://kit.fontawesome.com/d4d08ee551.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/d4d08ee551.js"
+      crossorigin="anonymous"
+    ></script>
 
     <!-- <script>
       AOS.init();
@@ -134,7 +141,7 @@
           get: function () {
             if (!e._h)
               throw new Error(
-                "[OpenWidget] You can't use getters before load."
+                "[OpenWidget] You can't use getters before load.",
               );
             return i(["get", c.call(arguments)]);
           },
@@ -143,13 +150,13 @@
           },
           init: function () {
             var n = t.createElement("script");
-            (n.async = !0),
+            ((n.async = !0),
               (n.type = "text/javascript"),
               (n.src = "https://cdn.openwidget.com/openwidget.js"),
-              t.head.appendChild(n);
+              t.head.appendChild(n));
           },
         };
-        !n.__ow.asyncInit && e.init(), (n.OpenWidget = n.OpenWidget || e);
+        (!n.__ow.asyncInit && e.init(), (n.OpenWidget = n.OpenWidget || e));
       })(window, document, [].slice);
     </script>
     <noscript
