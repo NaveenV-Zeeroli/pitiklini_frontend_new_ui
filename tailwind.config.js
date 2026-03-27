@@ -20,6 +20,9 @@ module.exports = {
         "green-custom": "#2FA766",
         "red-custom": "#E2464A",
       },
+      fontFamily: {
+        ibm: ["IBM Plex Sans", "sans-serif"],
+      },
     },
   },
   plugins: [],

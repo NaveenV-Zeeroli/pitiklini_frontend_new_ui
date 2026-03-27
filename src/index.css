@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,10 +7,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, a, button, input, div {
+  font-family: 'IBM Plex Sans', sans-serif !important;
 }
 
 :root {
-  --ff-primary: "IBM Plex Sans";
+  --ff-primary: 'IBM Plex Sans', sans-serif;
 
   --bgclr-primary: #ffc630;
   --clr-primary: #f3f3f3;

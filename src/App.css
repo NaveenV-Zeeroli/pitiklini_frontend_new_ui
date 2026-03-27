@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 /* @import url("https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap");
 */
 @import url("https://fonts.cdnfonts.com/css/satoshi");
@@ -123,7 +124,7 @@ body {
   border: 1px solid #ffc630;
   border: none;
   outline: none;
-  font-family: "Satoshi", sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif !important;
   color: #17171a;
   font-size: 16px;
   font-weight: 500;
@@ -222,7 +223,7 @@ body {
 .track > h1 {
   margin: 20px 0;
   font-size: 8rem;
-  font-family: Antonio;
+  font-family: 'IBM Plex Sans', sans-serif !important;
   -webkit-text-fill-color: rgba(255, 255, 255, 0);
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #f4955c;
@@ -337,7 +338,7 @@ body {
   padding: 8px 20px;
   border-radius: 46px;
   border: solid 1px #cececf;
-  font-family: "Satoshi", sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif !important;
   font-size: 14px;
   font-weight: 500;
   color: #cececf;
@@ -620,7 +621,7 @@ body {
 .advance-start-btn {
   border: none;
   outline: none;
-  font-family: "Satoshi", sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif !important;
   font-size: 16px;
   font-weight: 400;
   color: #cececf;
@@ -1383,7 +1384,7 @@ body {
   gap: 12px;
 }
 .low_line .verify_fail {
-  font-family: "Satoshi", sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif !important;
   font-size: 14px;
   color: #f84960;
 }
@@ -1391,12 +1392,12 @@ body {
   font-size: 20px;
 }
 .low_line .verify_medium {
-  font-family: "Satoshi", sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif !important;
   font-size: 14px;
   color: #ffaa5f;
 }
 .low_line .verify_success {
-  font-family: "Satoshi", sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif !important;
   font-size: 14px;
   color: #2ebd85;
 }
