@@ -45,8 +45,8 @@ const FeatureCards = () => {
 
   return (
     <div>
-      <div className="bg-[#0b0f19] min-h-screen p-10">
-        <h1 className="text-secondary font-family-ibm mb-10 text-center text-[48px] mx-auto max-w-[750px]">
+      <div className="bg-[#0b0f19] min-h-screen mt-10 p-10">
+        <h1 className="text-secondary font-family-ibm mb-10 mt-20 text-center text-[48px] mx-auto max-w-[750px]">
           {t("key_features")}
           <span className={`crypto-span mar-lft text-primary`}>
             {t("pitiklini")}

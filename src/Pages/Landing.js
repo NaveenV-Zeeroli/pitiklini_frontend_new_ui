@@ -16,6 +16,8 @@ import Email from "../assets/svg/email.svg";
 import FeatureCards from "./FeatureCards";
 import CryptoExchange from "./CryptoExchange";
 import CryptoJourney from "./CryptoJourney";
+import FAQ from "./FAQ";
+import Testimonials from "./Testimonials";
 
 export default function Landing() {
   const settings = {
@@ -416,8 +418,10 @@ export default function Landing() {
         </div>
 
         <FeatureCards />
+        <Testimonials />
         <CryptoExchange />
         <CryptoJourney />
+        <FAQ />
         {/* hero */}
         {/* <section className="fidex_hero_section">
           <div className="container">
@@ -612,7 +616,7 @@ export default function Landing() {
             </div>
         </section> */}
 
-        <section>
+        {/* <section>
           <div className="">
             <div className="marquee-container">
               {currencies.length > 0 && (
@@ -808,9 +812,9 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div> 
           </div>
-        </section>
+        </section> 
 
         <section ref={advanceTradeRef} className="advance_trade_section">
           <div className="container">
@@ -822,7 +826,7 @@ export default function Landing() {
               </p>
             </div>
 
-            {/* <div className="row adv_new_row" data-aos="fade-up"> */}
+           <div className="row adv_new_row" data-aos="fade-up">
             <div className="row adv_new_row">
               <div className="col-lg-4">
                 <div className="adv_card_main">
@@ -878,9 +882,9 @@ export default function Landing() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
-        <section className="down_new_main">
+        {/* <section className="down_new_main">
           <div className="container">
             <div className="row down_new_man">
               <div className="col-xl-4 col-lg-5  text-center">
@@ -957,9 +961,9 @@ export default function Landing() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
-        <section ref={secureRef} className="ready_hero_section">
+        {/* <section ref={secureRef} className="ready_hero_section">
           <div className="container">
             <div className="text-center">
               <div className="ready_main">
@@ -974,10 +978,10 @@ export default function Landing() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* footer */}
-        <section className="footer_section">
+        <section className="">
           <Footer />
         </section>
       </main>

@@ -6,7 +6,7 @@ const CryptoJourney = () => {
 
   return (
     <div className="p-10">
-      <div className="relative rounded-2xl border border-primary via-transparent to-yellow-500/40 hover:scale-105 transition-all duration-300">
+      <div className="relative rounded-2xl border border-primary via-transparent to-yellow-500/40">
         {/* Inner Card */}
         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-20 rounded-2xl h-full overflow-hidden">
           {/* Top Glow Line */}
@@ -23,14 +23,16 @@ const CryptoJourney = () => {
               className="w-[400px] h-[300px] object-contain drop-shadow-[0_0_20px_rgba(255,200,0,0.4)]"
             />
           </div>
-          <div className="flex flex-col h-full justify-center self-center">
+          <div className="flex flex-col h-full text-center justify-center self-center">
+            <p className="text-gray-400 text-sm mb-2">● {t("get_started")} </p>
+
             <p className="text-primary font-family-ibm mb-0 font-extrabold text-[40px]">
               {t("crypto_journey")}
             </p>
             <p className="text-secondary text-[20px] mt-7 mb-8 font-family-ibm">
               {t("experience_the_future")}{" "}
             </p>
-            <p className="bg-primary rounded-[8px] w-fit text-base font-family-ibm text-black px-4 py-4">
+            <p className="bg-primary rounded-[8px] w-fit text-base items-center mx-auto font-family-ibm text-black px-4 py-4">
               {t("get_started")}{" "}
             </p>
           </div>
