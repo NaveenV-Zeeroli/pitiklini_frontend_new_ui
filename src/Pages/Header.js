@@ -182,10 +182,12 @@ const Header = () => {
   useEffect(() => {
     // let userToken = localStorage.getItem("user_token");
     let userToken = sessionStorage.getItem("user_token");
-    if (userToken) {
+    if (true) { // Forced true for development
       setloginCheck(true);
-      verifyToken();
-      getProfile();
+      if (userToken) {
+        verifyToken();
+        getProfile();
+      }
       // getnotify();
     } else {
       setloginCheck(false);
