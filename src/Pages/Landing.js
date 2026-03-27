@@ -12,6 +12,10 @@ import apiService from "../core/service/detail";
 import { Link, useNavigate } from "react-router-dom";
 import { gsap, Elastic, Power1 } from "gsap";
 import Marquee from "react-marquee-slider";
+import Email from "../assets/svg/email.svg";
+import FeatureCards from "./FeatureCards";
+import CryptoExchange from "./CryptoExchange";
+import CryptoJourney from "./CryptoJourney";
 
 export default function Landing() {
   const settings = {
@@ -336,7 +340,7 @@ export default function Landing() {
           <Header />
         </section>
 
-<section className="fidex_hero_section">
+        <section className="fidex_hero_section">
           <div className="container">
             <div className="row">
               <div className="">
@@ -353,12 +357,67 @@ export default function Landing() {
                       {t("pitiklini")}
                     </span>
                   </h1>
-                  <p className="text-secondary text-[24px] text-center">{t("seize_the_moment")}</p>
+                  <p className="text-secondary text-[24px] mb-12 text-center">
+                    {t("seize_the_moment")}
+                  </p>
+                  <div className="flex w-full gap-4 justify-center mx-auto">
+                    <div className="flex gap-2 justify-start max-w-[300px] bg-gray rounded-[8px] py-4 px-8">
+                      <img src={Email} className="self-center" />
+                      <p className="text-primary self-center w-fit mb-0">
+                        {t("email_label")}{" "}
+                      </p>
+                      <span className="text-primary self-center w-fit">/</span>
+                      <p className="text-primary self-center w-fit">
+                        {t("phone_label")}{" "}
+                      </p>
+                    </div>
+                    <div className="flex bg-primary px-5 py-4 rounded-[8px]">
+                      <p className="text-black underline self-center w-fit mb-0">
+                        {t("email_label")}
+                      </p>
+                    </div>
                   </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
+        <div className="bg-black/35 w-full flex justify-center gap-[120px] py-6">
+          <div className="flex flex-col justify-center">
+            <p className="text-primary text-[40px] mb-0 font-bold">
+              17+<span className="text-[20px]">M</span>
+            </p>
+            <p className="text-secondary10 text-lg self-center w-fit mb-0">
+              {t("register_user")}
+            </p>
+          </div>
+          <div className="flex flex-col justify-center">
+            <p className="text-primary text-[40px] mb-0 font-bold">2500+</p>
+            <p className="text-secondary10 text-lg self-center w-fit mb-0">
+              {t("crypocurrentcies")}
+            </p>
+          </div>
+          <div className="flex flex-col justify-center">
+            <p className="text-primary text-[40px] mb-0 font-bold">
+              $6.62<span className="text-[20px]">M</span>
+            </p>
+            <p className="text-secondary10 text-lg self-center w-fit mb-0">
+              {t("trading_volume")}
+            </p>
+          </div>
+          <div className="flex flex-col justify-center">
+            <p className="text-primary text-[40px] mb-0 font-bold">
+              140+<span className="text-[20px]">M</span>
+            </p>
+            <p className="text-secondary10 text-lg self-center w-fit mb-0">
+              {t("countries")}
+            </p>
+          </div>
+        </div>
+
+        <FeatureCards />
+        <CryptoExchange />
+        <CryptoJourney />
         {/* hero */}
         {/* <section className="fidex_hero_section">
           <div className="container">
@@ -554,7 +613,7 @@ export default function Landing() {
         </section> */}
 
         <section>
-          <div className="morque_new_run">
+          <div className="">
             <div className="marquee-container">
               {currencies.length > 0 && (
                 <Marquee
