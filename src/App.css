@@ -11,6 +11,10 @@ body {
   /* background-color: #17171a !important; */
 }
 
+.font-family-ibm {
+  font-family: 'IBM Plex Sans', sans-serif !important;
+}
+
 .ui.dropdown .menu > .item > .label {
   display: none !important;
 }

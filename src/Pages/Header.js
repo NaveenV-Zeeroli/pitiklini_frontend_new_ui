@@ -5,7 +5,7 @@ import Darklogo from "../assets/footer_logo.webp";
 import UserIcon from "../assets/account.webp";
 import Moment from "moment";
 import { socket } from "../context/socket";
-import HeaderLogo from "../assets/header_logo.png";
+import HeaderLogo from "../assets/header_logo.svg";
 import GlobalIcon from "../assets/icons/global.svg";
 
 import {
@@ -851,36 +851,34 @@ const Header = () => {
                   </IconButton>
 
                   {/* {isAuthenticated ? ""  */}
-                   <div className="relative">
-                      {/* Trigger dropdown on click */}
-                      <Link className="contact_button" onClick={toggleDropdown}>
-                        <img
-                          src={GlobalIcon}
-                          width="22px"
-                          alt="Globe"
-                        />
-                      </Link>
+                  <div className="relative">
+                    {/* Trigger dropdown on click */}
+                    <Link className="contact_button" onClick={toggleDropdown}>
+                      <img src={GlobalIcon} width="22px" alt="Globe" />
+                    </Link>
 
-                      {/* Dropdown menu */}
-                      {isDropdownOpen && (
-                        <ul className="globe-lists">
-                          <li
-                            className="globe-options"
-                            onClick={() => handleLanguageChange("en")}
-                          >
-                            English
-                          </li>
-                          <li
-                            className="globe-options"
-                            onClick={() => handleLanguageChange("es")}
-                          >
-                            Spanish
-                          </li>
-                        </ul>
-                      )}
-                    </div>
- 
-                  <div className={`flex justify-center rounded-[8px] px-4 ml-4 bg-primary text-black ${classes.appBarItems}`}>
+                    {/* Dropdown menu */}
+                    {isDropdownOpen && (
+                      <ul className="globe-lists">
+                        <li
+                          className="globe-options"
+                          onClick={() => handleLanguageChange("en")}
+                        >
+                          English
+                        </li>
+                        <li
+                          className="globe-options"
+                          onClick={() => handleLanguageChange("es")}
+                        >
+                          Spanish
+                        </li>
+                      </ul>
+                    )}
+                  </div>
+
+                  <div
+                    className={`flex justify-center rounded-[8px] px-4 ml-4 bg-primary text-black ${classes.appBarItems}`}
+                  >
                     {loginCheck ? (
                       ""
                     ) : (
@@ -888,7 +886,9 @@ const Header = () => {
                         <button className="head-btn-login">{t("login")}</button>
                       </Link>
                     )}
-                    <span className="text-black flex justify-center align-items-center">/</span>
+                    <span className="text-black flex justify-center align-items-center">
+                      /
+                    </span>
                     {loginCheck ? (
                       ""
                     ) : (
@@ -896,7 +896,9 @@ const Header = () => {
                       //   <button className="head-btn">{t("register")}</button>
                       // </Link>
                       <Link to="/register">
-                        <button className="head-btn capitalize">{t("signin")}</button>
+                        <button className="head-btn capitalize">
+                          {t("signin")}
+                        </button>
                       </Link>
                     )}
                     {loginCheck ? (
@@ -971,9 +973,8 @@ const Header = () => {
                       ""
                     )}
 
-
                     {/* user profile */}
-                   
+
                     <>
                       {/* <h6
                         aria-controls="simple-menu"
@@ -1167,7 +1168,6 @@ const Header = () => {
                       </Menu>
                     </>
 
-                    
                     {/* download */}
                     {/* <Link
                       className="contact_button  nav-primary-icons margin-lr"
