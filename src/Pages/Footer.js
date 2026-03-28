@@ -4,6 +4,7 @@ import Twitter from "../assets/svg/twitter.svg";
 import Instagram from "../assets/svg/insta.svg";
 import Linkedin from "../assets/svg/linkedin.svg";
 import logo from "../assets/svg/logo.svg";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -57,7 +58,9 @@ const Footer = () => {
                 Customer Support
               </li>
               <li className="hover:text-white cursor-pointer">Tickets</li>
-              <li className="hover:text-white cursor-pointer">FAQs</li>
+              <Link to="/faq-page" color="inherit">
+                <li className="hover:text-white cursor-pointer">FAQs</li>
+              </Link>
             </ul>
           </div>
 

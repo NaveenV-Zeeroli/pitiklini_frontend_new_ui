@@ -90,6 +90,8 @@ import FeeSettings from "./Pages/FeeSettings";
 import NotificationHistory from "./Pages/NotificationHistory";
 import FundTransfer from "./Pages/FundTransfer";
 import UserRecharge from "./Pages/UserRecharge";
+import SupportPage from "./Pages/SupportPage";
+import FAQPage from "./Pages/FAQpage";
 
 function App() {
   const [favIconSite, setFaviconSite, favIconSiteref] = useState("");
@@ -108,16 +110,16 @@ function App() {
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
-    useEffect(() => {
-      const onBeforeUnload = (e) => {
-        e.preventDefault();
-        e.returnValue = " ";
-      };
+  useEffect(() => {
+    const onBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = " ";
+    };
 
-      window.addEventListener("beforeunload", onBeforeUnload);
-      return () => window.removeEventListener("beforeunload", onBeforeUnload);
-    }, []);
-  
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, []);
+
   // useEffect(() => {
   //   // Add fake history entry to block back to Google
   //   window.history.pushState({ blocked: true }, "");
@@ -525,6 +527,22 @@ function App() {
               element={
                 <RequireAuth>
                   <Support />{" "}
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/support-page"
+              element={
+                <RequireAuth>
+                  <SupportPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/faq-page"
+              element={
+                <RequireAuth>
+                  <FAQPage />
                 </RequireAuth>
               }
             />

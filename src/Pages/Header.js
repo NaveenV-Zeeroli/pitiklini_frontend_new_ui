@@ -182,7 +182,8 @@ const Header = () => {
   useEffect(() => {
     // let userToken = localStorage.getItem("user_token");
     let userToken = sessionStorage.getItem("user_token");
-    if (true) { // Forced true for development
+    if (true) {
+      // Forced true for development
       setloginCheck(true);
       if (userToken) {
         verifyToken();
@@ -444,7 +445,7 @@ const Header = () => {
                           {t("spot")}
                         </Link>
                         <Link
-                          to="/market"
+                          to="/support-page"
                           color="inherit"
                           className="contact_button px-4 uppercase font-bold"
                         >
