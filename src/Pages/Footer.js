@@ -58,8 +58,10 @@ const Footer = () => {
                 Customer Support
               </li>
               <li className="hover:text-white cursor-pointer">Tickets</li>
-              <Link to="/faq-page" color="inherit">
-                <li className="hover:text-white cursor-pointer">FAQs</li>
+              <Link to="/faq-page">
+                <li className="text-secondary10 mt-[7px] hover:text-white cursor-pointer">
+                  FAQs
+                </li>
               </Link>
             </ul>
           </div>
@@ -76,12 +78,16 @@ const Footer = () => {
           <div>
             <h3 className="text-primary font-semibold mb-4">Legal</h3>
             <ul className="space-y-2 text-secondary10 text-sm">
-              <li className="hover:text-white cursor-pointer">
-                Privacy Policy
-              </li>
-              <li className="hover:text-white cursor-pointer">
-                User Agreement
-              </li>
+              <Link to="/privacy-policy">
+                <li className="text-secondary10 hover:text-white cursor-pointer">
+                  Privacy Policy
+                </li>
+              </Link>
+              <Link to="/user-agreement">
+                <li className="text-secondary10 mt-[7px] hover:text-white cursor-pointer">
+                  User Agreement
+                </li>
+              </Link>
               <li className="hover:text-white cursor-pointer">Cookie Policy</li>
             </ul>
           </div>

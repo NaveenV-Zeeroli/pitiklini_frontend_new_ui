@@ -92,6 +92,8 @@ import FundTransfer from "./Pages/FundTransfer";
 import UserRecharge from "./Pages/UserRecharge";
 import SupportPage from "./Pages/SupportPage";
 import FAQPage from "./Pages/FAQpage";
+import PrivacyPolicy from "./Pages/PrivacyPolicy";
+import UserAgreement from "./Pages/UserAgreement";
 
 function App() {
   const [favIconSite, setFaviconSite, favIconSiteref] = useState("");
@@ -543,6 +545,22 @@ function App() {
               element={
                 <RequireAuth>
                   <FAQPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/privacy-policy"
+              element={
+                <RequireAuth>
+                  <PrivacyPolicy />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/user-agreement"
+              element={
+                <RequireAuth>
+                  <UserAgreement />
                 </RequireAuth>
               }
             />

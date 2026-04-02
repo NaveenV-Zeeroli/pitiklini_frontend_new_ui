@@ -63,7 +63,8 @@ const accountFaqAccordionItems = [
       "You can often register with basic details first, but identity verification (KYC) is usually required before you can deposit, withdraw, or access full trading features.",
   },
   {
-    question: "Why do I need to provide personal information during registration?",
+    question:
+      "Why do I need to provide personal information during registration?",
     answer:
       "We collect information to comply with anti-money laundering (AML) and know-your-customer (KYC) regulations, protect your account, and keep the platform safe for all users.",
   },
@@ -73,7 +74,8 @@ const accountFaqAccordionItems = [
       "Check your spam or promotions folder, confirm you entered the correct email, wait a few minutes, and use the resend option if available. If it still does not arrive, contact support.",
   },
   {
-    question: "Can I trade cryptocurrencies immediately after creating an account?",
+    question:
+      "Can I trade cryptocurrencies immediately after creating an account?",
     answer:
       "You may browse the platform right away, but trading limits often apply until you complete email verification and any required identity verification steps.",
   },
@@ -100,7 +102,10 @@ const FAQPage = () => {
                 role="search"
                 className="flex w-full max-w-[500px] items-center gap-3 rounded-xl border border-[#2a3038] bg-[#1E2329] px-6 py-3 shadow-inner"
               >
-                <Search className="h-5 w-5 shrink-0 text-primary pointer-events-none" aria-hidden />
+                <Search
+                  className="h-5 w-5 shrink-0 text-primary pointer-events-none"
+                  aria-hidden
+                />
                 <label htmlFor="faq-search" className="sr-only">
                   Search frequently asked questions
                 </label>
@@ -119,8 +124,7 @@ const FAQPage = () => {
           </div>
         </div>
         {/* MAIN FAQ CONTAINER */}
-        <div className="max-w-[1100px] mx-auto mt-16 border border-[#2a3038] rounded-xl p-8 bg-[#0B0E11]">
-
+        <div className="max-w-[1100px] mx-auto mt-16s rounded-xl p-8 bg-[#0B0E11]">
           {/* Category cards — 3D icons from ../assets/images/ */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
             {faqCategoryTabs.map(({ label, image }, i) => {
@@ -137,10 +141,11 @@ const FAQPage = () => {
                       setActiveCategoryIndex(i);
                     }
                   }}
-                  className={`flex flex-col items-center justify-center gap-3 rounded-2xl px-3 py-5 cursor-pointer transition border border-[#1F1F1F] bg-[#121212] hover:border-primary/35 ${isActive
-                    ? "!border-t-[3px] !border-t-primary bg-[#161618] ring-1 ring-primary/20"
-                    : ""
-                    }`}
+                  className={`flex flex-col items-center justify-center gap-3 rounded-2xl px-3 py-5 cursor-pointer transition border border-[#1F1F1F] bg-[#121212] hover:border-primary/35 ${
+                    isActive
+                      ? "!border-t-[3px] !border-t-primary bg-[#161618] ring-1 ring-primary/20"
+                      : ""
+                  }`}
                 >
                   <img
                     src={image}
@@ -157,7 +162,6 @@ const FAQPage = () => {
 
           {/* CONTENT AREA */}
           <div className="flex flex-col lg:flex-row gap-6">
-
             {/* SIDEBAR */}
             <div className="w-full lg:w-[260px] space-y-3 shrink-0">
               {faqSidebarItems.map(({ title, Icon }, i) => {
@@ -168,12 +172,16 @@ const FAQPage = () => {
                     key={title}
                     onClick={() => setActiveIndex(i)}
                     className={`w-full flex items-center gap-3.5 text-left px-5 py-3.5 rounded-xl text-sm font-medium transition border
-                  ${isActive
+                  ${
+                    isActive
                       ? "bg-[#B87A13] text-white border-[#B87A13] shadow-sm hover:bg-[#d89b2b]"
                       : "bg-[#12151c] text-white border-[#2a3038] hover:bg-[#f3c77a] hover:text-black hover:border-[#f3c77a]"
-                    }`}
+                  }`}
                   >
-                    <Icon className="h-[18px] w-[18px] shrink-0 stroke-[2]" aria-hidden />
+                    <Icon
+                      className="h-[18px] w-[18px] shrink-0 stroke-[2]"
+                      aria-hidden
+                    />
                     {title}
                   </button>
                 );
@@ -211,7 +219,9 @@ const FAQPage = () => {
                     </button>
                     {isOpen && (
                       <div className="px-5 pb-5 pt-0">
-                        <p className="text-secondary10 text-xs leading-relaxed">{answer}</p>
+                        <p className="text-secondary10 text-xs leading-relaxed">
+                          {answer}
+                        </p>
                       </div>
                     )}
                   </div>
