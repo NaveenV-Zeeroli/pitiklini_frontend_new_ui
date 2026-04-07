@@ -1122,9 +1122,9 @@ html, body {
 
 .padlef_0_col {
   height: 100%;
-  width: 276px; /* Fixed width for sidebar */
-  flex: 0 0 276px; /* Don't grow, don't shrink, stay 276px */
-  overflow: hidden;
+  width: auto; /* Changed to auto to support dynamic sidebar width */
+  flex: 0 0 auto; /* Allow the sidebar to control its own width */
+  overflow: visible; /* Changed from hidden to allow tooltips to show outside */
   padding: 16px;
   background-color: #181a20;
 }
@@ -1152,6 +1152,30 @@ html, body {
   border-radius: 10px;
 }
 
+/* Sidebar Tooltip Custom Design - Removed as we use MUI Tooltip now */
+/* 
+.sidebar-tooltip {
+  ...
+}
+*/
+
+.group:hover {
+  z-index: 1000;
+}
+
+.custom-scrollbar {
+  overflow-x: visible !important;
+}
+
+.padlef_0_col {
+  height: 100%;
+  width: auto;
+  flex: 0 0 auto;
+  overflow: visible !important;
+  padding: 16px;
+  background-color: #181a20;
+}
+
 /* Ensure no extra margins on common wrapper elements */
 .asset_section, .buy_head, .esti-container {
   margin-bottom: 24px;
@@ -1170,12 +1194,8 @@ html, body {
   width: 250px;
 }
 
-.padlef_0_col {
-  padding-left: 0 !important;
-}
-
 .padin_lefrig_dash {
-  padding: 0 100px;
+  padding: 0 24px; /* Reduced from 100px for better visibility */
 }
 
 .dashboard_title {
@@ -1837,7 +1857,7 @@ html, body {
   padding: 32px;
   border-radius: 12px;
   border: solid 1px #2b3139;
-  background-color: #181a20;
+  background-color: transparent;
   margin-top: 70px;
 }
 
@@ -2433,7 +2453,7 @@ html, body {
 .standard_verify_box {
   /* padding: 17px 49px 17px 24px; */
   border-radius: 12px;
-  background-color: #181a20;
+  background-color: transparent;
   border: 1px solid #2b3139;
   display: flex;
   justify-content: space-between;
