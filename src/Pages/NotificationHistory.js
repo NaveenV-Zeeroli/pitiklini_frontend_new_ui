@@ -145,105 +145,103 @@ const LoginTable = () => {
                       </ul>
                       {/* <AssetListTable /> */}
                       {/* <HistoryListTable /> */}
+<div className="w-full">
 
-                      <div className="table-responsive table-cont">
-                        <table className="table">
-                          <thead>
-                            <tr className="stake-head">
-                              <th>{t('date')}</th>
-                              <th className="opt-nowrap txt-center pad-left-23">
-                                {" "}
-                                {t('message')}
-                              </th>
-                            </tr>
-                          </thead>
+  <div className="bg-black rounded-xl p-4">
 
-                          <tbody>
-                            {sessionHistory.length > 0 && sessionHistory ? (
-                              sessionHistory.map((item, i) => {
-                                return (
-                                  <tr>
-                                    <td className="opt-percent font_14 pad-left-23 nowra_txt">
-                                      {Moment(item.createdAt).format(
-                                        "DD.MM.YYYY hh:mm a"
-                                      )}
-                                    </td>
-                                    <td className="opt-term font_14 table_center_text pad-left-23 nowra_txt">
-                                      {item.message}
-                                    </td>
-                                  </tr>
-                                );
-                              })
-                            ) : (
-                              <tr>
-                                <td colSpan={2} className="text-center py-5">
-                                  <div className="empty_data">
-                                    <div className="empty_data_img">
-                                      <img
-                                        src={require("../assets/No-data.webp")}
-                                        width="100px"
-                                      />
-                                    </div>
-                                    <div className="no_records_text">
-                                      {t('noRecordsFound')}
-                                    </div>
-                                  </div>
-                                </td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
+    {/* Header */}
+    <div className="flex items-center bg-gray rounded-lg px-4 py-3 text-primary text-sm">
+      <div className="flex-1">{t('date')}</div>
+      <div className="flex-1 text-center">{t('message')}</div>
+    </div>
 
-                        {sessionHistory && sessionHistory.length > 0 ? (
-                          <div className="pagination">
-                            <Stack spacing={2}>
-                              <Pagination
-                                count={Math.ceil(
-                                  logintotalpage / loginrecordpage
-                                )}
-                                page={logincurrentpage}
-                                onChange={handlepagelogin}
-                                size="small"
-                                sx={{
-                                  "& .MuiPaginationItem-root": {
-                                    color: "#fff", // Default text color for pagination items
-                                    // backgroundColor: "#2D1E23",
-                                    // "&:hover": {
-                                    //   backgroundColor: "#453a1f",
-                                    //   color: "#ffc630",
-                                    // },
-                                  },
-                                  "& .Mui-selected": {
-                                    backgroundColor: "#bd7f10 !important", // Background color for selected item
-                                    color: "#000", // Text color for selected item
-                                    "&:hover": {
-                                      backgroundColor: "#bd7f10",
-                                      color: "#000",
-                                    },
-                                  },
-                                  "& .MuiPaginationItem-ellipsis": {
-                                    color: "#fff", // Color for ellipsis
-                                  },
-                                  "& .MuiPaginationItem-icon": {
-                                    color: "#fff", // Color for icon (if present)
-                                  },
-                                }}
-                                // renderItem={(item) => (
-                                //   <PaginationItem
-                                //     slots={{
-                                //       previous: ArrowBackIcon,
-                                //       next: ArrowForwardIcon,
-                                //     }}
-                                //     {...item}
-                                //   />
-                                // )}
-                              />
-                            </Stack>
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
+    {/* Body */}
+    <div className="mt-3 flex flex-col gap-3">
+      {sessionHistory && sessionHistory.length > 0 ? (
+        sessionHistory.map((item, i) => (
+          <div
+            key={i}
+            className="flex items-center bg-black border border-gray rounded-lg px-4 py-4 hover:bg-gray transition"
+          >
+            {/* Date */}
+            <div className="flex-1 text-secondary text-sm">
+              {Moment(item.createdAt).format("DD.MM.YYYY hh:mm a")}
+            </div>
+
+            {/* Message */}
+            <div className="flex-1 text-center text-secondary text-sm truncate">
+              {item.message}
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="flex flex-col items-center justify-center py-10">
+          <img
+            src={require("../assets/No-data.webp")}
+            className="w-24"
+            alt="no data"
+          />
+          <div className="text-secondary10 mt-3">
+            {t('noRecordsFound')}
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* Pagination */}
+    {sessionHistory && sessionHistory.length > 0 && (
+      <div className="flex justify-center mt-6">
+        <Stack spacing={2}>
+          <Pagination
+            count={Math.ceil(logintotalpage / loginrecordpage)}
+            page={logincurrentpage}
+            onChange={handlepagelogin}
+            size="small"
+           sx={{
+  "& .MuiPagination-ul": {
+    gap: "6px",
+  },
+
+  /* ALL buttons (numbers + arrows) */
+  "& .MuiPaginationItem-root": {
+    color: "#fff",
+    borderRadius: "6px",
+    minWidth: "34px",
+    height: "34px",
+    backgroundColor: "transparent",
+    transition: "all 0.2s ease",
+  },
+
+  /* HOVER (apply to everything including arrows) */
+  "& .MuiPaginationItem-root:hover": {
+    backgroundColor: "#BD7F10",
+    color: "#000",
+  },
+
+  /* SELECTED */
+  "& .Mui-selected": {
+    backgroundColor: "#BD7F10 !important",
+    color: "#000",
+    fontWeight: "600",
+  },
+
+  /* PREV / NEXT buttons (force same style) */
+  "& .MuiPaginationItem-previousNext": {
+    borderRadius: "6px",
+  },
+
+  /* ICON inside arrows */
+  "& .MuiPaginationItem-icon": {
+    color: "inherit", // 👈 makes arrow follow text color
+  },
+}}
+          />
+        </Stack>
+      </div>
+    )}
+
+  </div>
+</div>
                     </div>
                   </div>
                 </section>

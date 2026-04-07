@@ -1077,8 +1077,84 @@ body {
 .dash_table_content tbody tr {
   border-bottom: 1px solid #2b3139 !important;
 }
+header.scrolled {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  z-index: 1000;
+  background-color: #181a20;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent body scrolling */
+  height: 100%;
+}
+
 .dashboard_main {
   background-color: #181a20;
+  height: calc(100vh - 80px);
+  overflow: hidden;
+  display: flex;
+  margin-top: 80px;
+  width: 100%; /* Use width 100% instead of 100vw to avoid scrollbar issues */
+}
+
+.dashboard_main .container-fluid {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.dashboard_main .row {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap; /* Prevent sidebar from wrapping */
+}
+
+.padlef_0_col {
+  height: 100%;
+  width: 276px; /* Fixed width for sidebar */
+  flex: 0 0 276px; /* Don't grow, don't shrink, stay 276px */
+  overflow: hidden;
+  padding: 16px;
+  background-color: #181a20;
+}
+
+.padin_lefrig_dash {
+  height: 100%;
+  flex: 1 1 auto; /* Take all remaining width */
+  min-width: 0; /* Crucial for preventing overflow in flex items */
+  overflow-y: auto;
+  padding: 24px;
+  background-color: #0c0d10;
+}
+
+/* Custom scrollbar for independent scrolling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #353945;
+  border-radius: 10px;
+}
+
+/* Ensure no extra margins on common wrapper elements */
+.asset_section, .buy_head, .esti-container {
+  margin-bottom: 24px;
 }
 .dashboard_main .row {
   background-color: #181a20;
