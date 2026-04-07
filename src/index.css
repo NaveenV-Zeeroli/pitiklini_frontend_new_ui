@@ -1223,7 +1223,7 @@ table > thead > tr > th {
   padding: 24px 24px 0px 0px;
   border-radius: 12px;
   border: solid 0.5px #2b3139;
-  background-color: #181a20;
+  background-color: transparent;
 }
 
 .deposit .form_div {

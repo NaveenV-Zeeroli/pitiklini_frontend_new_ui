@@ -1196,7 +1196,7 @@ table > tbody > tr {
 
 .asset_section {
   padding: 80px 19px 119px 0px;
-  background-color: #181a20;
+  background-color: transparent;
 }
 
 .asset_title {

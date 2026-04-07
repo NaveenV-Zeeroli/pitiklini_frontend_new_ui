@@ -87,70 +87,16 @@ const WithdrawTable = () => {
 
               <div className="col-lg-10 padin_lefrig_dash">
                 <section className="asset_section">
-                  <div className="row">
+                  
                     <div className="buy_head">
-                      <div className="Buycrypto_title">{t('history')}</div>
-                      <ul className="history-lists">
-                        <Link to="/loginHistory" className="history-links">
-                          {t("login")}
-                        </Link>
-                        {/* <Link to="/referralHistory" className="history-links">
-                          Referral
-                        </Link> */}
-                        <Link to="/depositHistory" className="history-links">
-                          {t("deposit")}
-                        </Link>
-                        <Link
-                          to="/withdrawHistory"
-                          className="history-links active"
-                        >
-                          {t("withdraw")}
-                        </Link>
-                        <Link
-                          to="/internaltransferhistory"
-                          className="history-links"
-                        >
-                          {t("internal_transfer")}
-                        </Link>
-                        <Link to="/swapHistory" className="history-links">
-                        {t('convert')}
-
-                        </Link>
-                        {/* <Link to="/stakingHistory" className="history-links">
-                          Staking
-                        </Link> */}
-                        <Link to="/orderHistory" className="history-links">
-                        {t('openOrder')}
-
-                        </Link>
-                        <Link
-                          to="/cancelorderHistory"
-                          className="history-links"
-                        >
-                                                    {t('closeOrder')}
-
-                        </Link>
-                        <Link to="/tradeHistory" className="history-links">
-                        {t('trade')}
-
-                        </Link>
-                         <Link to="/notificationHistory" className="history-links">
-                            {t('notification')}
-                          </Link>
-                        {/* <Link to="/rewardsHistory" className="history-links">
-                          Rewards
-                        </Link> */}
-
-                        {/* <Link to="/stoporderHistory" className="history-links">
-                          Stop Order
-                        </Link> */}
-                      </ul>
-                      {/* <AssetListTable /> */}
-                      {/* <HistoryListTable /> */}
+                    
+                     
+                      
 
                      <div className="w-full">
 
   <div className="bg-black rounded-xl p-4">
+      <div className="text-primary text-lg font-bold mb-8">{t("withdraw")} {t("history")}</div>
 
     {/* Header */}
     <div className="flex items-center bg-gray rounded-lg px-4 py-3 text-primary text-sm">
@@ -292,7 +238,7 @@ const WithdrawTable = () => {
   </div>
 </div>
                     </div>
-                  </div>
+                  {/* </div> */}
                 </section>
               </div>
             </div>
