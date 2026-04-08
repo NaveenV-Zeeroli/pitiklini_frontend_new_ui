@@ -224,7 +224,7 @@ const SupportPage = () => {
       </div>
 
       <div className="bg-[#0b0f19] w-full mx-auto px-6 py-16">
-        <div className="max-w-full mx-auto grid md:grid-cols-2 gap-10 items-center">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
           {/* LEFT - FORM */}
           <div>
             <p className="text-primary mb-6 text-sm">
