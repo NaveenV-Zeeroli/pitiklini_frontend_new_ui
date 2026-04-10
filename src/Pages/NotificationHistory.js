@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Header from "./Header";
+import DashboardLayout from "./DashboardLayout";
 import { stakeOpt } from "../utils/mockData2";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -16,7 +16,7 @@ import Moment from "moment";
 import { useTranslation } from "react-i18next";
 
 const LoginTable = () => {
-   const { t } = useTranslation();
+  const { t } = useTranslation();
   const [sessionHistory, setsessionHistory] = useState([]);
   const [logincurrentpage, setlogincurrentpage] = useState(1);
   const [logintotalpage, setloginTotalpages] = useState(0);
@@ -61,195 +61,128 @@ const LoginTable = () => {
 
   return (
     <>
-      <section>
-        <Header />
-      </section>
-      {siteLoader == true ? (
-        <div className="loadercss">
-          <Bars
-            height="80"
-            width="80"
-            color="#bd7f10"
-            ariaLabel="bars-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
-        </div>
-      ) : (
-        <main className="dashboard_main">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-2 padlef_0_col">
-                <Side_bar />
-              </div>
-
-              <div className="col-lg-10 padin_lefrig_dash">
-                <section className="asset_section">
-                  <div className="row">
-                    <div className="buy_head">
-                      <div className="Buycrypto_title">{t('history')}</div>
-                      <ul className="history-lists">
-                        <Link
-                          to="/loginHistory"
-                          className="history-links"
-                        >
-                          {t('login')}
-                        </Link>
-                        {/* <Link to="/referralHistory" className="history-links">
-                                  Referral
-                                </Link> */}
-                        <Link to="/depositHistory" className="history-links">
-                          {t('deposit')}
-                        </Link>
-                        <Link to="/withdrawHistory" className="history-links">
-                          {t('withdraw')}
-                        </Link>
-                        <Link
-                          to="/internaltransferhistory"
-                          className="history-links"
-                        >
-                          {t('internal_transfer')}
-                        </Link>
-                        <Link to="/swapHistory" className="history-links">
-                          {t('convert')}
-                        </Link>
-                        {/* <Link to="/stakingHistory" className="history-links">
-                                  Staking
-                                </Link> */}
-                        <Link to="/orderHistory" className="history-links">
-                          {t('openOrder')}
-                        </Link>
-                        <Link
-                          to="/cancelorderHistory"
-                          className="history-links"
-                        >
-                          {t('closeOrder')}
-                        </Link>
-                        <Link to="/tradeHistory" className="history-links">
-                          {t('trade')}
-                        </Link>
-                        <Link
-                          to="/notificationHistory"
-                          className="history-links active"
-                        >
-                          {t('notification')}
-                        </Link>
-                        {/* <Link to="/rewardsHistory" className="history-links">
-                                  Rewards
-                                </Link> */}
-
-                        {/* <Link to="/stoporderHistory" className="history-links">
-                          Stop Order
-                        </Link> */}
-                      </ul>
-                      {/* <AssetListTable /> */}
-                      {/* <HistoryListTable /> */}
-<div className="w-full">
-
-  <div className="bg-black rounded-xl p-4">
-
-    {/* Header */}
-    <div className="flex items-center bg-gray rounded-lg px-4 py-3 text-primary text-sm">
-      <div className="flex-1">{t('date')}</div>
-      <div className="flex-1 text-center">{t('message')}</div>
-    </div>
-
-    {/* Body */}
-    <div className="mt-3 flex flex-col gap-3">
-      {sessionHistory && sessionHistory.length > 0 ? (
-        sessionHistory.map((item, i) => (
-          <div
-            key={i}
-            className="flex items-center bg-black border border-gray rounded-lg px-4 py-4 hover:bg-gray transition"
-          >
-            {/* Date */}
-            <div className="flex-1 text-secondary text-sm">
-              {Moment(item.createdAt).format("DD.MM.YYYY hh:mm a")}
-            </div>
-
-            {/* Message */}
-            <div className="flex-1 text-center text-secondary text-sm truncate">
-              {item.message}
-            </div>
+      <DashboardLayout>
+        {siteLoader == true ? (
+          <div className="loadercss">
+            <Bars
+              height="80"
+              width="80"
+              color="#bd7f10"
+              ariaLabel="bars-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
           </div>
-        ))
-      ) : (
-        <div className="flex flex-col items-center justify-center py-10">
-          <img
-            src={require("../assets/No-data.webp")}
-            className="w-24"
-            alt="no data"
-          />
-          <div className="text-secondary10 mt-3">
-            {t('noRecordsFound')}
-          </div>
-        </div>
-      )}
-    </div>
-
-    {/* Pagination */}
-    {sessionHistory && sessionHistory.length > 0 && (
-      <div className="flex justify-center mt-6">
-        <Stack spacing={2}>
-          <Pagination
-            count={Math.ceil(logintotalpage / loginrecordpage)}
-            page={logincurrentpage}
-            onChange={handlepagelogin}
-            size="small"
-           sx={{
-  "& .MuiPagination-ul": {
-    gap: "6px",
-  },
-
-  /* ALL buttons (numbers + arrows) */
-  "& .MuiPaginationItem-root": {
-    color: "#fff",
-    borderRadius: "6px",
-    minWidth: "34px",
-    height: "34px",
-    backgroundColor: "transparent",
-    transition: "all 0.2s ease",
-  },
-
-  /* HOVER (apply to everything including arrows) */
-  "& .MuiPaginationItem-root:hover": {
-    backgroundColor: "#BD7F10",
-    color: "#000",
-  },
-
-  /* SELECTED */
-  "& .Mui-selected": {
-    backgroundColor: "#BD7F10 !important",
-    color: "#000",
-    fontWeight: "600",
-  },
-
-  /* PREV / NEXT buttons (force same style) */
-  "& .MuiPaginationItem-previousNext": {
-    borderRadius: "6px",
-  },
-
-  /* ICON inside arrows */
-  "& .MuiPaginationItem-icon": {
-    color: "inherit", // 👈 makes arrow follow text color
-  },
-}}
-          />
-        </Stack>
-      </div>
-    )}
-
-  </div>
-</div>
-                    </div>
+        ) : (
+          <section className="asset_section">
+            <div className="buy_head">
+              {/* <AssetListTable /> */}
+              {/* <HistoryListTable /> */}
+              <div className="w-full">
+                <div className="bg-black rounded-xl p-4">
+                  <div className="text-primary text-lg font-bold mb-8">
+                    {t("notification")} {t("history")}
                   </div>
-                </section>
+
+                  {/* Header */}
+                  <div className="flex items-center bg-gray rounded-lg px-4 py-3 text-primary text-sm">
+                    <div className="flex-1">{t("date")}</div>
+                    <div className="flex-1 text-center">{t("message")}</div>
+                  </div>
+
+                  {/* Body */}
+                  <div className="mt-3 flex flex-col gap-3">
+                    {sessionHistory && sessionHistory.length > 0 ? (
+                      sessionHistory.map((item, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center bg-black border border-gray rounded-lg px-4 py-4 hover:bg-gray transition"
+                        >
+                          {/* Date */}
+                          <div className="flex-1 text-secondary text-sm">
+                            {Moment(item.createdAt).format(
+                              "DD.MM.YYYY hh:mm a",
+                            )}
+                          </div>
+
+                          {/* Message */}
+                          <div className="flex-1 text-center text-secondary text-sm truncate">
+                            {item.message}
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="flex flex-col items-center justify-center py-10">
+                        <img
+                          src={require("../assets/No-data.webp")}
+                          className="w-24"
+                          alt="no data"
+                        />
+                        <div className="text-secondary10 mt-3">
+                          {t("noRecordsFound")}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Pagination */}
+                  {sessionHistory && sessionHistory.length > 0 && (
+                    <div className="flex justify-center mt-6">
+                      <Stack spacing={2}>
+                        <Pagination
+                          count={Math.ceil(logintotalpage / loginrecordpage)}
+                          page={logincurrentpage}
+                          onChange={handlepagelogin}
+                          size="small"
+                          sx={{
+                            "& .MuiPagination-ul": {
+                              gap: "6px",
+                            },
+
+                            /* ALL buttons (numbers + arrows) */
+                            "& .MuiPaginationItem-root": {
+                              color: "#fff",
+                              borderRadius: "6px",
+                              minWidth: "34px",
+                              height: "34px",
+                              backgroundColor: "transparent",
+                              transition: "all 0.2s ease",
+                            },
+
+                            /* HOVER (apply to everything including arrows) */
+                            "& .MuiPaginationItem-root:hover": {
+                              backgroundColor: "#BD7F10",
+                              color: "#000",
+                            },
+
+                            /* SELECTED */
+                            "& .Mui-selected": {
+                              backgroundColor: "#BD7F10 !important",
+                              color: "#000",
+                              fontWeight: "600",
+                            },
+
+                            /* PREV / NEXT buttons (force same style) */
+                            "& .MuiPaginationItem-previousNext": {
+                              borderRadius: "6px",
+                            },
+
+                            /* ICON inside arrows */
+                            "& .MuiPaginationItem-icon": {
+                              color: "inherit", // 👈 makes arrow follow text color
+                            },
+                          }}
+                        />
+                      </Stack>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </main>
-      )}
+          </section>
+        )}
+      </DashboardLayout>
     </>
   );
 };
