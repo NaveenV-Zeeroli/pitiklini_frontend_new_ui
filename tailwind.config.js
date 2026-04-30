@@ -3,6 +3,9 @@ module.exports = {
   important: true,
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    fontFamily: {
+      sans: ["IBM Plex Sans", "sans-serif"],
+    },
     extend: {
       colors: {
         // Custom color names based on your requirements
