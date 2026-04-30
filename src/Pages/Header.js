@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Lightlogo from "../assets/footer_logo.webp";
 import Darklogo from "../assets/footer_logo.webp";
@@ -40,6 +40,8 @@ import { getMethod, postMethod } from "../core/service/common.api";
 import apiService from "../core/service/detail";
 import { toast } from "react-toastify";
 import GoogleTranslate from "./GoogleTranslate";
+import usa from "../assets/svg/usa.svg";
+import spain from "../assets/svg/spain.svg";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -128,6 +130,35 @@ const Header = () => {
   const { t, i18n } = useTranslation();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isNotifyOpen, setIsNotifyOpen] = useState(false);
+  const languageRef1 = useRef(null);
+  const languageRef2 = useRef(null);
+  const notifyRef = useRef(null);
+  const mobileNotifyRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const isInsideLanguage =
+        (languageRef1.current && languageRef1.current.contains(event.target)) ||
+        (languageRef2.current && languageRef2.current.contains(event.target));
+      const isInsideNotify =
+        (notifyRef.current && notifyRef.current.contains(event.target)) ||
+        (mobileNotifyRef.current &&
+          mobileNotifyRef.current.contains(event.target));
+
+      if (isDropdownOpen && !isInsideLanguage) {
+        setIsDropdownOpen(false);
+      }
+      if (isNotifyOpen && !isInsideNotify) {
+        setIsNotifyOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen, isNotifyOpen]);
 
   const handleLanguageChange = (language) => {
     console.log(language, "language");
@@ -182,7 +213,8 @@ const Header = () => {
   useEffect(() => {
     // let userToken = localStorage.getItem("user_token");
     let userToken = sessionStorage.getItem("user_token");
-    if (true) { // Forced true for development
+    if (true) {
+      // Forced true for development
       setloginCheck(true);
       if (userToken) {
         verifyToken();
@@ -290,6 +322,7 @@ const Header = () => {
   // };
 
   const handleBellClick = async () => {
+    setIsNotifyOpen((prev) => !prev);
     try {
       var data = {
         apiUrl: apiService.notifyStateChange,
@@ -444,7 +477,7 @@ const Header = () => {
                           {t("spot")}
                         </Link>
                         <Link
-                          to="/market"
+                          to="/support-page"
                           color="inherit"
                           className="contact_button px-4 uppercase font-bold"
                         >
@@ -722,7 +755,7 @@ const Header = () => {
                       </Menu>
                     </>
                     {/* download */}
-                    <div className="relative">
+                    <div className="relative" ref={languageRef1}>
                       {/* Trigger dropdown on click */}
                       <Link className="mr-4" onClick={toggleDropdown}>
                         <img
@@ -758,13 +791,15 @@ const Header = () => {
 
                     {/* notification bell */}
                     {loginCheck ? (
-                      <div class="btn-group more-wrapper">
+                      <div
+                        className={`btn-group more-wrapper${isNotifyOpen ? " show" : ""}`}
+                        ref={notifyRef}
+                      >
                         <button
-                          class="btn btn-secondary btn-lg dropdown-toggle more-select bell-notify  nav-primary-icons"
+                          className="btn btn-secondary btn-lg dropdown-toggle more-select bell-notify  nav-primary-icons"
                           type="button"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                          onClick={() => handleBellClick()}
+                          aria-expanded={isNotifyOpen}
+                          onClick={handleBellClick}
                         >
                           {/* <img
                             src={require("../assets/icons/bell.webp")}
@@ -778,7 +813,9 @@ const Header = () => {
                           {hasUnread && <div className="bell-indicator"></div>}
                         </button>
 
-                        <ul class="dropdown-menu notify-dropdown">
+                        <ul
+                          className={`dropdown-menu notify-dropdown${isNotifyOpen ? " show" : ""}`}
+                        >
                           <div className="notify-contents">
                             <div className="notify-head-wrapper d-flex align-items-center justify-content-between">
                               <h5>{t("notifications")}</h5>
@@ -851,31 +888,67 @@ const Header = () => {
                   </IconButton>
 
                   {/* {isAuthenticated ? ""  */}
-                  <div className="relative">
-                    {/* Trigger dropdown on click */}
-                    <Link className="contact_button" onClick={toggleDropdown}>
-                      <img src={GlobalIcon} width="22px" alt="Globe" />
-                    </Link>
 
-                    {/* Dropdown menu */}
+                  <div className="relative" ref={languageRef2}>
+                    {/* Trigger */}
+                    <button
+                      onClick={toggleDropdown}
+                      className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray transition"
+                    >
+                      <img
+                        src={GlobalIcon}
+                        alt="language"
+                        className="w-5 h-5"
+                      />
+                    </button>
+
+                    {/* Dropdown */}
                     {isDropdownOpen && (
-                      <ul className="globe-lists">
-                        <li
-                          className="globe-options"
-                          onClick={() => handleLanguageChange("en")}
-                        >
-                          English
-                        </li>
-                        <li
-                          className="globe-options"
-                          onClick={() => handleLanguageChange("es")}
-                        >
-                          Spanish
-                        </li>
-                      </ul>
+                      <div className="absolute right-0 mt-10 w-[220px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-5 z-50">
+                        {/* Title */}
+                        <p className="text-primary text-center text-lg font-semibold mb-5 font-ibm">
+                          Languages
+                        </p>
+
+                        {/* Options */}
+                        <div className="flex flex-col gap-3">
+                          {/* English */}
+                          <button
+                            onClick={() => handleLanguageChange("en")}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                              i18n.language === "en"
+                                ? "bg-gray text-secondary"
+                                : "text-secondary10 hover:bg-gray"
+                            }`}
+                          >
+                            <img
+                              src={usa}
+                              alt="USA"
+                              className="w-8 h-8 rounded-full"
+                            />
+                            <span className="font-ibm text-sm">English</span>
+                          </button>
+
+                          {/* Spanish */}
+                          <button
+                            onClick={() => handleLanguageChange("es")}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                              i18n.language === "es"
+                                ? "bg-gray text-secondary"
+                                : "text-secondary10 hover:bg-gray"
+                            }`}
+                          >
+                            <img
+                              src={spain}
+                              alt="Spain"
+                              className="w-8 h-8 rounded-full"
+                            />
+                            <span className="font-ibm text-sm">Español</span>
+                          </button>
+                        </div>
+                      </div>
                     )}
                   </div>
-
                   <div
                     className={`flex justify-center rounded-[8px] px-4 ml-4 bg-primary text-black ${classes.appBarItems}`}
                   >
@@ -1181,62 +1254,86 @@ const Header = () => {
 
                     {/* notification bell */}
                     {loginCheck ? (
-                      <div class="btn-group more-wrapper">
+                      <div className="relative" ref={mobileNotifyRef}>
+                        {/* Bell Button */}
                         <button
-                          class="btn btn-secondary btn-lg dropdown-toggle more-select bell-notify  nav-primary-icons"
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
                           onClick={() => handleBellClick()}
+                          className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray transition"
                         >
-                          {/* <img
-                            src={require("../assets/icons/bell.webp")}
-                            className="moons"
-                            width="30px"
-                          /> */}
-
-                          <span className="header-profile-wrap dark_display_none nav-primary-icons">
-                            <i class="bi bi-bell"></i>
+                          <span className="text-white text-lg">
+                            <i className="bi bi-bell"></i>
                           </span>
-                          {hasUnread && <div className="bell-indicator"></div>}
+
+                          {/* Unread Indicator */}
+                          {hasUnread && (
+                            <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+                          )}
                         </button>
 
-                        <ul class="dropdown-menu notify-dropdown">
-                          <div className="notify-contents">
-                            <div className="notify-head-wrapper d-flex align-items-center justify-content-between">
-                              <h5>{t("notifications")}</h5>
-                              <button onClick={notifyNav}>
-                                {t("viewAll")}{" "}
-                                <i class="ri-arrow-right-s-line"></i>
+                        {/* Dropdown */}
+                        {isNotifyOpen && (
+                          <div className="absolute right-0 mt-10 w-[320px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-5 z-50">
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-4">
+                              <p className="text-secondary text-sm font-ibm">
+                                {notification?.length || 0}{" "}
+                                {t("newNotifications")}
+                              </p>
+
+                              <button
+                                onClick={notifyNav}
+                                className="text-primary text-sm font-medium hover:underline"
+                              >
+                                {t("viewAll")}
                               </button>
                             </div>
 
-                            {notification &&
-                              notification.map((options, i) => {
-                                return (
-                                  <div className="notify-container">
-                                    <Link
-                                      to={
-                                        options.link == ""
-                                          ? "/notificationHistory"
-                                          : options.link
-                                      }
-                                      className="nav-notify-content "
-                                    >
-                                      <h6 className="nav-notify">
-                                        {" "}
-                                        {options.message}{" "}
-                                      </h6>
+                            {/* Notifications List */}
+                            <div className="flex flex-col gap-4 max-h-[260px] overflow-y-auto">
+                              {notification && notification.length > 0 ? (
+                                notification.map((options, i) => (
+                                  <Link
+                                    key={i}
+                                    to={
+                                      options.link === ""
+                                        ? "/notificationHistory"
+                                        : options.link
+                                    }
+                                    className="flex gap-3 p-2 rounded-lg hover:bg-gray transition"
+                                  >
+                                    {/* Dot */}
+                                    <div className="w-2 h-2 mt-2 rounded-full bg-primary"></div>
 
-                                      <div className="time-notify">
+                                    {/* Content */}
+                                    <div>
+                                      <p className="text-secondary text-sm font-medium line-clamp-1">
+                                        {options.message}
+                                      </p>
+
+                                      <p className="text-secondary10 text-[11px] mt-1">
                                         {Moment(options.createdAt).fromNow()}
-                                      </div>
-                                    </Link>
-                                  </div>
-                                );
-                              })}
+                                      </p>
+                                    </div>
+                                  </Link>
+                                ))
+                              ) : (
+                                <p className="text-secondary10 text-sm text-center py-6">
+                                  {t("noNotifications")}
+                                </p>
+                              )}
+                            </div>
+
+                            {/* View All Button */}
+                            {notification && notification.length > 0 && (
+                              <button
+                                onClick={notifyNav}
+                                className="w-full mt-5 bg-primary text-black py-2.5 rounded-lg font-medium hover:opacity-90 transition"
+                              >
+                                {t("viewAll")}
+                              </button>
+                            )}
                           </div>
-                        </ul>
+                        )}
                       </div>
                     ) : (
                       ""
