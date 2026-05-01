@@ -194,6 +194,7 @@ const AssetsTableSection = () => {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pagedRows = filtered.slice((page - 1) * perPage, page * perPage);
+  const tableHeaders = ["Crypto", "Total Balance", "Available", "Frozen", "USDT Valuation", "Action"];
 
   return (
     <section className="mt-5 rounded-xl border border-[#252a36] bg-[#151922] p-5 shadow-[0_12px_30px_rgba(0,0,0,0.35)] md:p-6">
@@ -201,15 +202,15 @@ const AssetsTableSection = () => {
         <h3 className="text-2xl font-semibold text-[#e0a82d]">Assets List</h3>
         <div className="flex flex-wrap items-center gap-3 md:gap-4">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8a93a7]" />
-            <input value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }} placeholder="Search" className="h-10 w-52 rounded-xl border border-[#2a3038] bg-[#1a1f2a] pl-9 pr-3 text-sm text-[#e7ebf4] shadow-inner outline-none transition focus:border-[#B87A13] focus:ring-2 focus:ring-[#B87A13]/30 md:w-56" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#BD7F10]" />
+            <input value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }} placeholder="Search" className="h-10 w-52 rounded-xl border border-[#2a3038] bg-[#1a1f2a] pl-9 pr-3 text-sm text-[#BD7F10] placeholder:text-[#BD7F10] shadow-inner outline-none transition focus:border-[#BD7F10] focus:ring-2 focus:ring-[#BD7F10]/30 md:w-56" />
           </div>
-          <label className="flex items-center gap-2 text-xs text-[#c1c8d7] md:text-sm">
-            <input type="checkbox" checked={hideZero} onChange={(e) => setHideZero(e.target.checked)} className="h-4 w-4 rounded border border-[#2a3038] bg-[#1a1f2a] align-middle accent-[#B87A13]" />
+          <label className="flex items-center gap-2 text-xs text-[#BD7F10] md:text-sm">
+            <input type="checkbox" checked={hideZero} onChange={(e) => setHideZero(e.target.checked)} className="h-4 w-4 rounded border border-[#2a3038] bg-[#1a1f2a] align-middle accent-[#BD7F10]" />
             <span className="leading-none">Hide Zero Balance Assets</span>
           </label>
-          <label className="flex items-center gap-2 text-xs text-[#c1c8d7] md:text-sm">
-            <input type="checkbox" checked={simplified} onChange={(e) => setSimplified(e.target.checked)} className="h-4 w-4 rounded border border-[#2a3038] bg-[#1a1f2a] align-middle accent-[#B87A13]" />
+          <label className="flex items-center gap-2 text-xs text-[#BD7F10] md:text-sm">
+            <input type="checkbox" checked={simplified} onChange={(e) => setSimplified(e.target.checked)} className="h-4 w-4 rounded border border-[#2a3038] bg-[#1a1f2a] align-middle accent-[#BD7F10]" />
             <span className="leading-none">Simplified List</span>
           </label>
         </div>
@@ -221,14 +222,21 @@ const AssetsTableSection = () => {
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-[920px] w-full border-separate border-spacing-y-2">
-          <thead>
-            <tr className="border-b border-[#2a3038] bg-[#202636] text-xs text-[#d2a13f]">
-              <th className="px-4 py-3 text-left font-medium">Crypto</th>
-              <th className="px-4 py-3 text-left font-medium">Total Balance</th>
-              <th className="px-4 py-3 text-left font-medium">Available</th>
-              <th className="px-4 py-3 text-left font-medium">Frozen</th>
-              <th className="px-4 py-3 text-left font-medium">USDT Valuation</th>
-              <th className="px-4 py-3 text-left font-medium">Action</th>
+          <thead className="bg-[#151922] text-xs !text-[#BD7F10]">
+            <tr>
+              {tableHeaders.map((header) => (
+                <th key={header} className="border-b border-[#2a3038] px-4 py-3 text-left font-medium !text-[#BD7F10]">
+                  <span className="inline-flex items-center gap-1.5 !text-[#BD7F10]">
+                    {header}
+                    {header !== "Action" && (
+                      <span className="flex flex-col items-center justify-center text-[10px] leading-[8px] text-[#BD7F10]">
+                        <i className="ri-arrow-up-s-fill h-2.5 leading-[8px]" />
+                        <i className="-mt-0.5 ri-arrow-down-s-fill h-2.5 leading-[8px]" />
+                      </span>
+                    )}
+                  </span>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
