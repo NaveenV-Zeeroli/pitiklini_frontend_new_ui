@@ -3,10 +3,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Lightlogo from "../assets/footer_logo.webp";
 import Darklogo from "../assets/footer_logo.webp";
 import UserIcon from "../assets/account.webp";
+import Avatar from "../assets/svg/avatar.svg";
 import Moment from "moment";
 import { socket } from "../context/socket";
 import HeaderLogo from "../assets/header_logo.svg";
 import GlobalIcon from "../assets/icons/global.svg";
+import Asset from "../assets/svg/asset.svg";
 
 import {
   AppBar,
@@ -60,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       display: "none",
     },
+  },
+  profileButton: {
+    marginRight: theme.spacing(2),
+    display: "block !important",
   },
   mobileMenuButton: {
     marginRight: theme.spacing(2),
@@ -128,6 +134,10 @@ const Header = () => {
   const [siteData, setSiteData] = useState("");
   const [loaderSite, setLoaderSite] = useState(true);
   const { t, i18n } = useTranslation();
+  const [isAssetOpen, setIsAssetOpen] = useState(false);
+  const assetRef = useRef(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef(null);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotifyOpen, setIsNotifyOpen] = useState(false);
@@ -136,21 +146,41 @@ const Header = () => {
   const notifyRef = useRef(null);
   const mobileNotifyRef = useRef(null);
 
+  const handleProfileClick = () => {
+    setIsProfileOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       const isInsideLanguage =
         (languageRef1.current && languageRef1.current.contains(event.target)) ||
         (languageRef2.current && languageRef2.current.contains(event.target));
+
       const isInsideNotify =
         (notifyRef.current && notifyRef.current.contains(event.target)) ||
         (mobileNotifyRef.current &&
           mobileNotifyRef.current.contains(event.target));
 
+      const isInsideAsset =
+        assetRef.current && assetRef.current.contains(event.target);
+
+      const isInsideProfile =
+        profileRef.current && profileRef.current.contains(event.target);
+
+      if (isProfileOpen && !isInsideProfile) {
+        setIsProfileOpen(false);
+      }
+
       if (isDropdownOpen && !isInsideLanguage) {
         setIsDropdownOpen(false);
       }
+
       if (isNotifyOpen && !isInsideNotify) {
         setIsNotifyOpen(false);
+      }
+
+      if (isAssetOpen && !isInsideAsset) {
+        setIsAssetOpen(false);
       }
     };
 
@@ -158,8 +188,7 @@ const Header = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDropdownOpen, isNotifyOpen]);
-
+  }, [isDropdownOpen, isNotifyOpen, isAssetOpen, isProfileOpen]);
   const handleLanguageChange = (language) => {
     console.log(language, "language");
 
@@ -563,338 +592,6 @@ const Header = () => {
                     </div>
                   </Typography>
 
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    className={` m-0 p-0 ${classes.mobileMenuButton} ${classes.drawerIcon}`}
-                  >
-                    {/* user profile */}
-                    <>
-                      <h6
-                        aria-controls="simple-menu"
-                        aria-haspopup="true"
-                        className=" head-drops cursor-pointer"
-                        onClick={handleClick}
-                      >
-                        {loginCheck ? (
-                          // <img
-                          //   src={require("../assets/icons/profile_dark.webp")}
-                          //   width="30px"
-                          //   className="dark_display_none nav-primary-icons"
-                          // />
-                          <span className="header-profile-wrap dark_display_none nav-primary-icons">
-                            <i class="bi bi-person-circle"></i>
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                        {/* <img
-                          src={require("../assets/profile_dark.png")}
-                          className="dark_profile "
-                        /> */}
-                      </h6>
-
-                      <Menu
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                        className="MuiList-padding"
-                      >
-                        {loginCheck ? (
-                          <div className="frame-container ">
-                            {/* user details */}
-                            <div className="user-details">
-                              <img
-                                src={UserIcon}
-                                alt="usericon"
-                                className="user-img"
-                              />
-                              <div className="details">
-                                <span className="details-mail">
-                                  {obfuscateEmail(profileData.email)}
-                                </span>
-                                <span className="details-udi">
-                                  {t("UID")}:{profileData.uuid}{" "}
-                                  <i
-                                    className="fa-regular fa-copy cursor-pointer"
-                                    onClick={() => copy(profileData.uuid)}
-                                  ></i>{" "}
-                                </span>
-                                {/* <img
-                                src={logout}
-                                alt="logoutimg"
-                                className="logout-img"
-                              /> */}
-                              </div>
-                            </div>
-                            {/* links */}
-                            <ul className="links">
-                              <li>
-                                <Link to="/dashboard" className="link-content">
-                                  <span>{t("dashboard")}</span>{" "}
-                                  <span className="text-yellow hover-show">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
-                              <li>
-                                <Link to="/security" className="link-content">
-                                  <div className="header_new_chng">
-                                    <span>{t("security")}</span>
-                                    <div>
-                                      {profileData.tfastatus == 0 &&
-                                      // profileData.AntiphisingStatus == 0 ? (
-                                      profileData.AntiphisingEnabledStatus ==
-                                        0 ? (
-                                        <p>
-                                          <span className="low-clr mx-1 ">
-                                            {t("low")}
-                                          </span>
-                                          <i class="ri-shield-keyhole-line low-clr"></i>
-                                        </p>
-                                      ) : profileData.tfastatus == 0 ||
-                                        // profileData.AntiphisingStatus == 0 ? (
-                                        profileData.AntiphisingEnabledStatus ==
-                                          0 ? (
-                                        <p>
-                                          <span className="mid-clr mx-1">
-                                            {t("medium")}
-                                          </span>
-                                          <i class="ri-shield-keyhole-line mid-clr"></i>
-                                        </p>
-                                      ) : (
-                                        <p>
-                                          <span className="high-clr mx-1">
-                                            {t("high")}
-                                          </span>
-                                          <i class="ri-shield-keyhole-line high-clr"></i>
-                                        </p>
-                                      )}
-                                    </div>
-                                  </div>
-                                  <span className="text-yellow hover-show">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
-                              <li>
-                                <Link to="/kyc" className="link-content">
-                                  <div className="header_new_chng">
-                                    <span>{t("identification")}</span>
-                                    <div>
-                                      {profileData.kycstatus == 1 ? (
-                                        // <span className="text-success">
-                                        <p>
-                                          <span className="high-clr mx-1">
-                                            {t("verified")}
-                                          </span>
-                                          <i class="fa-solid fa-circle-check high-clr"></i>
-                                        </p>
-                                      ) : (
-                                        <p>
-                                          <span className="low-clr mx-1">
-                                            {t("notverified")}
-                                          </span>
-                                          <i class="fa-solid fa-circle-xmark low-clr"></i>
-                                        </p>
-                                      )}
-                                    </div>
-                                  </div>
-                                  <span className="text-yellow hover-show">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
-                              <li>
-                                <Link to="/withdraw" className="link-content">
-                                  <span>{t("withdrawal")}</span>
-                                  <span className="text-yellow hover-show">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
-                              {/* <li>
-                                <Link to="/rewards" className="link-content">
-                                  <span>My Rewards</span>
-                                  <span className="text-yellow hover-show">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li> */}
-                              <li>
-                                <Link
-                                  to="/depositHistory"
-                                  className="link-content"
-                                >
-                                  <span>{t("history")}</span>
-                                  <span className="text-yellow hover-show">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
-                              <li>
-                                <Link to="/support" className="link-content">
-                                  <span>{t("support")}</span>
-                                  <span className="text-yellow hover-show">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
-                            </ul>
-                            {/* logout button */}
-                            <div
-                              className="btn-wrapper security-link cursor-pointer"
-                              onClick={logout}
-                            >
-                              <span className="user-btn">{t("logout")}</span>
-                              <img
-                                src={require("../assets/icons/logout.webp")}
-                                alt="logoutimg"
-                                className="logout-img"
-                              />
-                            </div>
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </Menu>
-                    </>
-                    {/* download */}
-                    <div className="relative" ref={languageRef1}>
-                      {/* Trigger dropdown on click */}
-                      <Link className="mr-4" onClick={toggleDropdown}>
-                        <img
-                          src={require("../assets/Globe.png")}
-                          width="28px"
-                          alt="Globe"
-                        />
-                      </Link>
-
-                      {/* Dropdown menu */}
-                      {isDropdownOpen && (
-                        <ul className="globe-lists">
-                          <li
-                            className="globe-options"
-                            onClick={() => handleLanguageChange("en")}
-                          >
-                            English
-                          </li>
-                          <li
-                            className="globe-options"
-                            onClick={() => handleLanguageChange("es")}
-                          >
-                            Spanish
-                          </li>
-                        </ul>
-                      )}
-                    </div>
-                    {/* <Link className="contact_button nav-primary-icons" to="">
-                      <span className="header-profile-wrap dark_display_none nav-primary-icons ">
-                        <i class="bi bi-download"></i>
-                      </span>
-                    </Link> */}
-
-                    {/* notification bell */}
-                    {loginCheck ? (
-                      <div
-                        className={`btn-group more-wrapper${isNotifyOpen ? " show" : ""}`}
-                        ref={notifyRef}
-                      >
-                        <button
-                          className="btn btn-secondary btn-lg dropdown-toggle more-select bell-notify  nav-primary-icons"
-                          type="button"
-                          aria-expanded={isNotifyOpen}
-                          onClick={handleBellClick}
-                        >
-                          {/* <img
-                            src={require("../assets/icons/bell.webp")}
-                            className="moons"
-                            width="30px"
-                          /> */}
-
-                          <span className="header-profile-wrap dark_display_none nav-primary-icons">
-                            <i class="bi bi-bell"></i>
-                          </span>
-                          {hasUnread && <div className="bell-indicator"></div>}
-                        </button>
-
-                        <ul
-                          className={`dropdown-menu notify-dropdown${isNotifyOpen ? " show" : ""}`}
-                        >
-                          <div className="notify-contents">
-                            <div className="notify-head-wrapper d-flex align-items-center justify-content-between">
-                              <h5>{t("notifications")}</h5>
-                              <button onClick={notifyNav}>
-                                {t("viewAll")}{" "}
-                                <i class="ri-arrow-right-s-line"></i>
-                              </button>
-                            </div>
-
-                            {notification &&
-                              notification.map((options, i) => {
-                                return (
-                                  <div className="notify-container">
-                                    <Link
-                                      to={
-                                        options.link == ""
-                                          ? "/notificationHistory"
-                                          : options.link
-                                      }
-                                      className="nav-notify-content "
-                                    >
-                                      <h6 className="nav-notify">
-                                        {" "}
-                                        {options.message}{" "}
-                                      </h6>
-
-                                      <div className="time-notify">
-                                        {Moment(options.createdAt).fromNow()}
-                                      </div>
-                                    </Link>
-                                  </div>
-                                );
-                              })}
-                          </div>
-                        </ul>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-
-                    <>
-                      {/* <h6
-                        aria-controls="simple-menu"
-                        aria-haspopup="true"
-                        className=" head-drops"
-                        onClick={handleClick}
-                      >
-                        <img
-                          src={require("../assets/Globe.png")}
-                          className="minimage"
-                          width="30px"
-                        />
-                      </h6> */}
-
-                      {/* <Menu
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                      >
-                        <MenuItem>
-                          <LogoutIcon />
-                          <span className="mx-3 cus">Disconnect</span>{" "}
-                        </MenuItem>
-                      </Menu> */}
-                    </>
-
-                    <MenuIcon className="meus" onClick={handleMobileMenuOpen} />
-                  </IconButton>
-
                   {/* {isAuthenticated ? ""  */}
 
                   <div className="relative" ref={languageRef2}>
@@ -957,102 +654,493 @@ const Header = () => {
                       </div>
                     )}
                   </div>
-                  <div
-                    className={`flex justify-center rounded-[8px] px-4 ml-4 bg-primary text-black ${classes.appBarItems}`}
-                  >
-                    {loginCheck ? (
-                      ""
-                    ) : (
-                      <Link to="/login">
-                        <button className="head-btn-login">{t("login")}</button>
-                      </Link>
-                    )}
-                    <span className="text-black flex justify-center align-items-center">
-                      /
-                    </span>
-                    {loginCheck ? (
-                      ""
-                    ) : (
-                      // <Link to="/register">
-                      //   <button className="head-btn">{t("register")}</button>
-                      // </Link>
-                      <Link to="/register">
-                        <button className="head-btn capitalize">
-                          {t("signin")}
-                        </button>
-                      </Link>
-                    )}
-                    {loginCheck ? (
-                      <Link to="/deposit" className="head-dep-btn">
-                        <button className="head-btn m-0">{t("deposit")}</button>
-                      </Link>
-                    ) : (
-                      ""
-                    )}
-                    {loginCheck ? (
-                      <div class="btn-group more-wrapper">
-                        <button
-                          class="btn btn-secondary btn-lg dropdown-toggle more-select"
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          {t("assets")}
-                        </button>
 
-                        <ul class="dropdown-menu more-dropdown-newasset">
-                          <div className="more-links">
+                  {/* notification bell */}
+                  {loginCheck ? (
+                    <div className="relative" ref={mobileNotifyRef}>
+                      {/* Bell Button */}
+                      <button
+                        onClick={() => handleBellClick()}
+                        className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray transition"
+                      >
+                        <span className="text-primary text-lg">
+                          <i className="bi bi-bell"></i>
+                        </span>
+
+                        {/* Unread Indicator */}
+                        {hasUnread && (
+                          <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+                        )}
+                      </button>
+
+                      {/* Dropdown */}
+                      {isNotifyOpen && (
+                        <div className="absolute right-0 mt-10 w-[320px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-5 z-50">
+                          {/* Header */}
+                          <div className="flex items-center justify-between mb-4">
+                            <p className="text-secondary text-sm font-ibm">
+                              {notification?.length || 0}{" "}
+                              {t("newNotifications")}
+                            </p>
+
+                            <button
+                              onClick={notifyNav}
+                              className="text-primary text-sm font-medium hover:underline"
+                            >
+                              {t("viewAll")}
+                            </button>
+                          </div>
+
+                          {/* Notifications List */}
+                          <div className="flex flex-col gap-4 max-h-[260px] overflow-y-auto">
+                            {notification && notification.length > 0 ? (
+                              notification.map((options, i) => (
+                                <Link
+                                  key={i}
+                                  to={
+                                    options.link === ""
+                                      ? "/notificationHistory"
+                                      : options.link
+                                  }
+                                  className="flex gap-3 p-2 rounded-lg hover:bg-gray transition"
+                                >
+                                  {/* Dot */}
+                                  <div className="w-2 h-2 mt-2 rounded-full bg-primary"></div>
+
+                                  {/* Content */}
+                                  <div>
+                                    <p className="text-secondary text-sm font-medium line-clamp-1">
+                                      {options.message}
+                                    </p>
+
+                                    <p className="text-secondary10 text-[11px] mt-1">
+                                      {Moment(options.createdAt).fromNow()}
+                                    </p>
+                                  </div>
+                                </Link>
+                              ))
+                            ) : (
+                              <p className="text-secondary10 text-sm text-center py-6">
+                                {t("noNotifications")}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* View All Button */}
+                          {notification && notification.length > 0 && (
+                            <button
+                              onClick={notifyNav}
+                              className="w-full mt-5 bg-primary text-black py-2.5 rounded-lg font-medium hover:opacity-90 transition"
+                            >
+                              {t("viewAll")}
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
+                  {loginCheck ? (
+                    <div className="relative" ref={assetRef}>
+                      {/* Button */}
+                      <button
+                        onClick={() => setIsAssetOpen((prev) => !prev)}
+                        className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray transition"
+                      >
+                        <img src={Asset} alt="Asset" className="w-5 h-5" />
+                      </button>
+
+                      {/* Dropdown */}
+                      {isAssetOpen && (
+                        <div className="absolute right-0 mt-10 w-[220px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-4 z-50">
+                          <div className="flex flex-col gap-3">
                             <Link to="/assets" className="nav-trade-links">
-                              <div className="nav-trade-wrapper">
+                              <div className="nav-trade-wrapper flex items-center gap-2">
                                 <img
                                   src={require("../assets/icons/overview-assets.webp")}
-                                  alt="spot-trade-icon"
+                                  alt="overview"
                                 />
-                                <div>
+                                <div className="flex justify-between w-full items-center">
                                   {t("overview")}
-                                  <span className="primary-nav-arrow mx-2">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                  </span>
+                                  <i className="bi bi-arrow-right"></i>
                                 </div>
                               </div>
                             </Link>
+
                             <Link to="/spotassets" className="nav-trade-links">
-                              <div className="nav-trade-wrapper mt-3">
+                              <div className="nav-trade-wrapper flex items-center gap-2">
                                 <img
                                   src={require("../assets/icons/spot-assets.webp")}
-                                  alt="spot-trade-icon"
+                                  alt="spot"
                                 />
-                                <div>
+                                <div className="flex justify-between w-full items-center">
                                   {t("spotAssets")}
-                                  <span className="primary-nav-arrow mx-2">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                  </span>
+                                  <i className="bi bi-arrow-right"></i>
                                 </div>
                               </div>
                             </Link>
+
                             <Link
                               to="/fundingassets"
                               className="nav-trade-links"
                             >
-                              <div className="nav-trade-wrapper mt-3">
+                              <div className="nav-trade-wrapper flex items-center gap-2">
                                 <img
                                   src={require("../assets/icons/funding-assets.webp")}
-                                  alt="spot-trade-icon"
+                                  alt="funding"
                                 />
-                                <div>
+                                <div className="flex justify-between w-full items-center">
                                   {t("fundingAssets")}
-                                  <span className="primary-nav-arrow mx-2">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                  </span>
+                                  <i className="bi bi-arrow-right"></i>
                                 </div>
                               </div>
                             </Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : null}
+                  {/* <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    className={` m-0 p-0 ${classes.profileButton}`}
+                  > */}
+                  {/* user profile */}
+                  <>
+                    {loginCheck ? (
+                      <div className="relative" ref={profileRef}>
+                        {/* Profile Button */}
+                        <div
+                          onClick={handleProfileClick}
+                          className="w-[44px] h-[44px] rounded-full border-2 border-[#23262F] overflow-hidden flex items-center justify-center bg-[#23262F] cursor-pointer hover:opacity-80 transition"
+                        >
+                          <img
+                            src={Avatar}
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.src = require("../assets/icons/profile_dark.webp");
+                            }}
+                          />
+                        </div>
+
+                        {/* Dropdown (UNCHANGED CONTENT) */}
+                        {isProfileOpen && (
+                          <div className="absolute right-0 mt-10 w-[300px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-4 z-50">
+                            {/* <div className="frame-container"> */}
+                            {/* user details */}
+                            <div className="user-details">
+                              <img
+                                src={UserIcon}
+                                alt="usericon"
+                                className="user-img"
+                              />
+                              <div className="details">
+                                <span className="details-mail">
+                                  {obfuscateEmail(profileData.email)}
+                                </span>
+                                <span className="details-udi">
+                                  {t("UID")}:{profileData.uuid}
+                                  <i
+                                    className="bi bi-copy cursor-pointer"
+                                    onClick={() => copy(profileData.uuid)}
+                                  ></i>
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* links */}
+                            <ul className="links">
+                              <li>
+                                <Link to="/dashboard" className="link-content">
+                                  <span>{t("dashboard")}</span>
+                                  <span className="text-yellow hover-show">
+                                    <i className="bi bi-chevron-right"></i>
+                                  </span>
+                                </Link>
+                              </li>
+
+                              <li>
+                                <Link to="/security" className="link-content">
+                                  <div className="header_new_chng">
+                                    <span>{t("security")}</span>
+                                    <div>
+                                      {profileData.tfastatus == 0 &&
+                                      profileData.AntiphisingEnabledStatus ==
+                                        0 ? (
+                                        <p>
+                                          <span className="low-clr mx-1">
+                                            {t("low")}
+                                          </span>
+                                          <i className="ri-shield-keyhole-line low-clr"></i>
+                                        </p>
+                                      ) : profileData.tfastatus == 0 ||
+                                        profileData.AntiphisingEnabledStatus ==
+                                          0 ? (
+                                        <p>
+                                          <span className="mid-clr mx-1">
+                                            {t("medium")}
+                                          </span>
+                                          <i className="ri-shield-keyhole-line mid-clr"></i>
+                                        </p>
+                                      ) : (
+                                        <p>
+                                          <span className="high-clr mx-1">
+                                            {t("high")}
+                                          </span>
+                                          <i className="ri-shield-keyhole-line high-clr"></i>
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <span className="text-yellow hover-show">
+                                    <i className="bi bi-chevron-right"></i>
+                                  </span>
+                                </Link>
+                              </li>
+
+                              <li>
+                                <Link to="/kyc" className="link-content">
+                                  <div className="header_new_chng">
+                                    <span>{t("identification")}</span>
+                                    <div>
+                                      {profileData.kycstatus == 1 ? (
+                                        <p>
+                                          <span className="high-clr mx-1">
+                                            {t("verified")}
+                                          </span>
+                                          <i className="bi bi-check-circle high-clr"></i>
+                                        </p>
+                                      ) : (
+                                        <p>
+                                          <span className="low-clr mx-1">
+                                            {t("notverified")}
+                                          </span>
+                                          <i className="bi bi-x-circle low-clr"></i>
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <span className="text-yellow hover-show">
+                                    <i className="bi bi-chevron-right"></i>
+                                  </span>
+                                </Link>
+                              </li>
+
+                              <li>
+                                <Link to="/withdraw" className="link-content">
+                                  <span>{t("withdrawal")}</span>
+                                  <span className="text-yellow hover-show">
+                                    <i className="bi bi-chevron-right"></i>
+                                  </span>
+                                </Link>
+                              </li>
+
+                              <li>
+                                <Link
+                                  to="/depositHistory"
+                                  className="link-content"
+                                >
+                                  <span>{t("history")}</span>
+                                  <span className="text-yellow hover-show">
+                                    <i className="bi bi-chevron-right"></i>
+                                  </span>
+                                </Link>
+                              </li>
+
+                              <li>
+                                <Link to="/support" className="link-content">
+                                  <span>{t("support")}</span>
+                                  <span className="text-yellow hover-show">
+                                    <i className="bi bi-chevron-right"></i>
+                                  </span>
+                                </Link>
+                              </li>
+                            </ul>
+
+                            {/* logout */}
+                            <div
+                              className="btn-wrapper security-link cursor-pointer"
+                              onClick={logout}
+                            >
+                              <span className="user-btn">{t("logout")}</span>
+                              <img
+                                src={require("../assets/icons/logout.webp")}
+                                alt="logoutimg"
+                                className="logout-img"
+                              />
+                            </div>
+                            {/* </div> */}
+                          </div>
+                        )}
+                      </div>
+                    ) : null}
+                  </>
+                  {/* download */}
+                  {/* <div className="relative" ref={languageRef1}> */}
+                  {/* Trigger dropdown on click */}
+                  {/* <Link className="mr-4" onClick={toggleDropdown}>
+                        <img
+                          src={require("../assets/Globe.png")}
+                          width="28px"
+                          alt="Globe"
+                        />
+                      </Link> */}
+
+                  {/* Dropdown menu */}
+                  {/* {isDropdownOpen && (
+                        <ul className="globe-lists">
+                          <li
+                            className="globe-options"
+                            onClick={() => handleLanguageChange("en")}
+                          >
+                            English
+                          </li>
+                          <li
+                            className="globe-options"
+                            onClick={() => handleLanguageChange("es")}
+                          >
+                            Spanish
+                          </li>
+                        </ul>
+                      )}
+                    </div> */}
+                  {/* <Link className="contact_button nav-primary-icons" to="">
+                      <span className="header-profile-wrap dark_display_none nav-primary-icons ">
+                        <i class="bi bi-download"></i>
+                      </span>
+                    </Link> */}
+
+                  {/* notification bell */}
+                  {/* {loginCheck ? (
+                      <div
+                        className={`btn-group more-wrapper${isNotifyOpen ? " show" : ""}`}
+                        ref={notifyRef}
+                      >
+                        <button
+                          className="btn btn-secondary btn-lg dropdown-toggle more-select bell-notify  nav-primary-icons"
+                          type="button"
+                          aria-expanded={isNotifyOpen}
+                          onClick={handleBellClick}
+                        > */}
+                  {/* <img
+                            src={require("../assets/icons/bell.webp")}
+                            className="moons"
+                            width="30px"
+                          /> */}
+                  {/* 
+                          <span className="header-profile-wrap dark_display_none nav-primary-icons">
+                            <i class="bi bi-bell"></i>
+                          </span>
+                          {hasUnread && <div className="bell-indicator"></div>}
+                        </button>
+
+                        <ul
+                          className={`dropdown-menu notify-dropdown${isNotifyOpen ? " show" : ""}`}
+                        >
+                          <div className="notify-contents">
+                            <div className="notify-head-wrapper d-flex align-items-center justify-content-between">
+                              <h5>{t("notifications")}</h5>
+                              <button onClick={notifyNav}>
+                                {t("viewAll")}{" "}
+                                <i class="ri-arrow-right-s-line"></i>
+                              </button>
+                            </div>
+
+                            {notification &&
+                              notification.map((options, i) => {
+                                return (
+                                  <div className="notify-container">
+                                    <Link
+                                      to={
+                                        options.link == ""
+                                          ? "/notificationHistory"
+                                          : options.link
+                                      }
+                                      className="nav-notify-content "
+                                    >
+                                      <h6 className="nav-notify">
+                                        {" "}
+                                        {options.message}{" "}
+                                      </h6>
+
+                                      <div className="time-notify">
+                                        {Moment(options.createdAt).fromNow()}
+                                      </div>
+                                    </Link>
+                                  </div>
+                                );
+                              })}
                           </div>
                         </ul>
                       </div>
                     ) : (
                       ""
+                    )} */}
+
+                  <>
+                    {/* <h6
+                        aria-controls="simple-menu"
+                        aria-haspopup="true"
+                        className=" head-drops"
+                        onClick={handleClick}
+                      >
+                        <img
+                          src={require("../assets/Globe.png")}
+                          className="minimage"
+                          width="30px"
+                        />
+                      </h6> */}
+
+                    {/* <Menu
+                        id="simple-menu"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                      >
+                        <MenuItem>
+                          <LogoutIcon />
+                          <span className="mx-3 cus">Disconnect</span>{" "}
+                        </MenuItem>
+                      </Menu> */}
+                  </>
+
+                  {/* <MenuIcon
+                      className={`meus ${classes.mobileMenuButton}`}
+                      onClick={handleMobileMenuOpen}
+                    />
+                  </IconButton> */}
+                  <div
+                    className={`flex justify-center rounded-[8px] px-4 ml-4 bg-primary text-black ${classes.appBarItems}`}
+                  >
+                    {!loginCheck && (
+                      <div className="flex items-center gap-2">
+                        <Link to="/login">
+                          <button className="head-btn-login">
+                            {t("login")}
+                          </button>
+                        </Link>
+
+                        <span className="text-gray-400">/</span>
+
+                        <Link to="/register">
+                          <button className="head-btn capitalize">
+                            {t("signin")}
+                          </button>
+                        </Link>
+                      </div>
                     )}
+                    {/* {loginCheck ? (
+                      <Link to="/deposit" className="head-dep-btn">
+                        <button className="head-btn m-0">{t("deposit")}</button>
+                      </Link>
+                    ) : (
+                      ""
+                    )} */}
 
                     {/* user profile */}
 
@@ -1259,98 +1347,11 @@ const Header = () => {
                         <i class="bi bi-download"></i>
                       </span>
                     </Link> */}
-
-                    {/* notification bell */}
-                    {loginCheck ? (
-                      <div className="relative" ref={mobileNotifyRef}>
-                        {/* Bell Button */}
-                        <button
-                          onClick={() => handleBellClick()}
-                          className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray transition"
-                        >
-                          <span className="text-white text-lg">
-                            <i className="bi bi-bell"></i>
-                          </span>
-
-                          {/* Unread Indicator */}
-                          {hasUnread && (
-                            <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
-                          )}
-                        </button>
-
-                        {/* Dropdown */}
-                        {isNotifyOpen && (
-                          <div className="absolute right-0 mt-10 w-[320px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-5 z-50">
-                            {/* Header */}
-                            <div className="flex items-center justify-between mb-4">
-                              <p className="text-secondary text-sm font-ibm">
-                                {notification?.length || 0}{" "}
-                                {t("newNotifications")}
-                              </p>
-
-                              <button
-                                onClick={notifyNav}
-                                className="text-primary text-sm font-medium hover:underline"
-                              >
-                                {t("viewAll")}
-                              </button>
-                            </div>
-
-                            {/* Notifications List */}
-                            <div className="flex flex-col gap-4 max-h-[260px] overflow-y-auto">
-                              {notification && notification.length > 0 ? (
-                                notification.map((options, i) => (
-                                  <Link
-                                    key={i}
-                                    to={
-                                      options.link === ""
-                                        ? "/notificationHistory"
-                                        : options.link
-                                    }
-                                    className="flex gap-3 p-2 rounded-lg hover:bg-gray transition"
-                                  >
-                                    {/* Dot */}
-                                    <div className="w-2 h-2 mt-2 rounded-full bg-primary"></div>
-
-                                    {/* Content */}
-                                    <div>
-                                      <p className="text-secondary text-sm font-medium line-clamp-1">
-                                        {options.message}
-                                      </p>
-
-                                      <p className="text-secondary10 text-[11px] mt-1">
-                                        {Moment(options.createdAt).fromNow()}
-                                      </p>
-                                    </div>
-                                  </Link>
-                                ))
-                              ) : (
-                                <p className="text-secondary10 text-sm text-center py-6">
-                                  {t("noNotifications")}
-                                </p>
-                              )}
-                            </div>
-
-                            {/* View All Button */}
-                            {notification && notification.length > 0 && (
-                              <button
-                                onClick={notifyNav}
-                                className="w-full mt-5 bg-primary text-black py-2.5 rounded-lg font-medium hover:opacity-90 transition"
-                              >
-                                {t("viewAll")}
-                              </button>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      ""
-                    )}
                   </div>
                 </Toolbar>
               </AppBar>
 
-              <Drawer
+              {/* <Drawer
                 anchor="left"
                 open={mobileMenuOpen}
                 onClose={handleMobileMenuClose}
@@ -1392,16 +1393,16 @@ const Header = () => {
                       <Link to={isAuthenticated ? "/p2p" : "/login"}>
                         {t("p2p")}
                       </Link>
-                    </ListItem>
-                    {/* <ListItem button className="drawa">
+                    </ListItem> */}
+              {/* <ListItem button className="drawa">
                       <Link to="/staking">Staking</Link>
                     </ListItem> */}
-                    {/* <ListItem button className="drawa">
+              {/* <ListItem button className="drawa">
                       <Link to={isAuthenticated ? "/internaltransfer" : "/login"}>
                         {t("internal_transfer")}
                       </Link>
                     </ListItem> */}
-                    {/* <ListItem button className="drawa ">
+              {/* <ListItem button className="drawa ">
                       <Link to="/internaltransfer">Internal Transfer</Link>
                     </ListItem> 
 
@@ -1412,7 +1413,7 @@ const Header = () => {
                     <ListItem button className="drawa ">
                       <Link to="/airdroptokens">Airdrop</Link>
                     </ListItem>*/}
-                    {!loginCheck ? (
+              {/* {!loginCheck ? (
                       <>
                         <ListItem button className="drawa ">
                           <Link to="/login">
@@ -1469,11 +1470,11 @@ const Header = () => {
                         </ListItem>
                         <ListItem button className="drawa ">
                           <Link to="/recharge">{t("recharge")}</Link>
-                        </ListItem>
-                        {/* <ListItem button className="drawa ">
+                        </ListItem> */}
+              {/* <ListItem button className="drawa ">
                           <Link to="/rewards">My rewards</Link>
                         </ListItem> */}
-                        <ListItem button className="drawa ">
+              {/* <ListItem button className="drawa ">
                           <Link to="/loginHistory">{t("histories")}</Link>
                         </ListItem>
                         <ListItem button className="drawa ">
@@ -1498,7 +1499,7 @@ const Header = () => {
                     )}
                   </div>
                 </div>
-              </Drawer>
+              </Drawer> */}
             </div>
           </div>
         </div>

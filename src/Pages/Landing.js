@@ -345,47 +345,48 @@ export default function Landing() {
         <section className="fidex_hero_section">
           <div className="container">
             <div className="row">
-              <div className="">
-                <div className="hero_section_content my-20 w-full">
-                  <h1 className="text-secondary text-center text-[48px] mx-auto max-w-[750px]">
-                    {t("welcome_to")}
-                    <span
-                      className={`crypto-span mar-lft text-primary ${
-                        colorChanged
-                          ? "text-animate-inview text-animate"
-                          : "text-animate"
-                      }`}
-                    >
-                      {t("pitiklini")}
-                    </span>
-                  </h1>
-                  <p className="text-secondary text-[24px] mb-12 text-center">
-                    {t("seize_the_moment")}
-                  </p>
-                  <div className="flex w-full gap-4 justify-center mx-auto">
-                    <div className="flex gap-2 justify-start max-w-[300px] bg-gray rounded-[8px] py-4 px-8">
-                      <img src={Email} className="self-center" />
-                      <p className="text-primary self-center w-fit mb-0">
-                        {t("email_label")}{" "}
-                      </p>
-                      <span className="text-primary self-center w-fit">/</span>
-                      <p className="text-primary self-center w-fit">
-                        {t("phone_label")}{" "}
-                      </p>
-                    </div>
-                    <div className="flex bg-primary px-5 py-4 rounded-[8px]">
-                      <p className="text-black underline self-center w-fit mb-0">
-                        {t("email_label")}
-                      </p>
-                    </div>
+              <div className="hero_section_content mt-20 w-full">
+                <h1 className="text-secondary text-center text-[48px] mx-auto max-w-[750px]">
+                  {t("welcome_to")}
+                  <span
+                    className={`crypto-span mar-lft text-primary ${
+                      colorChanged
+                        ? "text-animate-inview text-animate"
+                        : "text-animate"
+                    }`}
+                  >
+                    {t("pitiklini")}
+                  </span>
+                </h1>
+                <p className="text-secondary text-[24px] mb-12 text-center">
+                  {t("seize_the_moment")}
+                </p>
+                <div className="flex w-full gap-4 justify-center mx-auto">
+                  <div className="flex gap-2 justify-start max-w-[300px] bg-gray rounded-[8px] py-4 px-8">
+                    <img src={Email} className="self-center" />
+                    <p className="text-primary self-center w-[320px] mb-0">
+                      {t("email_label")}{" "}
+                    </p>
+                    {/* <span className="text-primary self-center w-fit">/</span>
+                    <p className="text-primary self-center w-fit">
+                      {t("phone_label")}{" "}
+                    </p> */}
                   </div>
+                  <Link
+                    to="/register"
+                    className="flex bg-primary px-5 py-4 rounded-[8px]"
+                  >
+                    <p className="text-black underline self-center w-fit mb-0 capitalize">
+                      {t("signin")}{" "}
+                    </p>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        <div className="bg-black/35 w-full flex justify-center gap-[120px] py-6">
-          <div className="flex flex-col justify-center">
+        <div className=" w-full flex justify-center gap-[120px] mt-6">
+          <div className="flex flex-col justify-center ">
             <p className="text-primary text-[40px] mb-0 font-bold">
               17+<span className="text-[20px]">M</span>
             </p>
@@ -422,6 +423,7 @@ export default function Landing() {
         <CryptoExchange />
         <CryptoJourney />
         <FAQ />
+
         {/* hero */}
         {/* <section className="fidex_hero_section">
           <div className="container">

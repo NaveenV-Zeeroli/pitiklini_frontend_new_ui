@@ -3272,7 +3272,9 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   gap: 50px;
-  transition: border 0.5s ease, transform 0.5s ease;
+  transition:
+    border 0.5s ease,
+    transform 0.5s ease;
 }
 
 .feature_card_img {
@@ -3353,7 +3355,9 @@ input[type="file"] {
   display: flex;
   align-items: end;
   padding: 0px 30px 30px;
-  transition: border 0.5s ease, transform 0.5s ease;
+  transition:
+    border 0.5s ease,
+    transform 0.5s ease;
 }
 
 .adv_card_main:hover {
@@ -3983,7 +3987,7 @@ input[type="file"] {
   .proceed-btn {
     font-size: 14px;
   }
-  h6.timer_in_title{
+  h6.timer_in_title {
     flex-direction: column;
     align-items: flex-start;
     height: auto;

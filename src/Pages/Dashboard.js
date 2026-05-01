@@ -342,109 +342,6 @@ const Dashboard = () => {
         ) : (
           <div className="w-full">
             <div className="dashboard_content">
-              <div className="dash_user_name">
-                <h3>
-                  {t("hello")} {profileData.displayname}{" "}
-                  {profileData.vipBadge &&
-                    profileData.vipBadge === true &&
-                    dataExistref.current && (
-                      <span className="vipbge_dhbrd"> [ ⭐VIP ]</span>
-                    )}
-                </h3>
-              </div>
-
-              <div className="verified_low_btn">
-                {getKYCData.kycstatus == 1 ? (
-                  <>
-                    <p className="dash-verified mt-1">
-                      <img
-                        src={require("../assets/icons/verified.webp")}
-                        alt="verify"
-                        x
-                      />{" "}
-                      {t("verifiedProfile")}
-                    </p>
-                  </>
-                ) : getKYCData.kycstatus == 2 ? (
-                  <>
-                    <p className="verify_medium mt-1">
-                      <i class="ri-error-warning-fill"></i> {t("pending")}
-                    </p>
-                  </>
-                ) : getKYCData.kycstatus == 3 ? (
-                  <>
-                    <p className="dash-notVerified mt-1">
-                      <img
-                        src={require("../assets/icons/notverify.webp")}
-                        alt="rejected"
-                      />{" "}
-                      {t("rejected")}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p className="dash-notVerified mt-1">
-                      <img
-                        src={require("../assets/icons/notverify.webp")}
-                        alt="not-verify"
-                      />{" "}
-                      {t("notverified")}
-                    </p>
-                  </>
-                )}
-
-                {/* <div className="secuirty_box_title mt-0">
-                      {profileDataref.current.tfastatus == 0 &&
-                        profileDataref.current.AntiphisingEnabledStatus == 0 ? (
-                        <>
-                          <p className="verify_fail">
-                            <i class="ri-shield-keyhole-line"></i>
-                            <span className="mx-2">Low</span>
-                          </p>
-                        </>
-                      ) : profileDataref.current.tfastatus == 0 ||
-                          profileDataref.current.AntiphisingEnabledStatus == 0 ? (
-                        <>
-                          <p className="verify_medium">
-                            <i class="ri-shield-keyhole-line"></i>
-                            <span className="mx-2">Medium</span>
-                          </p>
-                        </>
-                      ) : (
-                        <>
-                          <p className="verify_success">
-                            <i class="ri-shield-keyhole-line"></i>
-                            <span className="mx-2">High</span>
-                          </p>
-                        </>
-                      )}
-                    </div> */}
-                <div className="secuirty_box_title mt-0">
-                  {profileDataLevelref.current == "Low" ? (
-                    <>
-                      <p className="verify_fail">
-                        <i class="ri-shield-keyhole-line"></i>
-                        <span className="mx-2">{t("low")}</span>
-                      </p>
-                    </>
-                  ) : profileDataLevelref.current == "Medium" ? (
-                    <>
-                      <p className="verify_medium">
-                        <i class="ri-shield-keyhole-line"></i>
-                        <span className="mx-2">{t("medium")}</span>
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="verify_success">
-                        <i class="ri-shield-keyhole-line"></i>
-                        <span className="mx-2">{t("high")}</span>
-                      </p>
-                    </>
-                  )}
-                </div>
-              </div>
-
               {/* <div className="row pad-y-40">
                     <div className="col-lg-6">
                       <div className="secuirty_box">
@@ -514,6 +411,81 @@ const Dashboard = () => {
               {/* table */}
               <div className="w-full">
                 <div className="bg-black rounded-xl p-4 ">
+                  <div className="flex items-center px-8 flex-wrap gap-3">
+                    {/* Left: Name + VIP */}
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg text-secondary font-bold">
+                        {t("hello")} {profileData.displayname}
+                      </h3>
+
+                      {profileData.vipBadge === true &&
+                        dataExistref.current && (
+                          <span className="text-yellow-500 text-sm font-medium">
+                            ⭐ VIP
+                          </span>
+                        )}
+                    </div>
+
+                    {/* Right: Status + Security */}
+                    <div className="flex items-center gap-4 flex-wrap">
+                      {/* KYC Status */}
+                      <div className="flex items-center gap-1 text-sm">
+                        {getKYCData.kycstatus == 1 ? (
+                          <span className="flex items-center gap-1 text-green-600">
+                            <img
+                              src={require("../assets/icons/verified.webp")}
+                              className="w-4 h-4"
+                              alt=""
+                            />
+                            {t("verifiedProfile")}
+                          </span>
+                        ) : getKYCData.kycstatus == 2 ? (
+                          <span className="flex items-center gap-1 text-yellow-500">
+                            <i className="ri-error-warning-fill"></i>
+                            {t("pending")}
+                          </span>
+                        ) : getKYCData.kycstatus == 3 ? (
+                          <span className="flex items-center gap-1 text-red-500">
+                            <img
+                              src={require("../assets/icons/notverify.webp")}
+                              className="w-4 h-4"
+                              alt=""
+                            />
+                            {t("rejected")}
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1 text-gray-500">
+                            <img
+                              src={require("../assets/icons/notverify.webp")}
+                              className="w-4 h-4"
+                              alt=""
+                            />
+                            {t("notverified")}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Security Level */}
+                      <div className="flex items-center gap-1 text-sm">
+                        {profileDataLevelref.current === "Low" ? (
+                          <span className="flex items-center gap-1 text-red-500">
+                            <i className="ri-shield-keyhole-line"></i>
+                            {t("low")}
+                          </span>
+                        ) : profileDataLevelref.current === "Medium" ? (
+                          <span className="flex items-center gap-1 text-yellow-500">
+                            <i className="ri-shield-keyhole-line"></i>
+                            {t("medium")}
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1 text-green-600">
+                            <i className="ri-shield-keyhole-line"></i>
+                            {t("high")}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <div className="row pad-y-40">
                     <div className="col-lg-12">
                       <div className="user_id_card">
