@@ -351,6 +351,15 @@ function App() {
             />
             {/* <Route path="/buycrypto" element={<Buycrypto />} /> */}
             <Route
+              path="/asset"
+              element={
+                <RequireAuth>
+                  {" "}
+                  <Assets />{" "}
+                </RequireAuth>
+              }
+            />
+            <Route
               path="/assets"
               element={
                 <RequireAuth>
