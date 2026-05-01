@@ -244,7 +244,7 @@ const Header = () => {
     let userToken = sessionStorage.getItem("user_token");
     if (true) {
       // Forced true for development
-      setloginCheck(false);
+      setloginCheck(true);
       if (userToken) {
         verifyToken();
         getProfile();
