@@ -20,7 +20,7 @@ body {
 
 .fidex_hero_section {
   padding: 110px 0 90px;
-  background-color: #090909;
+  background-color: #0b0f19;
 }
 
 .margin-cursor > * {
@@ -1085,7 +1085,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent body scrolling */
+  overflow-x: hidden;
   height: 100%;
 }
 
