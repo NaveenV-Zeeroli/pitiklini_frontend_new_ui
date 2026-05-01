@@ -460,6 +460,14 @@ const Header = () => {
                           </ul>
                         </div> */}
 
+                        <a
+                          href="/trade/BTC_USDT"
+                          color="inherit"
+                          className="contact_button px-4 uppercase font-bold"
+                        >
+                          {/* Market */}
+                          {t("spot")}
+                        </a>
                         <Link
                           to="/market"
                           color="inherit"
