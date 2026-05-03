@@ -18,10 +18,11 @@ import Moment from "moment";
 import ICON from "../assets/deposit-imp.png";
 import WARNICON from "../assets/icons/withdraw-warn.webp";
 import { useTranslation } from "react-i18next";
+import DashboardLayout from "./DashboardLayout";
 
 const stripePromise = loadStripe(
   // "pk_test_51QeAhuFMARC91de4r6DKi6KzNLIZ2vLG2p9ymEYVLpeIYxpaY4yA9zlFDqSeX7qoCnq8LHENJcpHGf4F1elrO6J400iIk60EOO"
-  "pk_test_51RnaEAGbtb4pkuNeCDlH6zQnbn96Ax8kJ8bJtttZOBlvNYjj5TCdwB6qECPVm3ERhkl4JYzlBQIDNLCJTEoxqvhd00q6kdprwm"
+  "pk_test_51RnaEAGbtb4pkuNeCDlH6zQnbn96Ax8kJ8bJtttZOBlvNYjj5TCdwB6qECPVm3ERhkl4JYzlBQIDNLCJTEoxqvhd00q6kdprwm",
 ); // Publishable Key
 
 const Checkout = () => {
@@ -34,7 +35,7 @@ const Checkout = () => {
 
   const [allCurrency, setallCurrency, allCurrencyref] = useState([]);
   const [allCurrencyFiat, setallCurrencyFiat, allCurrencyrefFiat] = useState(
-    []
+    [],
   );
   const [allCrypto, setallCrypto, allCryptoref] = useState([]);
   const [currency, setcurrency, currencyref] = useState("");
@@ -181,7 +182,7 @@ const Checkout = () => {
     } catch (error) {
       console.error(
         "Error during payment process:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
     }
   };
@@ -297,7 +298,7 @@ const Checkout = () => {
   };
   const onSelect1 = async (e, option) => {
     let indexData = allCryptoref.current.findIndex(
-      (x) => x._id == option.value
+      (x) => x._id == option.value,
     );
 
     var currencydata = allCryptoref.current[indexData];
@@ -321,7 +322,7 @@ const Checkout = () => {
     setnet_current("");
     getAddress();
     let indexData = allCryptoref.current.findIndex(
-      (x) => x._id == option.value
+      (x) => x._id == option.value,
     );
     if (option.label == "USD") {
       showerrorToast("Fiat withdraw is not allowed by the site");
@@ -547,7 +548,7 @@ const Checkout = () => {
   const onSelect_address = async (e) => {
     console.log(
       e.target.value,
-      "=-=-=-=option=-=-=-=-=option=-=-=-option=-=-="
+      "=-=-=-=option=-=-=-=-=option=-=-=-option=-=-=",
     );
     setwithdrawAddress(e.target.value);
     formValue.withAddress = e.target.value;
@@ -575,7 +576,7 @@ const Checkout = () => {
                     showerrorToast(
                       "Please enter greater than " +
                         currentcurrency.minWithdrawLimit +
-                        " amount"
+                        " amount",
                     );
                   } else if (
                     currentcurrency.maxWithdrawLimit < formValue.amount
@@ -583,7 +584,7 @@ const Checkout = () => {
                     showerrorToast(
                       "Please enter less than " +
                         currentcurrency.maxWithdrawLimit +
-                        " amount"
+                        " amount",
                     );
                   } else {
                     var data = {
@@ -618,7 +619,7 @@ const Checkout = () => {
                     showerrorToast(
                       "Please enter greater than " +
                         currentcurrency.minWithdrawLimit +
-                        " amount"
+                        " amount",
                     );
                   } else if (
                     currentcurrency.maxWithdrawLimit < formValue.amount
@@ -626,7 +627,7 @@ const Checkout = () => {
                     showerrorToast(
                       "Please enter less than " +
                         currentcurrency.maxWithdrawLimit +
-                        " amount"
+                        " amount",
                     );
                   } else {
                     var data = {
@@ -667,7 +668,7 @@ const Checkout = () => {
                   showerrorToast(
                     "Please enter greater than " +
                       currentcurrency.minWithdrawLimit +
-                      " amount"
+                      " amount",
                   );
                 } else if (
                   currentcurrency.maxWithdrawLimit < formValue.amount
@@ -675,7 +676,7 @@ const Checkout = () => {
                   showerrorToast(
                     "Please enter less than " +
                       currentcurrency.maxWithdrawLimit +
-                      " amount"
+                      " amount",
                   );
                 } else {
                   const obj = {
@@ -722,7 +723,7 @@ const Checkout = () => {
                   showerrorToast(
                     "Please enter greater than " +
                       currentcurrency.minWithdrawLimit +
-                      " amount"
+                      " amount",
                   );
                 } else if (
                   currentcurrency.maxWithdrawLimit < formValue.amount
@@ -730,7 +731,7 @@ const Checkout = () => {
                   showerrorToast(
                     "Please enter less than " +
                       currentcurrency.maxWithdrawLimit +
-                      " amount"
+                      " amount",
                   );
                 } else {
                   const obj = {
@@ -794,13 +795,13 @@ const Checkout = () => {
                 showerrorToast(
                   "Please enter greater than " +
                     currentcurrency.minWithdrawLimit +
-                    " amount"
+                    " amount",
                 );
               } else if (currentcurrency.maxWithdrawLimit < formValue.amount) {
                 showerrorToast(
                   "Please enter less than " +
                     currentcurrency.maxWithdrawLimit +
-                    " amount"
+                    " amount",
                 );
               } else {
                 var obj = {
@@ -850,13 +851,13 @@ const Checkout = () => {
                 showerrorToast(
                   "Please enter greater than " +
                     currentcurrency.minWithdrawLimit +
-                    " amount"
+                    " amount",
                 );
               } else if (currentcurrency.maxWithdrawLimit < formValue.amount) {
                 showerrorToast(
                   "Please enter less than " +
                     currentcurrency.maxWithdrawLimit +
-                    " amount"
+                    " amount",
                 );
               } else {
                 var obj = {
@@ -914,13 +915,13 @@ const Checkout = () => {
                 showerrorToast(
                   "Please enter greater than " +
                     currentcurrency.minWithdrawLimit +
-                    " amount"
+                    " amount",
                 );
               } else if (currentcurrency.maxWithdrawLimit < formValue.amount) {
                 showerrorToast(
                   "Please enter less than " +
                     currentcurrency.maxWithdrawLimit +
-                    " amount"
+                    " amount",
                 );
               } else {
                 var obj = {
@@ -984,13 +985,13 @@ const Checkout = () => {
                 showerrorToast(
                   "Please enter greater than " +
                     currentcurrency.minWithdrawLimit +
-                    " amount"
+                    " amount",
                 );
               } else if (currentcurrency.maxWithdrawLimit < formValue.amount) {
                 showerrorToast(
                   "Please enter less than " +
                     currentcurrency.maxWithdrawLimit +
-                    " amount"
+                    " amount",
                 );
               } else {
                 var obj = {
@@ -1129,38 +1130,32 @@ const Checkout = () => {
 
   return (
     <>
-      <section>
-        <Header />
-      </section>
-      {siteLoader == true ? (
-        <div className="loadercss">
-          <Bars
-            height="80"
-            width="80"
-            color="#bd7f10"
-            ariaLabel="bars-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
-        </div>
-      ) : (
-        <main className="dashboard_main">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-2 padlef_0_col">
-                <Side_bar />
-              </div>
-
-              <div className="col-lg-10 padin_lefrig_dash">
-                <section className="asset_section">
+      <DashboardLayout>
+        {siteLoader == true ? (
+          <div className="loadercss">
+            <Bars
+              height="80"
+              width="80"
+              color="#bd7f10"
+              ariaLabel="bars-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          </div>
+        ) : (
+          <section className="asset_section">
+            <div className="buy_head">
+              <div className="w-full">
+                <div className="bg-black rounded-xl p-4">
                   {withdrawstatus == "Active" ? (
                     <>
                       {kycStatusref.current == 1 ? (
                         <>
-                          <div className="row">
-                            <div className="p2p_title">{t("fiat_deposit")}</div>
-                            <div className="col-lg-7">
+                          {/* <div className="row"> */}
+                          <div className="p2p_title">{t("fiat_deposit")}</div>
+                          <div className="flex flex-col lg:flex-row gap-6">
+                            <div className="w-full lg:w-7/12">
                               <div className="deposit mt-5">
                                 {/* <div className="form_div">
                                   <div className="sides">
@@ -1428,6 +1423,7 @@ const Checkout = () => {
 
                                   <div className="sumbit_btn">
                                     <button
+                                      className="w-full h-[56px] bg-primary text-secondary rounded-lg text-lg font-medium hover:opacity-90 transition"
                                       onClick={() =>
                                         handleShowPaymentForm(amount)
                                       }
@@ -1474,7 +1470,7 @@ const Checkout = () => {
                               </div>
                             </div>
 
-                            <div className="col-lg-5">
+                            <div className="w-full lg:w-5/12">
                               <div>
                                 <div className="container-lg">
                                   <div className="deposit-imp-notes mt-5">
@@ -1509,6 +1505,7 @@ const Checkout = () => {
                               </div>
                             </div>
                           </div>
+                          {/* </div> */}
                           <div className="dashboard_table">
                             <div className="staking-flex dash_assets">
                               <h5 className="opt-title">
@@ -1517,7 +1514,7 @@ const Checkout = () => {
                               <Link to="/withdrawHistory">
                                 <div className="d-flex gap-2 text-yellow">
                                   {t("viewAll")}{" "}
-                                  <i class="fa-solid fa-chevron-right"></i>
+                                  <i className="bi bi-arrow-right"></i>
                                 </div>
                               </Link>
                             </div>
@@ -1555,7 +1552,7 @@ const Checkout = () => {
                                             </td>
                                             <td className="opt-percent font_14 table_center_text pad-left-23">
                                               {parseFloat(item.amount).toFixed(
-                                                2
+                                                2,
                                               )}
                                             </td>
                                             <td className="opt-term font_14 table_center_text pad-left-23">
@@ -1577,7 +1574,7 @@ const Checkout = () => {
                                             </td>
                                             <td className="opt-term font_14 table_center_text pad-left-23">
                                               {Moment(item.created_at).format(
-                                                "lll"
+                                                "lll",
                                               )}
                                             </td>
                                             <td className="opt-btn-flex table-action pad-left-23 text-green text-center">
@@ -1613,8 +1610,8 @@ const Checkout = () => {
                           </div>
                         </>
                       ) : (
-                        <>
-                          <div className="row ">
+                        <div className="flex flex-col lg:flex-row gap-6 ">
+                          <div className="w-full lg:w-7/12 ">
                             <div className="p2p_title">{t("fiat_deposit")}</div>
                             <div className="col-lg-7">
                               <div className="deposit mt-5  h-100">
@@ -1648,45 +1645,42 @@ const Checkout = () => {
                                 </div>
                               </div>
                             </div>
-
-                            <div className="col-lg-5">
-                              <div>
-                                <div className="container">
-                                  <div className="deposit-imp-notes mt-5">
-                                    <div className="imp-notes-title">
-                                      <span>
-                                        <img
-                                          src={ICON}
-                                          alt="warn-icon"
-                                          className="deposit-imp-icon"
-                                        />
-                                      </span>
-                                      <p>{t("importantNotes")}</p>
-                                    </div>
-                                    <div className="imp-notes-content">
-                                      <h6>
-                                        {t("doublecheckthedestinationaddress")}
-                                      </h6>
-                                      <p>{t("makesuretheaddress")}</p>
-                                    </div>
-                                    <div className="imp-notes-content">
-                                      <h6>{t("verifywithdrawaldetails")}</h6>
-                                      <p>{t("confirmtheamount")}</p>
-                                    </div>
-                                    <div className="imp-notes-content">
-                                      <h6>{t("security")}</h6>
-                                      <p>{t("ensurethatyouraccount")}</p>
-                                    </div>
-                                    <div className="imp-notes-content">
-                                      <h6>{t("networkverification")}</h6>
-                                      <p>{t("doublecheckyournetwork")}</p>
-                                    </div>
-                                  </div>
-                                </div>
+                          </div>
+                          {/* <div className="col-lg-5">
+                              <div> */}
+                          <div className="w-full lg:w-5/12">
+                            <div className="deposit-imp-notes mt-5">
+                              <div className="imp-notes-title">
+                                <span>
+                                  <img
+                                    src={ICON}
+                                    alt="warn-icon"
+                                    className="deposit-imp-icon"
+                                  />
+                                </span>
+                                <p>{t("importantNotes")}</p>
+                              </div>
+                              <div className="imp-notes-content">
+                                <h6>{t("doublecheckthedestinationaddress")}</h6>
+                                <p>{t("makesuretheaddress")}</p>
+                              </div>
+                              <div className="imp-notes-content">
+                                <h6>{t("verifywithdrawaldetails")}</h6>
+                                <p>{t("confirmtheamount")}</p>
+                              </div>
+                              <div className="imp-notes-content">
+                                <h6>{t("security")}</h6>
+                                <p>{t("ensurethatyouraccount")}</p>
+                              </div>
+                              <div className="imp-notes-content">
+                                <h6>{t("networkverification")}</h6>
+                                <p>{t("doublecheckyournetwork")}</p>
                               </div>
                             </div>
                           </div>
-                        </>
+                          {/* </div>
+                            </div> */}
+                        </div>
                       )}
                     </>
                   ) : (
@@ -1772,12 +1766,12 @@ const Checkout = () => {
                       </div>
                     </div>
                   )}
-                </section>
+                </div>
               </div>
             </div>
-          </div>
-        </main>
-      )}
+          </section>
+        )}
+      </DashboardLayout>
     </>
   );
 };
