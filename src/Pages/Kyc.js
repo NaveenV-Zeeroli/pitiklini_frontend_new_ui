@@ -773,7 +773,7 @@ const Dashboard = () => {
                                     {getKYCData.kycstatus == 2 ? (
                                       <button
                                         disabled
-                                        className="action_btn opt-nowrap w-100 disabl"
+                                        className="w-full h-[56px] bg-primary text-secondary rounded-lg text-lg font-medium hover:opacity-90 transition"
                                         type="button"
                                       >
                                         {t("pending")}
@@ -781,7 +781,7 @@ const Dashboard = () => {
                                     ) : getKYCData.kycstatus == 1 ? (
                                       <Link to="/deposit">
                                         <button
-                                          className="action_btn opt-nowrap w-100 kyc_depo_nw"
+                                          className="w-full h-[56px] bg-primary text-secondary rounded-lg text-lg font-medium hover:opacity-90 transition"
                                           type="button"
                                         >
                                           {t("deposit")}
