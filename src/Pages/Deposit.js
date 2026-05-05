@@ -888,6 +888,8 @@ const Dashboard = () => {
                               </div> */}
                             {/* </div> */}
                           </div>
+                        </div>
+                      </div>
 
                           {/* Right Side - Tips & FAQs */}
                           
