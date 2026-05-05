@@ -1846,11 +1846,11 @@ const Dashboard = () => {
                           </div>
                         </div>
 
-                        <div className="flex flex-col lg:flex-row gap-10">
+                        {/* <div className="flex flex-col lg:flex-row gap-10">
                           <div className="flex-[2]">
-                            <div className="relative pl-8 sm:pl-10 border-l-[2px] border-[#2b3139] ml-4 space-y-12 pb-8">
+                            <div className="relative pl-8 sm:pl-10 border-l-[2px] border-[#2b3139] ml-4 space-y-12 pb-8"> */}
                               {/* Step 1 */}
-                              <div className="relative">
+                              {/* <div className="relative">
                                 <div className="absolute -left-[54px] sm:-left-[62px] top-0 bg-primary p-[6px] rounded-md">
                                   <svg
                                     className="w-5 h-5 text-[#181a20]"
@@ -1902,10 +1902,10 @@ const Dashboard = () => {
                                     {validationnErr.withdrawcurrency}
                                   </span>
                                 )}
-                              </div>
+                              </div> */}
 
                               {/* Step 2 */}
-                              <div className="relative">
+                              {/* <div className="relative">
                                 <div className="absolute -left-[54px] sm:-left-[62px] top-0 bg-primary p-[6px] rounded-md z-10">
                                   <svg
                                     className="w-5 h-5 text-white"
@@ -1925,11 +1925,12 @@ const Dashboard = () => {
                                 <h3 className="text-white font-medium mb-4 text-lg">
                                   {t("Withdraw To")}
                                 </h3>
-
+                                </div> */}
+                          
                             <div className="flex flex-col lg:flex-row gap-10">
-                              <div className="flex-[2]">
+                               <div className="rounded-2xl bg-black p-4 border border-gray shadow-xl w-7/12  sm:p-5">
                                 <VerticalStepper steps={withdrawSteps} currentStep={withdrawCurrentStep} className="ml-2 pb-8" />
-                                {show_otpref.current == false &&
+                                {/* {show_otpref.current == false &&
                                   currentcurrencyref.current?.currencyType ==
                                     "2" && (
                                     <div className="mb-4 max-w-lg mt-6">
@@ -2022,11 +2023,12 @@ const Dashboard = () => {
                                       </span>
                                     )}
                                   </div>
-                                )}
+                                )} */}
                               </div>
+                            
 
                               {/* Step 3 */}
-                              <div className="relative">
+                              {/* <div className="relative">
                                 <div className="absolute -left-[54px] sm:-left-[62px] top-0 bg-primary p-[6px] rounded-md">
                                   <svg
                                     className="w-5 h-5 text-[#181a20]"
@@ -2127,7 +2129,7 @@ const Dashboard = () => {
                                   </div>
 
                                   {/* OTP and 2FA Inputs when show_otp is true */}
-                                  {show_otpref.current == true && (
+                                  {/* {show_otpref.current == true && (
                                     <div className="mb-4 mt-6">
                                       <label className="text-sm text-gray-500 mb-1 block px-1">
                                         {t("withdrawOTP")}
@@ -2266,10 +2268,10 @@ const Dashboard = () => {
                                           </span>
                                         )}
                                       </div>
-                                    )}
+                                    )} */}
 
                                   {/* Total and Fee */}
-                                  <div className="mt-14 text-right flex flex-col items-end px-1">
+                                  {/* <div className="mt-14 text-right flex flex-col items-end px-1">
                                     <div className="text-[22px] font-bold text-white tracking-wide">
                                       {amount &&
                                       !isNaN(amount) &&
@@ -2314,10 +2316,10 @@ const Dashboard = () => {
                                         ></path>
                                       </svg>
                                     </div>
-                                  </div>
+                                  </div> */}
 
                                   {/* Action Button */}
-                                  <div className="mt-3">
+                                  {/* <div className="mt-3">
                                     {buttonLoader == false ? (
                                       sessionStorage.getItem("tfa_status") ==
                                       0 ? (
@@ -2378,24 +2380,24 @@ const Dashboard = () => {
                                         {t("Loading")}...
                                       </button>
                                     )}
-                                  </div>
+                                  </div> */}
 
                                   {/* Bottom limits note */}
-                                  <div className="mt-4 text-left px-1">
+                                  {/* <div className="mt-4 text-left px-1">
                                     <p className="text-[13px] text-gray-500">
                                       {t("24-hour withdrawal limit")}: 0/
                                       {currentcurrencyref.current
                                         ?.maxWithdrawLimit || "0"}{" "}
                                       {currencyref.current || "BTC"}
                                     </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                                  </div> */}
+                                
+                               
+                            {/* </div> */}
+                          {/* </div> */}
 
                           {/* Right column content: Tips & FAQs */}
-                          <div className="flex-1 lg:pl-10 pt-2 lg:ml-10">
+                         <div className="rounded-2xl bg-black p-4 border border-gray shadow-xl w-5/12  sm:p-5">
                             <h3 className="text-primary font-medium flex items-center gap-2 mb-6 text-lg">
                               <svg
                                 className="w-5 h-5"
@@ -2510,8 +2512,9 @@ const Dashboard = () => {
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
+                            </div>
+                    
+                     
 
                       <div className="dashboard_table">
                         <div className="staking-flex dash_assets">
@@ -2617,6 +2620,7 @@ const Dashboard = () => {
                           </table>
                         </div>
                       </div>
+                          </div>
                     </>
                   ) : (
                     <>
