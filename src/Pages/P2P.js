@@ -11,6 +11,7 @@ import "semantic-ui-css/semantic.min.css";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { usePageLeaveConfirm } from "./usePageLeaveConfirm";
+import DashboardLayout from "./DashboardLayout";
 
 const P2P = () => {
   const { t } = useTranslation();
@@ -429,7 +430,7 @@ const P2P = () => {
 
   return (
     <>
-      <Header />
+      <DashboardLayout>
 
       {siteLoader == true ? (
         <div className="loadercss">
@@ -444,12 +445,11 @@ const P2P = () => {
           />
         </div>
       ) : (
-        <main className="dashboard_main">
-          <div className="container-lg">
-            <div className="row">
-              <div className="col-lg-12">
+       
                 <section className="asset_section">
-                  <div className="row">
+                <div className="buy_head">
+              <div className="w-full">
+                <div className="bg-black rounded-xl p-4">
                     <div className="p2p_title p2p-flex-title">
                       {t("p2p")}{" "}
                       <div className="p2p-head-right">
@@ -548,8 +548,11 @@ const P2P = () => {
                             fluid
                             selection
                             options={preferPayment}
-                            onChange={(e, { value }) => setPaymentMethod(value)}
-                            value={paymentMethod}
+                           onChange={(e, { value }) => {
+  e.stopPropagation();   // ✅ ADD THIS
+  setPaymentMethod(value);
+}}
+                            value={paymentMethod || ""}
                           />
                         </div>
 
@@ -783,7 +786,7 @@ const P2P = () => {
                                                     onChange={(e, { value }) =>
                                                       setselectPayment(value)
                                                     }
-                                                    value={selectPayment}
+                                                    value={selectPayment || ""}
                                                   />
                                                 ) : (
                                                   <Dropdown
@@ -1232,12 +1235,12 @@ const P2P = () => {
                       </div>
                     </div>
                   </div>
+                  </div>
+                  </div>
                 </section>
-              </div>
-            </div>
-          </div>
-        </main>
-      )}
+            
+           )}
+      </DashboardLayout>
     </>
   );
 };
