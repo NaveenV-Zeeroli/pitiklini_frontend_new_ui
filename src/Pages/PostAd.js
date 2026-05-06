@@ -10,7 +10,7 @@ import apiService from "../core/service/detail";
 import { postMethod, getMethod } from "../core/service/common.api";
 import { useTranslation } from "react-i18next";
 import { usePageLeaveConfirm } from "./usePageLeaveConfirm";
-
+import DashboardLayout from "./DashboardLayout";
 const PostAd = () => {
     const { t } = useTranslation();
   const [cryptoCurrencies, setCryptoCurrencies] = useState([]);
@@ -449,11 +449,8 @@ const PostAd = () => {
   };
 
   return (
-    <>
-      <section className="Non_fixed_nav">
-        <Header />
-      </section>
-
+   <>
+        <DashboardLayout>
       {siteLoader == true ? (
         <div className="loadercss">
           <Bars
@@ -467,10 +464,11 @@ const PostAd = () => {
           />
         </div>
       ) : (
-        <div>
-          <div className="Verification">
-            <div className="container">
-              <div className="row">
+          
+         <section className="asset_section">
+            <div className="buy_head">
+              <div className="w-full">
+                <div className="bg-black rounded-xl p-4">
                 <div className="col-lg-12">
                   <div className="mt-5">
                     <h6>
@@ -1384,9 +1382,11 @@ const PostAd = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </>
+        
+       </section>
+      )} 
+           </DashboardLayout>
+         </>
   );
 };
 
