@@ -372,7 +372,7 @@ const P2P = () => {
                       + Post Advertisement
                     </Link>
                     <Link
-                      to={loginStatus ? "/payment-methods" : "/login"}
+                      to={loginStatus ? "/Paymentmethod" : "/login"}
                       className="post-ad-btn bg-[#BD7F10] text-white px-4 py-2 rounded-lg flex items-center"
                     >
                       Payment Method
@@ -772,6 +772,168 @@ const P2P = () => {
                                       )}
                                     </td>
                                   </tr>
+                                  {i === isIndexVal && (
+                                    <tr className="bg-[#09111d]">
+                                      <td colSpan={5} className="px-4 py-6">
+                                        <div className="rounded-[24px] border border-white/10 bg-[#04060d] p-6">
+                                          <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+                                            <div className="space-y-4">
+                                              <div className="flex items-start gap-4">
+                                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c98a11] text-base font-extrabold uppercase text-black">
+                                                  {options.displayname?.charAt(0)}
+                                                </div>
+                                                <div>
+                                                  <h4 className="text-sm font-semibold text-white">
+                                                    {options.displayname}
+                                                  </h4>
+                                                  <p className="mt-1 text-xs text-white/60">
+                                                    {`Trades: ${options.trades} | ⭐ ${options.stars}`}
+                                                  </p>
+                                                </div>
+                                              </div>
+
+                                              <div className="grid gap-3 sm:grid-cols-2">
+                                                <div className="rounded-2xl bg-white/5 p-4">
+                                                  <div className="text-[13px] uppercase tracking-[0.22em] text-white/50">
+                                                    {t("price")}
+                                                  </div>
+                                                  <div className="mt-2 text-lg font-semibold text-white">
+                                                    {options.price} {options.secondCurrency}
+                                                  </div>
+                                                </div>
+
+                                                <div className="rounded-2xl bg-white/5 p-4">
+                                                  <div className="text-[13px] uppercase tracking-[0.22em] text-white/50">
+                                                    {t("payment_Method")}
+                                                  </div>
+                                                  <div className="mt-2 text-lg font-semibold text-white">
+                                                    {options.paymentMethod}
+                                                  </div>
+                                                </div>
+
+                                                <div className="rounded-2xl bg-white/5 p-4">
+                                                  <div className="text-[13px] uppercase tracking-[0.22em] text-white/50">
+                                                    {t("limit")}
+                                                  </div>
+                                                  <div className="mt-2 text-lg font-semibold text-white">
+                                                    {options.fromLimit} - {options.toLimit} {options.firstCurrency}
+                                                  </div>
+                                                </div>
+
+                                                <div className="rounded-2xl bg-white/5 p-4">
+                                                  <div className="text-[13px] uppercase tracking-[0.22em] text-white/50">
+                                                    {t("available")}
+                                                  </div>
+                                                  <div className="mt-2 text-lg font-semibold text-white">
+                                                    {options.available_qty} {options.firstCurrency}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="rounded-[24px] border border-white/10 bg-[#07101a] p-6">
+                                              <form className="space-y-5">
+                                                <div>
+                                                  <label className="mb-3 block text-sm font-semibold text-white/70">
+                                                    {t("enterquantityto")} {orderType === "buy" ? t("buy") : t("sell")}
+                                                  </label>
+                                                  <div className="relative">
+                                                    <input
+                                                      type="text"
+                                                      placeholder={t("enterAmount")}
+                                                      value={payAmount}
+                                                      onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        if (
+                                                          value.length <= 30 &&
+                                                          /^[0-9]*\.?[0-9]*$/.test(value)
+                                                        ) {
+                                                          handlePayAmountChange(e);
+                                                        }
+                                                      }}
+                                                      onKeyDown={(evt) =>
+                                                        ["e", "E", "+", "-"].includes(evt.key) &&
+                                                        evt.preventDefault()
+                                                      }
+                                                      className="w-full rounded-2xl border border-white/10 bg-[#02060d] px-4 py-3 text-white outline-none focus:border-[#c98a11] focus:ring-2 focus:ring-[#c98a11]/20"
+                                                    />
+                                                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/5 px-3 py-1 text-xs font-semibold uppercase text-white/70">
+                                                      {options.firstCurrency}
+                                                    </span>
+                                                  </div>
+                                                  {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+                                                </div>
+
+                                                <div>
+                                                  <label className="mb-3 block text-sm font-semibold text-white/70">
+                                                    {t("youwillpay")}
+                                                  </label>
+                                                  <div className="rounded-2xl border border-white/10 bg-[#02060d] px-4 py-3 text-white">
+                                                    <div className="flex items-center justify-between">
+                                                      <span>{receiveAmount || "0.00"}</span>
+                                                      <span className="text-xs uppercase text-white/70">{options.secondCurrency}</span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+
+                                                <div>
+                                                  <label className="mb-3 block text-sm font-semibold text-white/70">
+                                                    {t("selectPaymentMethod")}
+                                                  </label>
+                                                  <Dropdown
+                                                    placeholder={t("choosePayMethod")}
+                                                    fluid
+                                                    selection
+                                                    options={
+                                                      options.paymentMethod === "All Payment"
+                                                        ? allpayment
+                                                        : [
+                                                            {
+                                                              key: options.paymentMethod,
+                                                              text: options.paymentMethod,
+                                                              value: options.paymentMethod,
+                                                            },
+                                                          ]
+                                                    }
+                                                    onChange={(e, { value }) =>
+                                                      setselectPayment(value)
+                                                    }
+                                                    value={selectPayment || ""}
+                                                    className="you-pay-select"
+                                                  />
+                                                </div>
+
+                                                <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                                                  <button
+                                                    type="button"
+                                                    className="inline-flex justify-center rounded-2xl border border-white/10 bg-transparent px-5 py-3 text-sm font-bold text-white transition hover:border-[#c98a11] hover:text-[#c98a11]"
+                                                    onClick={handleCancel}
+                                                  >
+                                                    {t("cancel")}
+                                                  </button>
+                                                  <button
+                                                    type="button"
+                                                    onClick={
+                                                      orderType === "buy"
+                                                        ? confirm_order_buy
+                                                        : confirm_order_sell
+                                                    }
+                                                    className={`inline-flex justify-center rounded-2xl px-5 py-3 text-sm font-bold text-white transition ${
+                                                      orderType === "buy"
+                                                        ? "bg-[#c98a11] hover:bg-[#d79a1a]"
+                                                        : "bg-[#d14b4b] hover:bg-[#df5b5b]"
+                                                    }`}
+                                                  >
+                                                    {orderType === "buy" ? t("buy") : t("sell")}
+                                                  </button>
+                                                </div>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  )}
                                 </React.Fragment>
                               ))
                             ) : (
