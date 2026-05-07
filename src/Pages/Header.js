@@ -549,13 +549,13 @@ const Header = () => {
                         >
                           Staking
                         </Link> */}
-                        {/* <Link
+                        <Link
                           to={isAuthenticated ? "/p2p" : "/login"}
                           color="inherit"
                           className="contact_button  uppercase font-bold"
                         >
                           {t("p2p")}
-                        </Link> */}
+                        </Link>
 
                         {/* <Link
                           to="/Checkout"
@@ -565,14 +565,14 @@ const Header = () => {
                           {t("fiat_deposit")}
                         </Link> */}
 
-                        {/* <Link
+                        <Link
                           to="/internaltransfer"
                           color="inherit"
                           className="contact_button  uppercase font-bold"
                         >
                           {t("internal_transfer")}
                         </Link>
-                        <Link
+                       {/*  <Link
                           to="/fundtransfer"
                           color="inherit"
                           className="contact_button  uppercase font-bold"
