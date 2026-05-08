@@ -30,7 +30,7 @@ const faqData = [
 ];
 
 const FAQ = () => {
-  const [activeIndex, setActiveIndex] = useState(2);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const toggle = (index) => {
     setActiveIndex(activeIndex === index ? null : index);

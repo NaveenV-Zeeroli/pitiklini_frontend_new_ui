@@ -1,5 +1,5 @@
 // import config
-
+import axios from './axios';
 
 export const respChanges = (data) => {
     if(data.success === true) {

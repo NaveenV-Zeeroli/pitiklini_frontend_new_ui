@@ -24,7 +24,7 @@ const CryptoJourney = () => {
             />
           </div>
           <div className="flex flex-col h-full text-center justify-center self-center">
-            <p className="text-gray-400 text-sm mb-2">● {t("get_started")} </p>
+            <p className="text-gray-400 text-sm mb-2 text-white">● {t("get_started")} </p>
 
             <p className="text-primary font-family-ibm mb-0 font-extrabold text-[40px]">
               {t("crypto_journey")}

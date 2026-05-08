@@ -271,21 +271,46 @@ const Dashboard = () => {
   //   }
   // };
 
+  // const startVerification = async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     const data = { apiUrl: apiService.kycStripe };
+  //     const response = await postMethod(data);
+  //     console.log("Response:", response);
+  //     if (response?.url) {
+  //       window.location.href = response.url;
+  //       return;
+  //     }
+
+  //     console.log("Response:", response);
+  //   } catch (error) {
+  //     console.error("Error in verification:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const startVerification = async () => {
     try {
       setLoading(true);
 
-      const data = { apiUrl: apiService.kycStripe };
-      const response = await postMethod(data);
-      console.log("Response:", response);
-      if (response?.url) {
-        window.location.href = response.url;
+      const res = await postMethod({
+        apiUrl: "kyc/start-verification",
+      });
+
+      if (!res.status) {
+        toast.error(res.message || "Failed to start KYC");
         return;
       }
 
-      console.log("Response:", response);
-    } catch (error) {
-      console.error("Error in verification:", error);
+      const { url } = res;
+
+      // 👉 open depasify widget
+      window.open(url, "_blank");
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }

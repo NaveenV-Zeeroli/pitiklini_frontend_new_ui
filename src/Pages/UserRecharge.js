@@ -201,7 +201,8 @@ function UserRecharge() {
           />
         </div>
       ) : (
-        <main className="dashboard_main">
+        // <main className="dashboard_main">
+        <main className="dashboard_main_exp">
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-2 padlef_0_col">
@@ -220,8 +221,10 @@ function UserRecharge() {
                               <Dropdown
                                 placeholder="Select Operator"
                                 fluid
-                                className="dep-drops"
+                                className="dep-drops new-clr_inp"
                                 selection
+                                search
+                                searchInput={{ autoComplete: "off" }}
                                 value={selectedOperator}
                                 options={operatorListRef.current}
                                 onChange={(e, d) => onSelectOperator(d)}
@@ -252,15 +255,15 @@ function UserRecharge() {
                                       setSelectedPlan(d.value);
                                       setPlanError(false);
                                       const selectedObj = d.options.find(
-                                        (x) => x.value === d.value
+                                        (x) => x.value === d.value,
                                       );
 
                                       if (selectedObj) {
                                         setSelectedPlanPrice(
-                                          selectedObj.cost_amount
+                                          selectedObj.cost_amount,
                                         );
                                         setSelectedPlanCurrency(
-                                          selectedObj.cost_currency
+                                          selectedObj.cost_currency,
                                         );
                                       }
                                     }}
@@ -291,7 +294,7 @@ function UserRecharge() {
 
                                   if (d.value === "PTK") {
                                     await convertUSDTtoPTK(
-                                      selectedPlanPriceref.current
+                                      selectedPlanPriceref.current,
                                     );
                                   } else {
                                     setConvertedAmount(null);
@@ -320,8 +323,8 @@ function UserRecharge() {
                                   selectedCoin === "USDT"
                                     ? `${selectedPlanPriceref.current} USDT`
                                     : convertedAmount
-                                    ? `${convertedAmount} PTK`
-                                    : "---"
+                                      ? `${convertedAmount} PTK`
+                                      : "---"
                                 }
                                 className="dep-drops"
                               />

@@ -396,7 +396,7 @@ export default function RegisterTesting() {
               </div>
 
               {/* Referral Code */}
-              <div className="mb-5 mt-6">
+              {/* <div className="mb-5 mt-6">
                 <button
                   type="button"
                   className="w-full px-4 py-3.5 bg-slate-700 border border-slate-600 rounded-lg text-amber-600 text-sm font-medium flex items-center justify-between cursor-pointer transition-all hover:border-amber-600 hover:bg-slate-800"
@@ -407,7 +407,7 @@ export default function RegisterTesting() {
                   </span>
                   <span className="text-xs transition-transform">▼</span>
                 </button>
-              </div>
+              </div> */}
 
               {/* Terms Checkbox */}
               <div className="mb-5 mt-6">
