@@ -118,9 +118,12 @@ const Payment = () => {
   const [loader, setloader] = useState(false);
   const [headurl, setheadurl, headurlref] = useState("");
   const [disputeDetails, setdisputeDetails, disputeDetailsref] = useState({});
+  const [cancelButtonShow, setcancelButtonShow, cancelButtonShowref] = useState(false);
 
   const ratingModalRef = useRef(null);
+  const cancelCalledRef = useRef(false);
   const currentOrderForRating = useRef(null);
+  const ratingSubmittedRef = React.useRef(false);
 
   const submitP2PRating = (orderId, stars) => {
     try {
@@ -147,23 +150,93 @@ const Payment = () => {
     setTimeout(() => navigate("/p2p"), 200);
   };
 
+  const afterRatingFlow = () => {
+    getp2pChat();
+    getp2pOrder();
+    getconfirmOrder();
+
+    setTimeout(() => {
+      navigate("/p2p");
+    }, 200);
+  };
+
+  const handleStarClick = (stars) => {
+    ratingSubmittedRef.current = true; // ⭐ mark star clicked
+
+    const orderId =
+      currentOrderForRating.current || window.location.href.split("/").pop();
+
+    // Close modal
+    const modalEl = document.getElementById("p2pRatingModal");
+    if (modalEl && window.bootstrap?.Modal) {
+      const inst = window.bootstrap.Modal.getInstance(modalEl);
+      inst ? inst.hide() : new window.bootstrap.Modal(modalEl).hide();
+    }
+
+    // EXISTING rating process
+    postMethod({
+      apiUrl: apiService.p2p_user_ratings,
+      payload: { orderId, stars },
+    })
+      .then(() => {
+        afterRatingFlow(); // ✅ same flow
+      })
+      .catch((err) => {
+        console.error("rating error", err);
+        afterRatingFlow(); // still continue
+      });
+  };
+
+  const handleRatingClose = () => {
+    console.log("User closed rating popup");
+
+    // only if rating NOT submitted
+    if (!ratingSubmittedRef.current) {
+      afterRatingFlow();
+    }
+
+    ratingSubmittedRef.current = false;
+
+    const modalEl = document.getElementById("p2pRatingModal");
+    if (modalEl && window.bootstrap?.Modal) {
+      const inst = window.bootstrap.Modal.getInstance(modalEl);
+      if (inst) inst.hide();
+    }
+  };
+
   // ------------- SHOW RATING MODAL -------------
   const showRatingModalForOrder = (orderId) => {
     currentOrderForRating.current = orderId;
+    // console.log("it comess modal opening====");
+
+    setTimeout(() => {
+      const modalEl = document.getElementById("p2pRatingModal");
+
+      if (modalEl && window.bootstrap?.Modal) {
+        let bsModal =
+          window.bootstrap.Modal.getInstance(modalEl) ||
+          new window.bootstrap.Modal(modalEl, {
+            backdrop: "static",
+            keyboard: false,
+          });
+
+        bsModal.show();
+      }
+    }, 150);
 
     // If Bootstrap is loaded globally, use window.bootstrap.Modal
-    const modalEl = document.getElementById("p2pRatingModal");
-    let bsModal;
-    if (modalEl) {
-      // Use existing instance or create new
-      bsModal =
-        window.bootstrap && window.bootstrap.Modal
-          ? window.bootstrap.Modal.getInstance(modalEl) ||
-            new window.bootstrap.Modal(modalEl)
-          : null;
+    // const modalEl = document.getElementById("p2pRatingModal");
+    // let bsModal;
+    // if (modalEl) {
+    //   // Use existing instance or create new
+    //   bsModal =
+    //     window.bootstrap && window.bootstrap.Modal
+    //       ? window.bootstrap.Modal.getInstance(modalEl) ||
+    //         new window.bootstrap.Modal(modalEl)
+    //       : null;
 
-      if (bsModal) bsModal.show();
-    }
+    //   if (bsModal) bsModal.show();
+    // }
   };
 
   const getp2pChat = async () => {
@@ -233,6 +306,18 @@ const Payment = () => {
         getDispute();
         //getp2pconfirmOrder();
         getconfirmOrder();
+      }  else if (res.Reason == "existnotify") {
+        setnotifymessage(res.Message);
+        showsuccessToast(res.Message, {
+          toastId: "3",
+        });
+        const orderId = window.location.href.split("/").pop();
+        // console.log("it comess orderId check====", orderId);
+        showRatingModalForOrder(orderId);
+        // getp2pOrder();
+        // getDispute();
+        //getp2pconfirmOrder();
+        // getconfirmOrder();
       } else if (res.Reason == "ordercancel") {
         setnotifymessage(res.Message);
         showsuccessToast(res.Message, {
@@ -493,9 +578,12 @@ const Payment = () => {
           );
           setTimer(timer);
         }
-      } else if (resp.Message.status == 1 && resp.Message.dispute_status == 0) {
-        var timer = new Date(resp.Message.paytime).getTime() + 15 * 60 * 1000;
-        var current_time = new Date().getTime();
+      // } else if (resp.Message.status == 1 && resp.Message.dispute_status == 0) {
+        // } else if (resp.Message.status == 0 && resp.Message.dispute_status == 0) {
+        
+        // var timer = new Date(resp.Message.datetime).getTime() + 15 * 60 * 1000;
+        // var current_time = new Date().getTime();
+
         if (timer > current_time) {
           setsellTimerstatus("active");
           setsellTimer(timer);
@@ -516,19 +604,35 @@ const Payment = () => {
   };
 
   const renderer_sell = ({ hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a complete state
-      cancel_confirmorder_sell();
-    } else {
-      return (
-        <div className="timer_section1">
-          <div className="timer-sect">
-            <span>{hours}h</span> :<span>{minutes}m</span> :
-            <span>{seconds}s</span>
-          </div>
-        </div>
-      );
-    }
+          if (completed) {
+            if (!cancelCalledRef.current) {
+              cancelCalledRef.current = true;
+              cancel_confirmorder_sell();
+            }
+            return null;
+          }
+
+          return (
+            <div className="timer_section1">
+              <div className="timer-sect">
+                <span>{hours}h</span> :<span>{minutes}m</span> :
+                <span>{seconds}s</span>
+              </div>
+            </div>
+          );
+    // if (completed) {
+    //   // Render a complete state
+    //   cancel_confirmorder_sell();
+    // } else {
+    //   return (
+    //     <div className="timer_section1">
+    //       <div className="timer-sect">
+    //         <span>{hours}h</span> :<span>{minutes}m</span> :
+    //         <span>{seconds}s</span>
+    //       </div>
+    //     </div>
+    //   );
+    // }
   };
 
   const handleChange_buycancel = async (e) => {
@@ -538,6 +642,7 @@ const Payment = () => {
   };
 
   const cancel_confirmorder_sell = async () => {
+    // console.log("it comess confirm sell cancel====");
     var onj = {
       orderId: window.location.href.split("/").pop(),
     };
@@ -553,6 +658,11 @@ const Payment = () => {
     if (resp.status) {
       setsellTimerstatus("deactive");
       setsellTimer("");
+      showerrorToast("Order Cancelled!");
+      setcancelButtonShow(true);
+            const orderId = window.location.href.split("/").pop();
+            // console.log("it comess orderId check====", orderId);
+            showRatingModalForOrder(orderId);
     }
   };
 
@@ -577,11 +687,11 @@ const Payment = () => {
       if (resp.status) {
         showsuccessToast(resp.Message);
         // navigate(`/p2p/complete/${order_Id}`)
-        const orderId = window.location.href.split("/").pop();
-        showRatingModalForOrder(orderId);
-        // getp2pChat();
-        // getp2pOrder();
-        // getconfirmOrder();
+        // const orderId = window.location.href.split("/").pop();
+        // showRatingModalForOrder(orderId);
+        getp2pChat();
+        getp2pOrder();
+        getconfirmOrder();
       } else {
         showerrorToast(resp.Message);
       }
@@ -641,6 +751,7 @@ const Payment = () => {
         showsuccessToast(resp.Message);
         setRunningTimer(false);
         clearInterval(intervalref.current);
+        setcancelButtonShow(true);
         // navigate("/p2p");
         const orderId = window.location.href.split("/").pop();
          setTimeout(() => {
@@ -669,6 +780,7 @@ const Payment = () => {
         payload: obj,
       };
 
+
       var resp = await postMethod(data);
 
       setSiteLoader(false);
@@ -679,7 +791,7 @@ const Payment = () => {
         // getp2pOrder();
         // navigate("/p2p");
          const orderId = window.location.href.split("/").pop();
-         showRatingModalForOrder(orderId);
+        showRatingModalForOrder(orderId);
       } else {
         showerrorToast(resp.Message);
       }
@@ -705,6 +817,7 @@ const Payment = () => {
   };
 
   const cancel_confirm_buy = async () => {
+    // console.log("it comess confirm buy cancel====");
     var onj = {
       orderId: window.location.href.split("/").pop(),
     };
@@ -722,8 +835,11 @@ const Payment = () => {
       setTimerstatus("deactive");
       setTimer("");
       showerrorToast(resp.Message);
+       setcancelButtonShow(true);
       // navigate("/p2p");
+      // console.log("here trueeeeeeeeeeeee==",cancelButtonShowref.current)
       const orderId = window.location.href.split("/").pop();
+      // console.log("it comess orderId check====", orderId);
       showRatingModalForOrder(orderId);
     }
   };
@@ -921,9 +1037,14 @@ const Payment = () => {
   };
 
   const renderer = ({ hours, minutes, seconds, completed }) => {
-    if (completed) {
-      cancel_confirm_buy();
-    } else {
+      if (completed) {
+        if (!cancelCalledRef.current) {
+          cancelCalledRef.current = true;
+          cancel_confirm_buy();
+        }
+        return null;
+      }
+
       return (
         <div className="timer_section1">
           <div className="timer-sect">
@@ -932,7 +1053,18 @@ const Payment = () => {
           </div>
         </div>
       );
-    }
+    // if (completed) {
+    //   cancel_confirm_buy();
+    // } else {
+    //   return (
+    //     <div className="timer_section1">
+    //       <div className="timer-sect">
+    //         <span>{hours}h</span> :<span>{minutes}m</span> :
+    //         <span>{seconds}s</span>
+    //       </div>
+    //     </div>
+    //   );
+    // }
   };
 
   const copy_to_clipboard = async (type, text) => {
@@ -1039,7 +1171,7 @@ const Payment = () => {
                             <span className="pay-btc">
                               {parseFloat(
                                 p2pDataref.current.price *
-                                  confirmp2porderref.current.askAmount
+                                  confirmp2porderref.current.askAmount,
                               ).toFixed(2)}{" "}
                               {p2pDataref.current.secondCurrnecy}
                             </span>
@@ -1050,6 +1182,19 @@ const Payment = () => {
                       ) : (
                         ""
                       )}
+
+                      {p2pDataref.current.requirements &&
+                        orderTyperef.current == "Sell" && (
+                          <div className="pay-flex">
+                            {/* <span className="pay-name">{t("requirements")}</span> */}
+                            <span className="pay-name">
+                              {t("advertiserinfo")}
+                            </span>
+                            <span className="pay-money">
+                              {p2pDataref.current.requirements}
+                            </span>
+                          </div>
+                        )}
 
                       {profileDataref.current != null ? (
                         UserIDref.current != p2pDataref.current.userId?._id &&
@@ -1094,7 +1239,8 @@ const Payment = () => {
                                           onClick={() =>
                                             copy_to_clipboard(
                                               "Account Number",
-                                              bankDataref.current.Account_Number
+                                              bankDataref.current
+                                                .Account_Number,
                                             )
                                           }
                                         ></i>
@@ -1105,15 +1251,16 @@ const Payment = () => {
                                         {t("account_name")}
                                       </span>
                                       <span className="pay-money">
-                                        {p2pDataref.current.userId?.displayname}{" "}
-                                        ( {bankDataref.current.Accout_HolderName} )
+                                        {p2pDataref.current.userId?.orgName} ({" "}
+                                        {bankDataref.current.Accout_HolderName}{" "}
+                                        )
                                         <i
                                           class="ri-file-copy-line cursor-pointer"
                                           onClick={() =>
                                             copy_to_clipboard(
                                               t("account_name"),
                                               bankDataref.current
-                                                .Accout_HolderName
+                                                .Accout_HolderName,
                                             )
                                           }
                                         ></i>
@@ -1131,7 +1278,7 @@ const Payment = () => {
                                           onClick={() =>
                                             copy_to_clipboard(
                                               "Bank Name",
-                                              bankDataref.current.Bank_Name
+                                              bankDataref.current.Bank_Name,
                                             )
                                           }
                                         ></i>
@@ -1149,7 +1296,7 @@ const Payment = () => {
                                           onClick={() =>
                                             copy_to_clipboard(
                                               t("Currency"),
-                                              bankDataref.current.Currency
+                                              bankDataref.current.Currency,
                                             )
                                           }
                                         ></i>
@@ -1212,7 +1359,8 @@ const Payment = () => {
                                           onClick={() =>
                                             copy_to_clipboard(
                                               "Account Number",
-                                              bankDataref.current.Account_Number
+                                              bankDataref.current
+                                                .Account_Number,
                                             )
                                           }
                                         ></i>
@@ -1224,15 +1372,17 @@ const Payment = () => {
                                         {t("account_name")}
                                       </span>
                                       <span className="pay-money">
-                                        {p2pDataref.current.userId?.displayname}{" "}
-                                        ( {bankDataref.current.Accout_HolderName} )
+                                        {p2pDataref.current.userId?.orgName} ({" "}
+                                        {/* {p2pDataref.current.userId?.displayname}{" "} */}
+                                        {bankDataref.current.Accout_HolderName}{" "}
+                                        )
                                         <i
                                           class="ri-file-copy-line cursor-pointer"
                                           onClick={() =>
                                             copy_to_clipboard(
                                               t("account_name"),
                                               bankDataref.current
-                                                .Accout_HolderName
+                                                .Accout_HolderName,
                                             )
                                           }
                                         ></i>
@@ -1251,7 +1401,7 @@ const Payment = () => {
                                           onClick={() =>
                                             copy_to_clipboard(
                                               "Bank Name",
-                                              bankDataref.current.Bank_Name
+                                              bankDataref.current.Bank_Name,
                                             )
                                           }
                                         ></i>
@@ -1270,7 +1420,7 @@ const Payment = () => {
                                           onClick={() =>
                                             copy_to_clipboard(
                                               t("Currency"),
-                                              bankDataref.current.Currency
+                                              bankDataref.current.Currency,
                                             )
                                           }
                                         ></i>
@@ -1301,12 +1451,13 @@ const Payment = () => {
 
                       {profileDataref.current != null ? (
                         orderTyperef.current == "Sell" &&
-                        UserIDref.current == p2pDataref.current.userId?._id &&
-                        confirmp2porderref.current.status == 1 &&
-                        sellTimerstatusref.current == "active" ? (
+                        UserIDref.current == p2pDataref.current.userId?._id ? (
+                          // UserIDref.current == p2pDataref.current.userId?._id &&
+                          // confirmp2porderref.current.status == 1 &&
+                          // sellTimerstatusref.current == "active" ? (
                           <div className="timer">
                             <h6>
-                              {t("releasethecrypto")}
+                              {t("releasethecrypto")} 
                               <span>
                                 <Countdown
                                   date={sellTimerref.current}
@@ -1314,7 +1465,7 @@ const Payment = () => {
                                 />
                               </span>
                             </h6>
-                            <p className="pay-name mt-4">
+                            {/* <p className="pay-name mt-4">
                               - {t("buyerpaidtheamount")}
                             </p>
                             <p className="pay-name">
@@ -1322,7 +1473,7 @@ const Payment = () => {
                             </p>
                             <p className="pay-name">
                               - {t("ifyouarenotreleasewithin")}
-                            </p>
+                            </p> */}
                           </div>
                         ) : (
                           ""
@@ -1334,7 +1485,9 @@ const Payment = () => {
                       {profileDataref.current != null ? (
                         orderTyperef.current == "Sell" &&
                         UserIDref.current == p2pDataref.current.userId?._id &&
-                        confirmp2porderref.current.status == 1 ? (
+                        confirmp2porderref.current.status == 1 &&
+                        cancelButtonShowref.current === false ? (
+                          // confirmp2porderref.current.status == 1 ? (
                           <div class="form register_login  marhing_pading pl-0 paddinte_ledy_o pt-0 right_pading">
                             <div className="aling_caseds justify-content-end">
                               {confirmorderloader == false ? (
@@ -1380,9 +1533,10 @@ const Payment = () => {
 
                       {profileDataref.current != null ? (
                         orderTyperef.current == "Sell" &&
-                        UserIDref.current != p2pDataref.current.userId?._id &&
-                        confirmp2porderref.current.status == 1 &&
-                        sellTimerstatusref.current == "active" ? (
+                        UserIDref.current != p2pDataref.current.userId?._id ? (
+                          // UserIDref.current != p2pDataref.current.userId?._id &&
+                          // confirmp2porderref.current.status == 1 &&
+                          // sellTimerstatusref.current == "active" ? (
                           <div className="timer">
                             <h6>
                               {t("releasethecrypto")}
@@ -1393,7 +1547,7 @@ const Payment = () => {
                                 />
                               </span>
                             </h6>
-                            <p className="pay-name mt-4">
+                            {/* <p className="pay-name mt-4">
                               - {t("buyerpaidtheamount")}
                             </p>
                             <p className="pay-name">
@@ -1401,7 +1555,7 @@ const Payment = () => {
                             </p>
                             <p className="pay-name">
                               - {t("ifyouarenotreleasewithin")}
-                            </p>
+                            </p> */}
                           </div>
                         ) : (
                           ""
@@ -1413,7 +1567,9 @@ const Payment = () => {
                       {profileDataref.current != null ? (
                         orderTyperef.current == "Sell" &&
                         UserIDref.current != p2pDataref.current.userId?._id &&
-                        confirmp2porderref.current.status == 1 ? (
+                        confirmp2porderref.current.status == 1 &&
+                        cancelButtonShowref.current === false ? (
+                          // confirmp2porderref.current.status == 1 ? (
                           <div class="form register_login  marhing_pading pl-0 paddinte_ledy_o pt-0 right_pading">
                             <div className="aling_caseds justify-content-end">
                               {confirmorderloader == false ? (
@@ -1464,8 +1620,8 @@ const Payment = () => {
                               {payTimeref.current < 60
                                 ? payTimeref.current + " minutes"
                                 : payTimeref.current / 60 == 1
-                                ? payTimeref.current / 60 + " hour"
-                                : payTimeref.current / 60 + " hours"}{" "}
+                                  ? payTimeref.current / 60 + " hour"
+                                  : payTimeref.current / 60 + " hours"}{" "}
                               <span>
                                 <Countdown
                                   date={Timerref.current}
@@ -1473,7 +1629,13 @@ const Payment = () => {
                                 />
                               </span>
                             </h6>
-                            <p className="pay-name mt-4">
+                            {p2pDataref.current.requirements && (
+                              <p className="pay-name mt-4">
+                                {t("advertiserinfo")} -{" "}
+                                {p2pDataref.current.requirements}
+                              </p>
+                            )}
+                            {/* <p className="pay-name mt-4">
                               - {t("pleasepayfast")}
                             </p>
                             <p className="pay-name">
@@ -1484,10 +1646,10 @@ const Payment = () => {
                               {payTimeref.current < 60
                                 ? payTimeref.current + " minutes"
                                 : payTimeref.current / 60 == 1
-                                ? payTimeref.current / 60 + " hour"
-                                : payTimeref.current / 60 + " hours"}
+                                  ? payTimeref.current / 60 + " hour"
+                                  : payTimeref.current / 60 + " hours"}
                               , {t("orderwillbecancelledautomatically")}
-                            </p>
+                            </p> */}
                           </div>
                         ) : (
                           ""
@@ -1499,7 +1661,8 @@ const Payment = () => {
                       {profileDataref.current != null ? (
                         orderTyperef.current == "Buy" &&
                         UserIDref.current == p2pDataref.current.userId?._id &&
-                        confirmp2porderref.current.status == 0 ? (
+                        confirmp2porderref.current.status == 0 &&
+                        cancelButtonShowref.current === false ? (
                           <div class="form register_login  marhing_pading pl-0 paddinte_ledy_o pt-0 right_pading">
                             <div className="aling_caseds justify-content-end">
                               <button
@@ -1549,8 +1712,8 @@ const Payment = () => {
                               {payTimeref.current < 60
                                 ? payTimeref.current + " minutes"
                                 : payTimeref.current / 60 == 1
-                                ? payTimeref.current / 60 + " hour"
-                                : payTimeref.current / 60 + " hours"}{" "}
+                                  ? payTimeref.current / 60 + " hour"
+                                  : payTimeref.current / 60 + " hours"}{" "}
                               <span>
                                 <Countdown
                                   date={Timerref.current}
@@ -1558,7 +1721,13 @@ const Payment = () => {
                                 />
                               </span>
                             </h6>
-                            <p className="pay-name mt-4">
+                            {p2pDataref.current.requirements && (
+                              <p className="pay-name mt-4">
+                                {t("advertiserinfo")} -{" "}
+                                {p2pDataref.current.requirements}
+                              </p>
+                            )}
+                            {/* <p className="pay-name mt-4">
                               - {t("pleasepayfast")}
                             </p>
                             <p className="pay-name">
@@ -1569,10 +1738,10 @@ const Payment = () => {
                               {payTimeref.current < 60
                                 ? payTimeref.current + " minutes"
                                 : payTimeref.current / 60 == 1
-                                ? payTimeref.current / 60 + " hour"
-                                : payTimeref.current / 60 + " hours"}{" "}
+                                  ? payTimeref.current / 60 + " hour"
+                                  : payTimeref.current / 60 + " hours"}{" "}
                               {t("orderwillbecancelledautomatically")}
-                            </p>
+                            </p> */}
                           </div>
                         ) : (
                           ""
@@ -1584,7 +1753,8 @@ const Payment = () => {
                       {profileDataref.current != null ? (
                         orderTyperef.current == "Buy" &&
                         UserIDref.current != p2pDataref.current.userId?._id &&
-                        confirmp2porderref.current.status == 0 ? (
+                        confirmp2porderref.current.status == 0 &&
+                        cancelButtonShowref.current === false ? (
                           <div class="form register_login  marhing_pading pl-0 paddinte_ledy_o pt-0 right_pading cancel-payment-butns">
                             <div className="aling_caseds justify-content-star payment-cancel-confirm">
                               <button
@@ -1704,7 +1874,7 @@ const Payment = () => {
                                           <p>
                                             {/* <span>{chat.adv_name}</span>{" "} */}
                                             {Moment(chat.createdAt).format(
-                                              "LT"
+                                              "LT",
                                             )}
                                           </p>
 
@@ -1965,7 +2135,7 @@ const Payment = () => {
                         <div className="mar-top-12">
                           <h4 className="modal-title mb-4">
                             {t(
-                              "Appeal submitted. Awaiting response from other party."
+                              "Appeal submitted. Awaiting response from other party.",
                             )}
                           </h4>
                           <p className="select_id_text mb-3">
@@ -1981,7 +2151,7 @@ const Payment = () => {
                             </li>
                             <li className="select_id_text1 mb-3">
                               {t(
-                                "If no response in 20 minutes, arbitration starts."
+                                "If no response in 20 minutes, arbitration starts.",
                               )}
                             </li>
                             <li className="select_id_text1 mb-3">
@@ -2060,7 +2230,7 @@ const Payment = () => {
                           </h4>
                           <p className="select_id_text mb-3">
                             {t(
-                              "Customer service is reviewing this appeal. processing may take several hours."
+                              "Customer service is reviewing this appeal. processing may take several hours.",
                             )}
                           </p>
 
@@ -2196,14 +2366,14 @@ const Payment = () => {
                               <div className="first_name mt-3">
                                 <h4 className="select_id_text1">
                                   {t(
-                                    "You can try to resolve the issue by following these steps"
+                                    "You can try to resolve the issue by following these steps",
                                   )}
                                   :
                                 </h4>
                                 <h4 className="select_id_text">
                                   1.{" "}
                                   {t(
-                                    "Make sure your account information is correct"
+                                    "Make sure your account information is correct",
                                   )}
                                   .
                                 </h4>
@@ -2213,21 +2383,21 @@ const Payment = () => {
                                     ? "seller's"
                                     : "buyer's"}{" "}
                                   {t(
-                                    "payment proof or chat with them for clarification"
+                                    "payment proof or chat with them for clarification",
                                   )}
                                   .
                                 </h4>
                                 <h4 className="select_id_text">
                                   3.{" "}
                                   {t(
-                                    "Some payment methods may take 1–3 days to complete"
+                                    "Some payment methods may take 1–3 days to complete",
                                   )}
                                   .
                                 </h4>
                                 <h4 className="select_id_text1">
                                   *{" "}
                                   {t(
-                                    "If the issue remains, you can initiate an appeal"
+                                    "If the issue remains, you can initiate an appeal",
                                   )}
                                   .
                                 </h4>
@@ -2373,7 +2543,7 @@ const Payment = () => {
                         <div className="mar-top-12">
                           <h4 className="modal-title mb-4">
                             {t(
-                              "Appeal submitted. Awaiting response from other party."
+                              "Appeal submitted. Awaiting response from other party.",
                             )}
                           </h4>
                           <p className="select_id_text mb-3">
@@ -2389,7 +2559,7 @@ const Payment = () => {
                             </li>
                             <li className="select_id_text1 mb-3">
                               {t(
-                                "If no response in 20 minutes, arbitration starts."
+                                "If no response in 20 minutes, arbitration starts.",
                               )}
                             </li>
                             <li className="select_id_text1 mb-3">
@@ -2468,13 +2638,13 @@ const Payment = () => {
                           </h4>
                           <p className="select_id_text mb-3">
                             {t(
-                              "Customer service is reviewing this appeal. processing may take several hours."
+                              "Customer service is reviewing this appeal. processing may take several hours.",
                             )}
                           </p>
 
                           <p className="select_id_text mb-3">
                             {t(
-                              "Customer service is reviewing this appeal. processing may take several hours."
+                              "Customer service is reviewing this appeal. processing may take several hours.",
                             )}
                           </p>
 
@@ -2606,14 +2776,14 @@ const Payment = () => {
                               <div className="first_name mt-3">
                                 <h4 className="select_id_text1">
                                   {t(
-                                    "You can try to resolve the issue by following these steps"
+                                    "You can try to resolve the issue by following these steps",
                                   )}
                                   :
                                 </h4>
                                 <h4 className="select_id_text">
                                   1.{" "}
                                   {t(
-                                    "Make sure your account information is correct"
+                                    "Make sure your account information is correct",
                                   )}
                                   .
                                 </h4>
@@ -2623,21 +2793,21 @@ const Payment = () => {
                                     ? "seller's"
                                     : "buyer's"}{" "}
                                   {t(
-                                    "payment proof or chat with them for clarification"
+                                    "payment proof or chat with them for clarification",
                                   )}
                                   .
                                 </h4>
                                 <h4 className="select_id_text">
                                   3.{" "}
                                   {t(
-                                    "Some payment methods may take 1–3 days to complete"
+                                    "Some payment methods may take 1–3 days to complete",
                                   )}
                                   .
                                 </h4>
                                 <h4 className="select_id_text1">
                                   *{" "}
                                   {t(
-                                    "If the issue remains, you can initiate an appeal"
+                                    "If the issue remains, you can initiate an appeal",
                                   )}
                                   .
                                 </h4>
@@ -2688,8 +2858,8 @@ const Payment = () => {
                     <button
                       type="button"
                       className="btn-close btn-close-custom"
-                      data-bs-dismiss="modal"
                       aria-label="Close"
+                      onClick={handleRatingClose}
                     ></button>
                   </div>
 
@@ -2711,31 +2881,32 @@ const Payment = () => {
                             // backgroundColor: "#daecee",
                             color: "#daecee",
                           }}
-                          onClick={() => {
-                            // get current orderId from ref (set when showing modal)
-                            const orderId =
-                              currentOrderForRating.current ||
-                              window.location.href.split("/").pop();
-                            // Hide modal immediately (so user doesn't see it stuck)
-                            const modalEl =
-                              document.getElementById("p2pRatingModal");
-                            if (
-                              modalEl &&
-                              window.bootstrap &&
-                              window.bootstrap.Modal
-                            ) {
-                              const inst =
-                                window.bootstrap.Modal.getInstance(modalEl);
-                              if (inst) inst.hide();
-                              else new window.bootstrap.Modal(modalEl).hide();
-                            }
-                            // Submit rating (fire-and-forget) and immediately navigate
-                            submitP2PRating(orderId, n);
-                            // DELAY TO LET API FIRE AND THEN NAVIGATE
-                            setTimeout(() => {
-                              navigate("/p2p");
-                            }, 200);
-                          }}
+                          // onClick={() => {
+                          //   // get current orderId from ref (set when showing modal)
+                          //   const orderId =
+                          //     currentOrderForRating.current ||
+                          //     window.location.href.split("/").pop();
+                          //   // Hide modal immediately (so user doesn't see it stuck)
+                          //   const modalEl =
+                          //     document.getElementById("p2pRatingModal");
+                          //   if (
+                          //     modalEl &&
+                          //     window.bootstrap &&
+                          //     window.bootstrap.Modal
+                          //   ) {
+                          //     const inst =
+                          //       window.bootstrap.Modal.getInstance(modalEl);
+                          //     if (inst) inst.hide();
+                          //     else new window.bootstrap.Modal(modalEl).hide();
+                          //   }
+                          //   // Submit rating (fire-and-forget) and immediately navigate
+                          //   submitP2PRating(orderId, n);
+                          //   // DELAY TO LET API FIRE AND THEN NAVIGATE
+                          //   setTimeout(() => {
+                          //     navigate("/p2p");
+                          //   }, 200);
+                          // }}
+                          onClick={() => handleStarClick(n)}
                         >
                           ★
                         </span>

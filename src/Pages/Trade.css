@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: "IBM Plex Sans" !important;
+  font-family: "Larsseit" !important;
 }
 
 .wholenew_back_clr {
@@ -114,7 +114,7 @@ a {
 }
 .pair_section h2 {
   margin: 0px;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: #eaecef;
@@ -164,7 +164,7 @@ a {
   box-sizing: border-box;
   margin: 0px;
   min-width: 0px;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 20px;
   font-weight: 300;
   color: #f45e71;
@@ -214,7 +214,7 @@ a {
 
 .orderbook-num span {
   font-size: 12px;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-weight: 500;
   color: #cececf !important;
 }
@@ -245,7 +245,7 @@ a {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 10px;
   color: #bd7f10;
   gap: 12px;
@@ -301,7 +301,7 @@ a {
 }
 .css-f4kgqr a {
   text-decoration: none;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 300;
   color: #cececf;
@@ -340,7 +340,7 @@ a {
 }
 .layout h1 {
   margin: 0;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 20px;
   font-weight: 300;
   color: #fff;
@@ -373,7 +373,7 @@ a {
   /* text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap; */
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 300;
   color: #98989c;
@@ -592,7 +592,7 @@ a {
 
 .market_order table th {
   font-size: 12px;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 300;
   color: #cececf;
@@ -609,7 +609,7 @@ a {
   text-align: right;
   font-weight: normal;
   font-size: 12px;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 12px;
   font-weight: 300;
   color: #eaecef;
@@ -704,7 +704,7 @@ a {
 .order_form .nav-tabs .nav-link {
   border: none;
   color: #888b93;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-weight: 500;
 }
 
@@ -728,7 +728,7 @@ a {
 /* nav-tabs end */
 
 .cross-btns {
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 500;
   padding: 10px;
@@ -741,7 +741,7 @@ a {
   padding: 8px 19px;
   border-radius: 4px;
   background-color: #2a2d35;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: #bd7f10;
@@ -753,7 +753,7 @@ a {
   padding: 8px 19px;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: rgba(206, 206, 207, 0.5);
@@ -762,7 +762,7 @@ a {
 }
 
 .spot_nav_tabs {
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 14px;
   font-weight: 200;
   padding: 0px 10px;
@@ -823,7 +823,7 @@ a {
 }
 
 .max-btc {
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 400;
   color: #cececf;
@@ -832,7 +832,7 @@ a {
 .tradeform ul.nav a.active {
   border: none;
   padding: 0px 10px;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 14px !important;
   /* font-weight: 500; */
   color: #fff;
@@ -841,7 +841,7 @@ a {
 /* active order table styles */
 
 .active-order-data {
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 12px;
   font-weight: 300;
   color: #fefefe !important;
@@ -851,7 +851,7 @@ a {
   padding: 6px 16px;
   border-radius: 4px;
   background-color: rgba(244, 94, 113, 0.2);
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 12px;
   font-weight: 500;
   color: #f45e71;
@@ -879,7 +879,7 @@ a {
   margin-left: 5px;
   font-weight: 300;
   color: #fff !important;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   line-height: normal;
   letter-spacing: normal;
@@ -923,7 +923,7 @@ a {
 
 .form_right label,
 .max-buy {
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: rgba(206, 206, 207, 0.5);
@@ -976,7 +976,7 @@ a {
 
 .form_right .input_section span {
   margin-left: 5px;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 300;
   color: #fff;
@@ -1027,14 +1027,14 @@ a {
   padding: 1px 5px;
   border-radius: 2px;
   font-size: 12px;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-weight: 300;
   color: rgba(206, 206, 207, 0.5);
   cursor: pointer;
 }
 .form_seldect__pair ul li a.active {
   background-color: var(--trade-primary-bg);
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   border-bottom: 2px solid #bd7f10;
   font-size: 12px;
   /* font-weight: 500; */
@@ -1068,7 +1068,7 @@ a {
   padding: 6px 0px;
   width: 30%;
   font-weight: 400;
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: #cececf;
@@ -1102,7 +1102,7 @@ a {
   /* color: rgb(183, 189, 198); */
   padding: 4px 0px !important;
   text-align: left;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 12px;
   font-weight: 300;
   color: #eaecef;
@@ -1183,7 +1183,7 @@ a {
 .pair_details.pading_oedar td {
   font-size: 13px;
   color: rgb(183, 189, 198);
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-weight: 300;
   padding: 10px 0px;
   /* text-align: center; */
@@ -1195,7 +1195,7 @@ a {
   /* text-align: center; */
   width: auto;
   /* border-bottom: 1px solid #cccccc21; */
-  font-family: "IBM Plex Sans", sans-serif !important;
+  font-family: "Larsseit", sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: rgba(206, 206, 207, 0.5);
@@ -1221,7 +1221,7 @@ a {
 }
 
 .current-down-price {
-  font-family: "IBM Plex Sans" !important;
+  font-family: "Larsseit" !important;
   font-size: 12px !important;
   font-weight: 300 !important;
   color: #cececf !important;
@@ -1448,7 +1448,7 @@ a {
   align-items: center;
   flex-shrink: 0;
 
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 14px;
   font-weight: 500;
   color: #fff;
@@ -1469,7 +1469,7 @@ a {
   text-decoration: none;
   font-size: 12px;
   text-align: left;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 12px;
   font-weight: 300;
   text-align: left;
@@ -1519,7 +1519,7 @@ a {
   box-sizing: border-box;
   margin: 0px 0px 2px;
   min-width: 0px;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 12px;
   font-weight: 500;
   color: #cececf;
@@ -1542,7 +1542,7 @@ a {
   box-sizing: border-box;
   margin: 0px;
   min-width: 0px;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 10px;
   font-weight: 300;
   color: rgba(206, 206, 207, 0.5);
@@ -1563,7 +1563,7 @@ a {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 12px;
   font-weight: 500;
   text-align: right;
@@ -1580,7 +1580,7 @@ a {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-family: "IBM Plex Sans";
+  font-family: "Larsseit";
   font-size: 10px;
   font-weight: 300;
   text-align: right;

@@ -1,6 +1,6 @@
 export const getAuthToken = () => {
   if (sessionStorage.getItem("user_token")) {
-    return "Bearer " + sessionStorage.getItem("user_token");
+    return "Bearer "+sessionStorage.getItem("user_token");
   }
   return "";
 };
