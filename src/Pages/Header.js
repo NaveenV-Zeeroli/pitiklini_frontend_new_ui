@@ -419,7 +419,7 @@ const Header = () => {
           <div className="header_new_mega">
             <div className={`${classes.root} `}>
               <AppBar position="static">
-                <Toolbar className="container-fluid pad-0">
+                <Toolbar className="container-fluid min-w-0 px-3 py-2 sm:px-4 sm:py-2 md:px-4">
                   <Typography variant="h6" className={classes.title}>
                     <div className="logo_new_sectio d-flex">
                       <Link
@@ -607,11 +607,12 @@ const Header = () => {
 
                   {/* {isAuthenticated ? ""  */}
 
+                  <div className="ml-auto flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1 sm:gap-x-2.5 md:gap-3">
                   <div className="relative" ref={languageRef2}>
                     {/* Trigger */}
                     <button
                       onClick={toggleDropdown}
-                      className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray transition"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition hover:bg-gray sm:h-10 sm:w-10"
                     >
                       <img
                         src={GlobalIcon}
@@ -674,7 +675,7 @@ const Header = () => {
                       {/* Bell Button */}
                       <button
                         onClick={() => handleBellClick()}
-                        className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray transition"
+                        className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition hover:bg-gray sm:h-10 sm:w-10"
                       >
                         <span className="text-primary text-lg">
                           <i className="bi bi-bell"></i>
@@ -760,7 +761,7 @@ const Header = () => {
                       {/* Button */}
                       <button
                         onClick={() => setIsAssetOpen((prev) => !prev)}
-                        className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray transition"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition hover:bg-gray sm:h-10 sm:w-10"
                       >
                         <img src={Asset} alt="Asset" className="w-5 h-5" />
                       </button>
@@ -828,7 +829,7 @@ const Header = () => {
                         {/* Profile Button */}
                         <div
                           onClick={handleProfileClick}
-                          className="w-[44px] h-[44px] rounded-full border-2 border-[#23262F] overflow-hidden flex items-center justify-center bg-[#23262F] cursor-pointer hover:opacity-80 transition"
+                          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#23262F] bg-[#23262F] transition hover:opacity-80 sm:h-11 sm:w-11 md:h-[44px] md:w-[44px]"
                         >
                           <img
                             src={Avatar}
@@ -1130,12 +1131,13 @@ const Header = () => {
                   <IconButton
                     edge="start"
                     aria-label="menu"
-                    className={classes.mobileMenuButton}
-                    style={{ color: "#BD7F10" }}
+                    className={`${classes.mobileMenuButton} !ml-0 !mr-0 shrink-0`}
+                    style={{ color: "#B87A13" }}
                     onClick={handleMobileMenuOpen}
                   >
                     <MenuIcon />
                   </IconButton>
+                  </div>
 
                   <div
                     className={`flex justify-center rounded-[8px] px-4 ml-4 bg-primary text-black ${classes.appBarItems}`}
