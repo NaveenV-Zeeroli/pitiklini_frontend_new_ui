@@ -60,7 +60,7 @@ const VerticalStepper = ({ steps = [], currentStep = 1, className = "" }) => {
             <div className="min-w-0 pb-6 sm:pb-10">
               <h3
                 className={`mb-3 text-base font-medium leading-snug transition-colors duration-300 sm:mb-4 sm:text-lg ${
-                  isActive || isCompleted ? "text-white" : "text-[#7d8798]"
+                  isActive || isCompleted ? "text-[#B87A13]" : "text-[#7d8798]"
                 }`}
               >
                 {step.title}
