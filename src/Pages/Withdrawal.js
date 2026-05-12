@@ -1796,7 +1796,7 @@ const Dashboard = () => {
             />
           </div>
         ) : (
-          <section className="asset_section w-full min-w-0 max-w-full overflow-x-hidden px-3 sm:px-4 md:px-0">
+          <section className="asset_section w-full min-w-0 max-w-full overflow-x-hidden px-3 sm:px-4 md:px-0 max-sm:pt-20">
             <div className="buy_head w-full min-w-0 max-w-full">
               {withdrawstatus == "Active" ? (
                 <>
