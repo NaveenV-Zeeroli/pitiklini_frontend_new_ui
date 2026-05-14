@@ -219,14 +219,14 @@ const Assets = () => {
             />
           </div>
         ) : (
-          <section className="asset_section">
-            <div className="buy_head">
-              <div className="asset_title">{t("spotAssets")}</div>
-              <div className="col-lg-12">
+          <section className="asset_section w-full min-w-0 max-w-full overflow-x-hidden px-3 sm:px-4 md:px-0 max-sm:pt-20">
+            <div className="buy_head w-full min-w-0 max-w-full">
+              <div className="asset_title w-full min-w-0 max-w-full">{t("spotAssets")}</div>
+              <div className="col-lg-12 w-full min-w-0 max-w-full">
                 {/* Estimated Value */}
-                <div className="esti-container">
-                  <div className="esti-sub-container">
-                    <div className="esti-left">
+                <div className="esti-container max-sm:!p-4">
+                  <div className="esti-sub-container max-lg:!flex-col max-lg:!items-stretch max-lg:!justify-start max-lg:gap-4 lg:!flex-row lg:!items-center lg:!justify-between">
+                    <div className="esti-left min-w-0 max-w-full">
                       <span className="esti-title">
                         {t("spot-balance")}
                         <span
@@ -280,12 +280,12 @@ const Assets = () => {
                         INR
                       </span>
                     </div>
-                    <div className="dash-bal-btns-wrapper ">
-                      <Link to="/deposit">
-                        <button className="dash-bal-btn">{t("deposit")}</button>
+                    <div className="dash-bal-btns-wrapper w-full shrink-0 max-lg:flex-col max-lg:gap-3 max-lg:[&>a]:block max-lg:[&>a]:w-full max-lg:[&_button]:w-full lg:w-auto lg:flex-row">
+                      <Link to="/deposit" className="max-lg:block max-lg:w-full">
+                        <button className="dash-bal-btn max-lg:!w-full">{t("deposit")}</button>
                       </Link>
-                      <Link to="/withdraw">
-                        <button className="dash-bal-btn">
+                      <Link to="/withdraw" className="max-lg:block max-lg:w-full">
+                        <button className="dash-bal-btn max-lg:!w-full">
                           {t("withdrawal")}
                         </button>
                       </Link>
@@ -338,8 +338,8 @@ const Assets = () => {
                         </button>
                       </div> */}
 
-                <div className="terms justify-content-end">
-                  <div class="checkbox-container">
+                <div className="terms mb-3 flex max-w-full flex-wrap items-center gap-2 px-0 sm:justify-end">
+                  <div class="checkbox-container shrink-0">
                     <input
                       id="custom-checkbox"
                       checked={isChecked}
@@ -349,12 +349,12 @@ const Assets = () => {
                     />
                     <label htmlFor="custom-checkbox"></label>
                   </div>
-                  <label htmlFor="custom-checkbox" className="terms-check">
+                  <label htmlFor="custom-checkbox" className="terms-check min-w-0 flex-1 text-sm leading-snug sm:flex-none sm:text-[inherit]">
                     {t("hidesmallbalances")}
                   </label>
                 </div>
 
-                <div class="tab-content" id="nav-tabContent">
+                <div class="tab-content w-full min-w-0 max-w-full" id="nav-tabContent">
                   {/* <div
                           class="tab-pane fade mt-4"
                           id="nav-orders"
@@ -362,18 +362,18 @@ const Assets = () => {
                           aria-labelledby="nav-orders-tab"
                           tabindex="0"
                         > */}
-                  <div className="table-responsive table-cont">
-                    <table className="table">
+                  <div className="table-responsive table-cont min-w-0 max-w-full overflow-x-auto">
+                    <table className="table min-w-0">
                       <thead>
                         <tr className="stake-head-assss ">
-                          <th>{t("assets")}</th>
-                          <th className="opt-nowrap txt-center pad-left-23 pad-l-100">
+                          <th className="align-middle">{t("assets")}</th>
+                          <th className="opt-nowrap txt-center pad-left-23 pad-l-100 min-w-[6.5rem] px-2 md:min-w-[7.5rem] md:px-4 lg:px-5">
                             {t("onOrders")}
                           </th>
-                          <th className="opt-nowrap txt-center pad-left-23  pad-l-100">
+                          <th className="opt-nowrap txt-center pad-left-23 pad-l-100 min-w-[8.5rem] px-3 md:min-w-[10rem] md:px-6 lg:px-10">
                             {t("availablebalance")}
                           </th>
-                          <th className="opt-btn-flex table-action p-r-25">
+                          <th className="opt-btn-flex table-action p-r-25 min-w-[8.5rem] px-3 text-center md:min-w-[10rem] md:pl-8 md:pr-8 lg:pl-12 lg:pr-10">
                             {t("totalBalance")}
                           </th>
                         </tr>
@@ -400,7 +400,7 @@ const Assets = () => {
                                     </div>
                                   </td>
 
-                                  <td className="opt-term  font_14 table_center_text pad-left-23 pad-l-100 nowra_txt">
+                                  <td className="opt-term  font_14 table_center_text pad-left-23 pad-l-100 nowra_txt min-w-[6.5rem] px-2 md:min-w-[7.5rem] md:px-4 lg:px-5">
                                     {isBalanceVisible ? (
                                       <>
                                         {parseFloat(item?.holdAmount).toFixed(
@@ -412,7 +412,7 @@ const Assets = () => {
                                     )}{" "}
                                     {item?.currencysymbol}
                                   </td>
-                                  <td className="opt-term  font_14 table_center_text pad-left-23 pad-l-100 nowra_txt">
+                                  <td className="opt-term  font_14 table_center_text pad-left-23 pad-l-100 nowra_txt min-w-[8.5rem] px-3 md:min-w-[10rem] md:px-6 lg:px-10">
                                     {isBalanceVisible ? (
                                       <>
                                         {parseFloat(
@@ -424,7 +424,7 @@ const Assets = () => {
                                     )}{" "}
                                     {item?.currencysymbol}
                                   </td>
-                                  <td className="opt-term  font_14 pad-left-23 assnewch_lasttd nowra_txt">
+                                  <td className="opt-term  font_14 pad-left-23 assnewch_lasttd nowra_txt min-w-[8.5rem] px-3 text-center md:min-w-[10rem] md:pl-8 md:pr-8 lg:pl-12 lg:pr-10">
                                     {isBalanceVisible ? (
                                       <>
                                         {parseFloat(
@@ -461,7 +461,7 @@ const Assets = () => {
                     </table>
 
                     {balanceDetails && balanceDetails.length > 0 ? (
-                      <div className="flex justify-center my-4">
+                      <div className="mx-auto my-4 flex max-w-full justify-center overflow-x-auto px-1">
                         <Stack spacing={2}>
                           <Pagination
                             count={Math.ceil(total / recordPerPage)}
