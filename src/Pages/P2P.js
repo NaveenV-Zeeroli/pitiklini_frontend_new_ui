@@ -8,7 +8,7 @@ import { Dropdown } from "semantic-ui-react";
 import { Bars } from "react-loader-spinner";
 import "semantic-ui-css/semantic.min.css";
 import { useTranslation } from "react-i18next";
-import { usePageLeaveConfirm } from "./usePageLeaveConfirm";
+// import { usePageLeaveConfirm } from "./usePageLeaveConfirm";
 import DashboardLayout from "./DashboardLayout";
 import Payment from "./view-order";
 
@@ -34,8 +34,37 @@ const P2P = () => {
   const [preferPayment, setpreferPayment] = useState([]);
   const [selectedCrypto, setSelectedCrypto] = useState("USDT");
   const [cryptoStartIndex, setCryptoStartIndex] = useState(0);
+  const [visibleCryptoCount, setVisibleCryptoCount] = useState(0);
 
-  const visibleCryptoCount = 3;
+  // const visibleCryptoCount = 2;
+
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      const width = window.innerWidth;
+
+      if (width < 767) {
+        setVisibleCryptoCount(3);
+      } else if (width < 991) {
+        setVisibleCryptoCount(2);
+      } else if (width < 1299) {
+        setVisibleCryptoCount(1);
+      } else {
+        setVisibleCryptoCount(2);
+      }
+    };
+
+    updateVisibleCount(); // Initial check
+
+    window.addEventListener("resize", updateVisibleCount);
+
+    return () => window.removeEventListener("resize", updateVisibleCount);
+  }, []);
+
+  useEffect(() => {
+    setCryptoStartIndex((prev) =>
+      Math.min(prev, Math.max(0, cryptoCurrencies.length - visibleCryptoCount)),
+    );
+  }, [visibleCryptoCount, cryptoCurrencies.length]);
 
   const visibleCryptos = cryptoCurrencies.slice(
     cryptoStartIndex,
@@ -46,15 +75,15 @@ const P2P = () => {
   const canGoNext =
     cryptoStartIndex + visibleCryptoCount < cryptoCurrencies.length;
 
-  usePageLeaveConfirm("Are you sure you want to leave P2P?", "/p2p", true, [
-    "/p2p/order/:id",
-    "/processorders",
-    "/p2p/chat/:id",
-    "/myorders",
-    "/p2p/dispute/:id",
-    "/postad",
-    "/Paymentmethod",
-  ]);
+  // usePageLeaveConfirm("Are you sure you want to leave P2P?", "/p2p", true, [
+  //   "/p2p/order/:id",
+  //   "/processorders",
+  //   "/p2p/chat/:id",
+  //   "/myorders",
+  //   "/p2p/dispute/:id",
+  //   "/postad",
+  //   "/Paymentmethod",
+  // ]);
 
   const allpayment = [
     { key: "imps", text: "IMPS", value: "IMPS" },
@@ -200,20 +229,63 @@ const P2P = () => {
     }
   };
 
+  // const filterOrders = () => {
+  //   setSiteLoader(true);
+  //   let filtered = Array.isArray(p2pOrders) ? p2pOrders.slice() : [];
+  //   if (paymentMethod)
+  //     filtered = filtered.filter((o) => o.paymentMethod === paymentMethod);
+  //   if (orderType) filtered = filtered.filter((o) => o.orderType !== orderType);
+  //   if (selectedCrypto)
+  //     filtered = filtered.filter((o) => o.firstCurrency === selectedCrypto);
+  //   if (selectedFiat)
+  //     filtered = filtered.filter((o) => o.secondCurrency === selectedFiat);
+  //   if (amount)
+  //     filtered = filtered.filter(
+  //       (o) => amount >= o.fromLimit && amount <= o.toLimit,
+  //     );
+  //   setFilteredOrders(filtered);
+  //   setSiteLoader(false);
+  // };
+
   const filterOrders = () => {
     setSiteLoader(true);
-    let filtered = Array.isArray(p2pOrders) ? p2pOrders.slice() : [];
-    if (paymentMethod)
-      filtered = filtered.filter((o) => o.paymentMethod === paymentMethod);
-    if (orderType) filtered = filtered.filter((o) => o.orderType !== orderType);
-    if (selectedCrypto)
+
+    let filtered = Array.isArray(p2pOrders) ? [...p2pOrders] : [];
+
+    if (paymentMethod) {
+      filtered = filtered.filter((o) => {
+        if (!o.paymentMethod) return false;
+
+        if (Array.isArray(o.paymentMethod)) {
+          return o.paymentMethod.includes(paymentMethod);
+        }
+
+        return o.paymentMethod === paymentMethod;
+      });
+    }
+
+    if (orderType) {
+      filtered = filtered.filter((o) => o.orderType !== orderType);
+    }
+
+    if (selectedCrypto) {
       filtered = filtered.filter((o) => o.firstCurrency === selectedCrypto);
-    if (selectedFiat)
+    }
+
+    if (selectedFiat) {
       filtered = filtered.filter((o) => o.secondCurrency === selectedFiat);
-    if (amount)
+    }
+
+    if (amount) {
+      const enteredAmount = Number(amount);
+
       filtered = filtered.filter(
-        (o) => amount >= o.fromLimit && amount <= o.toLimit,
+        (o) =>
+          enteredAmount >= Number(o.fromLimit) &&
+          enteredAmount <= Number(o.toLimit),
       );
+    }
+
     setFilteredOrders(filtered);
     setSiteLoader(false);
   };
@@ -323,7 +395,7 @@ const P2P = () => {
           if (resp.status) {
             toast.success(resp.Message);
             navigate(resp.link || "/");
-            window.location.href = resp.link || "/";
+            // window.location.href = resp.link || "/";
           } else toast.error(resp.Message);
         } else toast.error("Please select the payment methods");
       } else toast.error("Please enter quantity");
@@ -350,18 +422,17 @@ const P2P = () => {
         <section className="asset_section">
           <div className="buy_head">
             <div className="w-full">
-              <div className="bg-black rounded-xl p-4">
+              <div className="bg-black rounded-xl p-md-4 p-2">
                 <div className="p2p_header_row flex justify-between items-center mb-6">
                   <div>
                     <h2 className="p2p_main_title text-[#BD7F10]">
-                      P2P Platform
+                      {t("p2pplatform")}
                     </h2>
                     <h3 className="p2p_main_title text-[#ffff]">
-                      P2P Marketplace
+                      {t("p2pmarketplace")}
                     </h3>
                     <span className="p2p_subtitle text-[#BD7F10]">
-                      Institutional marketplace for high-volume asset
-                      conversion.
+                      {t("p2pmarketplacedetails")}
                     </span>
                   </div>
                   <div className="flex space-x-4">
@@ -369,13 +440,14 @@ const P2P = () => {
                       to={loginStatus ? "/postad" : "/login"}
                       className="post-ad-btn bg-[#BD7F10] text-black px-4 py-2 rounded-lg flex items-center"
                     >
-                      + Post Advertisement
+                      {t("postAd")}
+                      {/* + Post Advertisement */}
                     </Link>
                     <Link
                       to={loginStatus ? "/Paymentmethod" : "/login"}
                       className="post-ad-btn bg-[#BD7F10] text-black px-4 py-2 rounded-lg flex items-center"
                     >
-                      Payment Method
+                      {t("PaymentMethods")}
                     </Link>
                     <Link
                       to={loginStatus ? "/processorders" : "/login"}
@@ -396,7 +468,7 @@ const P2P = () => {
                           onClick={() => setOrderType("buy")}
                           className={`flex-1 rounded-xl px-6 py-3 text-sm font-extrabold uppercase tracking-[0.22em] transition-all duration-200 ${
                             orderType === "buy"
-                              ? "bg-[#c98a11] text-[#1a1a1a] shadow-[inset_0_-2px_0_rgba(0,0,0,0.18)]"
+                              ? "bg-[#2ebd85] text-black shadow-[inset_0_-2px_0_rgba(0,0,0,0.18)]"
                               : "text-[#7f8798] hover:text-white"
                           }`}
                         >
@@ -408,7 +480,7 @@ const P2P = () => {
                           onClick={() => setOrderType("sell")}
                           className={`flex-1 rounded-xl px-6 py-3 text-sm font-extrabold uppercase tracking-[0.22em] transition-all duration-200 ${
                             orderType === "sell"
-                              ? "bg-[#c98a11] text-[#1a1a1a] shadow-[inset_0_-2px_0_rgba(0,0,0,0.18)]"
+                              ? "bg-[#f45e71] text-black shadow-[inset_0_-2px_0_rgba(0,0,0,0.18)]"
                               : "text-[#7f8798] hover:text-white"
                           }`}
                         >
@@ -431,17 +503,17 @@ const P2P = () => {
                             <path d="M3 5h18l-7 8v5l-4 2v-7L3 5z" />
                           </svg>
                           <span className="text-[13px] font-extrabold uppercase tracking-[0.22em] text-white">
-                            Market Filters
+                            {t("marketfilter")}
                           </span>
                         </div>
 
                         {/* Asset */}
                         <div className="mb-6">
                           <label className="mb-3 block text-[12px] font-bold uppercase tracking-[0.2em] text-white/85">
-                            Asset
+                            {t("asset")}
                           </label>
 
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1">
                             <button
                               type="button"
                               onClick={() =>
@@ -469,7 +541,7 @@ const P2P = () => {
                               </svg>
                             </button>
 
-                            <div className="flex flex-1 gap-3 overflow-hidden">
+                            <div className="flex flex-1 gap-1 overflow-hidden">
                               {visibleCryptos && visibleCryptos.length > 0 ? (
                                 visibleCryptos.map((crypto) => (
                                   <button
@@ -478,7 +550,7 @@ const P2P = () => {
                                     onClick={() =>
                                       setSelectedCrypto(crypto.value)
                                     }
-                                    className={`min-w-[72px] rounded-lg px-4 py-3 text-sm font-bold uppercase transition-all duration-200 whitespace-nowrap ${
+                                    className={`min-w-[68px] rounded-lg px-4 py-3 text-sm font-bold uppercase transition-all duration-200 whitespace-nowrap ${
                                       selectedCrypto === crypto.value
                                         ? "bg-[#c98a11] text-white"
                                         : "bg-[#282A30] text-white hover:bg-white/12"
@@ -530,13 +602,13 @@ const P2P = () => {
                         {/* Amount */}
                         <div className="mb-6">
                           <label className="mb-3 block text-[12px] font-bold uppercase tracking-[0.2em] text-white/85">
-                            Amount
+                            {t("amount")}
                           </label>
 
                           <div className="flex items-center rounded-xl bg-[#050811] px-4 py-4">
                             <input
                               type="text"
-                              placeholder="Enter amount..."
+                              placeholder={t("enterAmount")}
                               value={amount}
                               onChange={(e) => {
                                 const v = e.target.value.replace(
@@ -558,13 +630,13 @@ const P2P = () => {
                         {/* Fiat Currency */}
                         <div className="mb-6">
                           <label className="mb-3 block text-[12px] font-bold uppercase tracking-[0.2em] text-white/85">
-                            Fiat Currency
+                            {t("fiatCurrency")}
                           </label>
 
                           <div className="relative">
                             <div className="[&_.ui.selection.dropdown]:!min-h-[56px] [&_.ui.selection.dropdown]:!w-full [&_.ui.selection.dropdown]:!rounded-xl [&_.ui.selection.dropdown]:!border-0 [&_.ui.selection.dropdown]:!bg-[#050811] [&_.ui.selection.dropdown]:!px-4 [&_.ui.selection.dropdown]:!pr-12 [&_.ui.selection.dropdown]:!text-white [&_.ui.selection.dropdown]:!shadow-none [&_.ui.selection.dropdown]:!flex [&_.ui.selection.dropdown]:!items-center [&_.ui.selection.dropdown>.text]:!text-white [&_.ui.selection.dropdown>.default.text]:!text-[#6b7280] [&_.ui.selection.dropdown>.dropdown.icon]:!hidden">
                               <Dropdown
-                                placeholder="USD - US Dollar"
+                                placeholder={t("fiatCurrency")}
                                 fluid
                                 selection
                                 options={fiatCurrencies}
@@ -590,7 +662,7 @@ const P2P = () => {
                         {/* Payment Method */}
                         <div className="mb-8">
                           <label className="mb-3 block text-[12px] font-bold uppercase tracking-[0.2em] text-white/85">
-                            Payment Method
+                            {t("payment_Method")}
                           </label>
 
                           <div className="relative">
@@ -621,7 +693,7 @@ const P2P = () => {
                         </div>
 
                         {/* More Filters */}
-                        <div className="mb-6 flex cursor-pointer items-center justify-between text-[#c98a11]">
+                        {/* <div className="mb-6 flex cursor-pointer items-center justify-between text-[#c98a11]">
                           <span className="text-[12px] font-bold uppercase tracking-[0.2em]">
                             More Filters
                           </span>
@@ -635,9 +707,9 @@ const P2P = () => {
                           >
                             <path d="m6 9 6 6 6-6" />
                           </svg>
-                        </div>
+                        </div> */}
 
-                        <div className="border-t border-white/5 pt-6">
+                        {/* <div className="border-t border-white/5 pt-6">
                           <label className="flex items-center gap-4 cursor-pointer">
                             <input type="checkbox" className="peer sr-only" />
                             <span className="flex h-7 w-7 items-center justify-center rounded-md border border-[#c98a11] bg-transparent text-[#c98a11] peer-checked:bg-[#c98a11] peer-checked:text-[#111827]">
@@ -658,7 +730,7 @@ const P2P = () => {
                               Only
                             </span>
                           </label>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -696,12 +768,13 @@ const P2P = () => {
                                     <td className="px-4 py-4">
                                       <div className="flex items-center gap-3">
                                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#c98a11] text-sm font-extrabold uppercase text-white shadow-[0_8px_20px_rgba(201,138,17,0.28)]">
-                                          {options.displayname?.charAt(0)}
+                                          {/* {options.displayname?.charAt(0)} */}
+                                          {options.uuid?.charAt(0)}
                                         </div>
 
                                         <div className="min-w-0">
                                           <h4 className="truncate text-sm font-semibold text-white">
-                                            {options.displayname}
+                                            {options.uuid}
                                           </h4>
                                           <div className="mt-1 truncate text-xs text-white/55">
                                             {`Trades: ${options.trades} | ⭐ ${options.stars}`}
@@ -723,14 +796,14 @@ const P2P = () => {
                                       <div className="space-y-1.5">
                                         <div className="text-sm text-white/85">
                                           <span className="mr-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
-                                            Available
+                                            {t("available")}
                                           </span>
                                           {options.available_qty}{" "}
                                           {options.firstCurrency}
                                         </div>
                                         <div className="text-sm text-white/85">
                                           <span className="mr-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
-                                            Limit
+                                            {t("limit")}
                                           </span>
                                           {options.fromLimit} -{" "}
                                           {options.toLimit}
@@ -740,7 +813,10 @@ const P2P = () => {
 
                                     <td className="px-1 py-4 whitespace-nowrap">
                                       <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85">
-                                        {options.paymentMethod}
+                                        {/* {options.paymentMethod} */}
+                                        {Array.isArray(options.paymentMethod)
+                                          ? options.paymentMethod.join(", ")
+                                          : options.paymentMethod}
                                       </span>
                                     </td>
 
@@ -757,8 +833,9 @@ const P2P = () => {
                                           <button
                                             className={`inline-flex min-w-[120px] items-center justify-center rounded-xl px-4 py-2.5 text-sm font-bold transition ${
                                               orderType === "buy"
-                                                ? "bg-[#c98a11] text-black hover:bg-[#d79a1a]"
-                                                : "bg-[#d14b4b] text-black hover:bg-[#df5b5b]"
+                                                ? "bg-[#2ebd85] text-black hover:bg-[#d79a1a]"
+                                                : "bg-[#f45e71] text-black hover:bg-[#df5b5b]"
+                                                // : "bg-[#d14b4b] text-black hover:bg-[#df5b5b]"
                                             }`}
                                             onClick={() =>
                                               handleClick(i, options)
@@ -788,13 +865,14 @@ const P2P = () => {
                                             <div className="space-y-4">
                                               <div className="flex items-start gap-4">
                                                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c98a11] text-base font-extrabold uppercase text-black">
-                                                  {options.displayname?.charAt(
+                                                  {/* {options.displayname?.charAt(
                                                     0,
-                                                  )}
+                                                  )} */}
+                                                  {options.uuid?.charAt(0)}
                                                 </div>
                                                 <div>
                                                   <h4 className="text-sm font-semibold text-white">
-                                                    {options.displayname}
+                                                    {options.uuid}
                                                   </h4>
                                                   <p className="mt-1 text-xs text-white/60">
                                                     {`Trades: ${options.trades} | ⭐ ${options.stars}`}
@@ -818,7 +896,14 @@ const P2P = () => {
                                                     {t("payment_Method")}
                                                   </div>
                                                   <div className="mt-2 text-lg font-semibold text-white">
-                                                    {options.paymentMethod}
+                                                    {/* {options.paymentMethod} */}
+                                                    {Array.isArray(
+                                                      options.paymentMethod,
+                                                    )
+                                                      ? options.paymentMethod.join(
+                                                          ", ",
+                                                        )
+                                                      : options.paymentMethod}
                                                   </div>
                                                 </div>
 
@@ -925,9 +1010,16 @@ const P2P = () => {
                                                     fluid
                                                     selection
                                                     options={
-                                                      options.paymentMethod ===
-                                                      "All Payment"
-                                                        ? allpayment
+                                                      Array.isArray(
+                                                        options.paymentMethod,
+                                                      )
+                                                        ? options.paymentMethod.map(
+                                                            (method) => ({
+                                                              key: method,
+                                                              text: method,
+                                                              value: method,
+                                                            }),
+                                                          )
                                                         : [
                                                             {
                                                               key: options.paymentMethod,
@@ -937,6 +1029,19 @@ const P2P = () => {
                                                             },
                                                           ]
                                                     }
+                                                    // options={
+                                                    //   options.paymentMethod ===
+                                                    //   "All Payment"
+                                                    //     ? allpayment
+                                                    //     : [
+                                                    //         {
+                                                    //           key: options.paymentMethod,
+                                                    //           text: options.paymentMethod,
+                                                    //           value:
+                                                    //             options.paymentMethod,
+                                                    //         },
+                                                    //       ]
+                                                    // }
                                                     onChange={(e, { value }) =>
                                                       setselectPayment(value)
                                                     }

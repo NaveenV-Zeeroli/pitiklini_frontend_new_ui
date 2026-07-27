@@ -269,6 +269,7 @@ const service = {
   //kyc
   kycUpload: "kyc/savekyc",
   kycStripe: "kyc/create-verification-session",
+  saveKycBasicDetails: "kyc/save-kyc-basic-details",
 
   //internal transfer
   walletTransfer: "swap/walletTransfer",
@@ -332,6 +333,10 @@ const service = {
   getVipDatas: "users/getVipDatas",
   getVipUserDetail: "users/getVipUserDetail",
   enableVipUser: "users/enableVipUser",
+
+  startFiatDeposit: "users/start-fiat-deposit",
+  getPortfolioHistory: "users/getPortfolioHistory",
+  notificationViewed: "users/notificationViewed",
 };
 
 export default service;

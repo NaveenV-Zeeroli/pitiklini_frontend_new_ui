@@ -188,24 +188,51 @@ const Checkout = () => {
   //   }
   // };
 
-    const handleFiatDeposit = (amount) => {
+    // const handleFiatDeposit = (amount) => {
+    //   if (!amount || amount <= 0) {
+    //     toast.error("Enter valid amount");
+    //     return;
+    //   }
+
+    //   const userId = depaIdref.current;
+    //   if (!userId) {
+    //     toast.error("User not found");
+    //     return;
+    //   }
+
+    //   const redirectUrl = encodeURIComponent("https://pitiklini.com/checkout");
+
+    //   const url = `https://widget.sandbox.depa.finance/?partner=Pitiklini&scenario=direct_card_payment&external_user_uuid=${userId}&amount=${amount}&redirect_url=${redirectUrl}`;
+
+    //   window.open(url, "_blank");
+  // };
+  
+    const handleFiatDeposit = async (amount) => {
+    try {
       if (!amount || amount <= 0) {
         toast.error("Enter valid amount");
         return;
       }
 
-      const userId = depaIdref.current;
-      if (!userId) {
-        toast.error("User not found");
+      const response = await postMethod({
+        apiUrl: apiService.startFiatDeposit,
+        payload: {
+          amount,
+        },
+      });
+
+      if (!response.status) {
+        toast.error(response.message);
         return;
       }
 
-      const redirectUrl = encodeURIComponent("https://pitiklini.com/checkout");
-
-      const url = `https://widget.sandbox.depa.finance/?partner=Pitiklini&scenario=direct_card_payment&external_user_uuid=${userId}&amount=${amount}&redirect_url=${redirectUrl}`;
-
-      window.open(url, "_blank");
-    };
+      // ✅ open depasify payment widget
+      window.open(response.url, "_blank");
+    } catch (err) {
+      // console.log(err);
+      toast.error("Something went wrong");
+    }
+  };
 
   const handleChange = async (e) => {
     e.preventDefault();
@@ -1533,12 +1560,12 @@ const Checkout = () => {
                               <h5 className="opt-title">
                                 {t("paymentHistory")}
                               </h5>
-                              <Link to="/withdrawHistory">
+                              {/* <Link to="/withdrawHistory">
                                 <div className="d-flex gap-2 text-yellow">
                                   {t("viewAll")}{" "}
                                   <i className="bi bi-arrow-right"></i>
                                 </div>
-                              </Link>
+                              </Link> */}
                             </div>
 
                             <div className="table-responsive table-cont">
@@ -1569,7 +1596,7 @@ const Checkout = () => {
                                       .map((item, i) => {
                                         return (
                                           <tr>
-                                            <td className="opt-percent font_14 table_center_text pad-left-23">
+                                            <td className="opt-percent font_14 pad-left-23">
                                               {item.currency}
                                             </td>
                                             <td className="opt-percent font_14 table_center_text pad-left-23">
@@ -1609,9 +1636,9 @@ const Checkout = () => {
                                     <tr>
                                       <td
                                         colSpan={5}
-                                        className="text-center py-5"
+                                        className="px-4 py-10 text-center text-sm text-white/60"
                                       >
-                                        <div className="empty_data">
+                                        {/* <div className="empty_data">
                                           <div className="empty_data_img">
                                             <img
                                               src={require("../assets/No-data.webp")}
@@ -1619,10 +1646,10 @@ const Checkout = () => {
                                               alt=""
                                             />
                                           </div>
-                                          <div className="no_records_text">
-                                            {t("noRecordsFound")}
-                                          </div>
-                                        </div>
+                                          <div className="no_records_text"> */}
+                                        {t("noRecordsFound")}
+                                        {/* </div>
+                                        </div> */}
                                       </td>
                                     </tr>
                                   )}

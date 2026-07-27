@@ -239,8 +239,48 @@ const Payment = () => {
     // }
   };
 
+      const showReleaseConfirmModal = () => {
+        setTimeout(() => {
+          const modalEl = document.getElementById("releaseConfirmModal");
+
+          if (modalEl && window.bootstrap?.Modal) {
+            let bsModal =
+              window.bootstrap.Modal.getInstance(modalEl) ||
+              new window.bootstrap.Modal(modalEl, {
+                backdrop: "static",
+                keyboard: false,
+              });
+
+            bsModal.show();
+          }
+        }, 100);
+      };
+
+      const closeReleaseConfirmModal = () => {
+        const modalEl = document.getElementById("releaseConfirmModal");
+
+        if (modalEl && window.bootstrap?.Modal) {
+          const modal = window.bootstrap.Modal.getInstance(modalEl);
+
+          if (modal) {
+            modal.hide();
+          }
+        }
+  };
+  
+  const confirmReleaseCrypto = () => {
+    closeReleaseConfirmModal();
+
+    handleChange_confirm("release");
+  };
+
   const getp2pChat = async () => {
-    setSiteLoader(true);
+    // setSiteLoader(true);
+
+    if (!headurlref.current) {
+      console.log("Headrer url not comes-->>");
+      return;
+    }
 
     var onj = {
       orderId: headurlref.current,
@@ -266,6 +306,16 @@ const Payment = () => {
     let formData = { ...formValue, ...{ [name]: santisedValue } };
     setFormValue(formData);
   };
+
+  // useEffect(() => {
+  //   const urls = window.location.href;
+  //   // console.log(urls, "urls");
+  //   const chat = urls.split("/").pop();
+  //   // console.log(chat, "chat");
+
+  //   setheadurl(chat);
+  // }, [])
+  
 
   const [UserID, setUserID, UserIDref] = useState("");
 
@@ -295,17 +345,21 @@ const Payment = () => {
     socket.off("socketResponse");
     socket.on("socketResponse" + socketsplit[0], function (res) {
       console.log("socketResponse ressss-->>", res);
+      console.log("headurlref.current",headurlref.current)
       if (res.Reason == "p2pchat") {
-        getp2pChat();
+          getp2pChat();
+      } else if (res.Reason == "notifysingle") {
+        //  setnotifymessage(res.Message);
+         showsuccessToast(res.Message);
       } else if (res.Reason == "notify") {
         setnotifymessage(res.Message);
         showsuccessToast(res.Message, {
           toastId: "3",
         });
-        getp2pOrder();
-        getDispute();
-        //getp2pconfirmOrder();
-        getconfirmOrder();
+          getp2pOrder();
+          getDispute();
+          //getp2pconfirmOrder();
+          getconfirmOrder();
       }  else if (res.Reason == "existnotify") {
         setnotifymessage(res.Message);
         showsuccessToast(res.Message, {
@@ -375,7 +429,10 @@ const Payment = () => {
 
   const getp2pOrder = async () => {
     setSiteLoader(true);
-
+    if (!headurlref.current) {
+      console.log("Headrer url not comes-->>");
+      return;
+    };
     var onj = {
       orderId: headurlref.current,
     };
@@ -539,6 +596,11 @@ const Payment = () => {
   };
 
   const getconfirmOrder = async () => {
+     if (!headurlref.current) {
+      console.log("Headrer url not comes-->>");
+      return;
+    };
+
     var onj = {
       orderId: headurlref.current,
     };
@@ -642,7 +704,7 @@ const Payment = () => {
   };
 
   const cancel_confirmorder_sell = async () => {
-    // console.log("it comess confirm sell cancel====");
+    console.log("it comess confirm sell cancel====");
     var onj = {
       orderId: window.location.href.split("/").pop(),
     };
@@ -707,14 +769,14 @@ const Payment = () => {
         UserIDref.current == p2pDataref.current.userId._id ? "advertiser" : "user";
 
       if (formValue.message != "" || formValue.file != "") {
-        setSiteLoader(true);
+        // setSiteLoader(true);
         var data = {
           apiUrl: apiService.p2pchat,
           payload: formValue,
         };
         setchatloading(true);
         var resp = await postMethod(data);
-        setSiteLoader(false);
+        // setSiteLoader(false);
 
         if (resp.status) {
           setchatloading(false);
@@ -817,7 +879,7 @@ const Payment = () => {
   };
 
   const cancel_confirm_buy = async () => {
-    // console.log("it comess confirm buy cancel====");
+    console.log("it comess confirm buy cancel====");
     var onj = {
       orderId: window.location.href.split("/").pop(),
     };
@@ -1457,7 +1519,7 @@ const Payment = () => {
                           // sellTimerstatusref.current == "active" ? (
                           <div className="timer">
                             <h6>
-                              {t("releasethecrypto")} 
+                              {t("releasethecrypto")}
                               <span>
                                 <Countdown
                                   date={sellTimerref.current}
@@ -1495,9 +1557,11 @@ const Payment = () => {
                                   type="button"
                                   class="proceed-btn txt-center"
                                   // onClick={handleChange_confirm}
-                                  onClick={() =>
-                                    handleChange_confirm("release")
-                                  }
+
+                                  // onClick={() =>
+                                  //   handleChange_confirm("release")
+                                  // }
+                                  onClick={showReleaseConfirmModal}
                                 >
                                   {t("confirmRelease")}
                                 </button>
@@ -1577,9 +1641,11 @@ const Payment = () => {
                                   type="button"
                                   class="proceed-btn txt-center"
                                   // onClick={handleChange_confirm}
-                                  onClick={() =>
-                                    handleChange_confirm("release")
-                                  }
+
+                                  // onClick={() =>
+                                  //   handleChange_confirm("release")
+                                  // }
+                                  onClick={showReleaseConfirmModal}
                                 >
                                   {t("confirmRelease")}
                                 </button>
@@ -1844,13 +1910,16 @@ const Payment = () => {
                     <div className="chat-box">
                       <div className="chat-flex">
                         <div className="p2p_namefrst_change align-items-center">
-                          {p2pDataref.current.userId?.displayname
+                          {/* {p2pDataref.current.userId?.displayname
                             ? p2pDataref.current.userId.displayname[0]
+                            : ""} */}
+                          {p2pDataref.current.userId?.uuid
+                            ? p2pDataref.current.userId.uuid[0]
                             : ""}
                         </div>
                         <div className="chat-content">
                           <span className="pay-btc">
-                            {p2pDataref.current.userId?.displayname}
+                            {p2pDataref.current.userId?.uuid}
                           </span>
                           <span className="chat-para">
                             {p2pOrdercountref.current} Volume |{" "}
@@ -2916,6 +2985,54 @@ const Payment = () => {
                     <p className="small text-muted">
                       Thanks for your feedback!
                     </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className="modal fade"
+              id="releaseConfirmModal"
+              tabIndex="-1"
+              aria-labelledby="releaseConfirmModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog modal-dialog-centered modal-md">
+                <div className="modal-content">
+                  <div className="modal-header lvl-one-header">
+                    <h5 className="modal-title" id="releaseConfirmModalLabel">
+                      Confirm Release
+                    </h5>
+
+                    <button
+                      type="button"
+                      className="btn-close btn-close-custom"
+                      onClick={closeReleaseConfirmModal}
+                    ></button>
+                  </div>
+
+                  <div className="modal-body text-center text-white mt-4">
+                    <p className="mb-4 text-white">
+                      Are you sure you want to release the crypto?
+                      <br />
+                      This action cannot be undone.
+                    </p>
+
+                    <div className="d-flex justify-content-center gap-2 mt-4">
+                      <button
+                        className="modal_continue_btn"
+                        onClick={closeReleaseConfirmModal}
+                      >
+                        Cancel
+                      </button>
+
+                      <button
+                        className="modal_continue_btn"
+                        onClick={confirmReleaseCrypto}
+                      >
+                        Release Crypto
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

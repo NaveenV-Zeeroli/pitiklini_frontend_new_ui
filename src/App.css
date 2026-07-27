@@ -6,6 +6,10 @@ body {
   /* background-color: #17171a !important; */
 }
 
+i.icon {
+  font-family: Icons !important;
+}
+
 .font-family-ibm {
   font-family: "IBM Plex Sans", sans-serif !important;
 }
@@ -3365,7 +3369,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .loadercss {
   height: 100vh;
   display: flex;
-  width: 100vw !important;
+  /* width: 100vw !important; */
   align-items: center;
   justify-content: center;
 }
@@ -3727,6 +3731,23 @@ input[type="number"]::-webkit-inner-spin-button {
 .newtablehead_chngtheme_back {
   background-color: #0A0E18 !important;
 }
+.dashboard_main .row.newchange_rcky{
+  display: flex;
+  flex-wrap: wrap !important;
+}
+.sumbit_btn.fundtrans_nwbtn {
+  padding-left: 24px;
+}
+.sumbit_btn.fundtrans_nwbtn button {
+  width: 100%;
+}
+.swaphis_mobscrl > div {
+  text-wrap: nowrap !important;
+}
+.swaphis_mobscrl > .swaphis_mobscrl_scdry {
+  text-wrap: normal !important;
+}
+
 
 /* Media Queries */
 
@@ -3807,7 +3828,9 @@ input[type="number"]::-webkit-inner-spin-button {
 
 @media (max-width: 1200px) {
   .dashboard_content {
-    padding-left: 50px;
+    /* padding-left: 50px; */
+    padding-left: 10px;
+    padding-right: 10px;
   }
   header.scrolled .MuiAppBar-colorPrimary {
     padding: 14px 20px;
@@ -3818,7 +3841,8 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 40px 20px 0px 160px;
   }
   .padin_lefrig_dash {
-    padding: 0 80px;
+    /* padding: 0 80px; */
+    padding: 0px;
   }
   .dashboard_pages_list {
     width: 218px;
@@ -3902,6 +3926,9 @@ input[type="number"]::-webkit-inner-spin-button {
   .security-height {
     height: 155px;
   }
+    .security-login-h {
+    height: 152px;
+  }
   .user_id_card {
     gap: 30px;
     overflow-x: scroll;
@@ -3911,8 +3938,8 @@ input[type="number"]::-webkit-inner-spin-button {
 @media (max-width: 1199px) and (min-width: 992px) {
   .menu_new_typr a {
     margin: 0px !important;
-    margin-right: 14px !important;
-    font-size: 14px;
+    margin-right: 2px !important;
+    font-size: 13px;
   }
   a.head-dep-btn {
     margin-right: 0px !important;
@@ -3979,6 +4006,11 @@ input[type="number"]::-webkit-inner-spin-button {
     gap: 20px 0;
     padding: 20px;
   }
+  .makeStyles-mobileMenuButton-6,
+  .makeStyles-mobileMenuButton-22 {
+    display: block !important;
+  }
+
 }
 
 @media (max-width: 991px) {
@@ -4002,7 +4034,7 @@ input[type="number"]::-webkit-inner-spin-button {
     gap: 15px;
   }
   .padin_lefrig_dash {
-    padding: 0 40px;
+    padding: 0 20px;
   }
   .globe-lists {
     top: 61px;
@@ -4197,6 +4229,16 @@ input[type="number"]::-webkit-inner-spin-button {
   .stake-head-newchang .market_trade_new {
     padding-right: 48px !important;
   }
+  .dashboard_main .row {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+    .swaphis_mobscrl {
+    overflow-x: scroll !important;
+  }
+    .swaphis_mobscrl > div {
+  padding: 0px 4px;
+}
 }
 
 @media (max-width: 575px) {
@@ -4392,6 +4434,17 @@ input[type="number"]::-webkit-inner-spin-button {
   .page-inline {
     display: inline;
   }
+    .uid_content h4,
+  .uid_content p {
+    font-size: 13px;
+  }
+    header.scrolled {
+    height: 66px;
+  }
+  .p2p_header_row {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
 @media (max-width: 500px) {
@@ -4403,6 +4456,10 @@ input[type="number"]::-webkit-inner-spin-button {
     position: relative;
     width: max-content;
   }
+  .nowheader_poppp {
+  right: -50px !important;
+  margin-top: 24px !important;
+}
 }
 
 @media (max-width: 480px) {
@@ -4445,6 +4502,13 @@ input[type="number"]::-webkit-inner-spin-button {
   }
   .support-his-table td {
     padding-right: 24px !important;
+  }
+    .uid_content h4,
+  .uid_content p {
+    font-size: 12px;
+  }
+    .padin_lefrig_dash {
+    padding: 60px 12px;
   }
 }
 
@@ -4567,6 +4631,13 @@ input[type="number"]::-webkit-inner-spin-button {
   .not-found-img-wrap {
     width: 390px;
   }
+  header.scrolled {
+    height: 58px;
+}
+  .nowheader_poppp {
+  right: -80px !important;
+  margin-top: 24px !important;
+}
 }
 
 @media (max-width: 380px) {

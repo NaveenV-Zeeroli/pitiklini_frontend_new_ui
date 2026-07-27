@@ -200,13 +200,13 @@ const Side_bar = () => {
             </Tooltip>
 
             {/* Asset */}
-            <Tooltip title={isCollapsed ? "Asset" : ""} placement="right" arrow {...tooltipProps}>
-              {/* <Link to="/asset" className={menuClass("asset")}> */}
-              <Link to="/spotassets" className={menuClass("asset")}>
+            {/* <Tooltip title={isCollapsed ? "Asset" : ""} placement="right" arrow {...tooltipProps}> */}
+            {/* <Link to="/asset" className={menuClass("asset")}> */}
+            {/* <Link to="/spotassets" className={menuClass("asset")}>
                 <i className="ri-wallet-3-line text-[24px]"></i>
                 {!isCollapsed && <span className="text-[16px] font-ibm">Asset</span>}
               </Link>
-            </Tooltip>
+            </Tooltip> */}
 
             {/* Security */}
             <Tooltip
@@ -257,19 +257,17 @@ const Side_bar = () => {
               </Link>
             </Tooltip>
 
-            {/* Fiat Deposit */}
+            {/* Deposit */}
             <Tooltip
-              title={isCollapsed ? t("fiat_deposit") : ""}
+              title={isCollapsed ? t("deposit") : ""}
               placement="right"
               arrow
               {...tooltipProps}
             >
-              <Link to="/Checkout" className={menuClass("Checkout")}>
-                <i className="ri-bank-card-line text-[24px]"></i>
+              <Link to="/deposit" className={menuClass("deposit")}>
+                <i className="ri-download-2-line text-[24px]"></i>
                 {!isCollapsed && (
-                  <span className="text-[16px] font-ibm">
-                    {t("fiat_deposit")}
-                  </span>
+                  <span className="text-[16px] font-ibm">{t("deposit")}</span>
                 )}
               </Link>
             </Tooltip>
@@ -291,17 +289,19 @@ const Side_bar = () => {
               </Link>
             </Tooltip>
 
-            {/* Deposit */}
+            {/* Fiat Deposit */}
             <Tooltip
-              title={isCollapsed ? t("deposit") : ""}
+              title={isCollapsed ? t("fiat_deposit") : ""}
               placement="right"
               arrow
               {...tooltipProps}
             >
-              <Link to="/deposit" className={menuClass("deposit")}>
-                <i className="ri-download-2-line text-[24px]"></i>
+              <Link to="/Checkout" className={menuClass("Checkout")}>
+                <i className="ri-bank-card-line text-[24px]"></i>
                 {!isCollapsed && (
-                  <span className="text-[16px] font-ibm">{t("deposit")}</span>
+                  <span className="text-[16px] font-ibm">
+                    {t("fiat_deposit")}
+                  </span>
                 )}
               </Link>
             </Tooltip>

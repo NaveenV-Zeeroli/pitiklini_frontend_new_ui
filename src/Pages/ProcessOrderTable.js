@@ -20,21 +20,21 @@ const ProcessOrderTable = () => {
   const [notifyCurrentPage, setnotifyCurrentPage, notifyCurrentPageref] =
     useState(1); // Start with page 1
   const [notifytotalpage, Setnotifytotalpage, notifytotalpageref] = useState(0);
-  usePageLeaveConfirm(
-    "Are you sure you want to leave P2P?",
-    "/processorders",
-    true,
-    [
-      "/p2p/order/:id",
-      "/p2p",
-      "/p2p/chat/:id",
-      "/myorders",
-      "/myhistory",
-      "/p2p/dispute/:id",
-      "/postad",
-      "/Paymentmethod",
-    ],
-  );
+  // usePageLeaveConfirm(
+  //   "Are you sure you want to leave P2P?",
+  //   "/processorders",
+  //   true,
+  //   [
+  //     "/p2p/order/:id",
+  //     "/p2p",
+  //     "/p2p/chat/:id",
+  //     "/myorders",
+  //     "/myhistory",
+  //     "/p2p/dispute/:id",
+  //     "/postad",
+  //     "/Paymentmethod",
+  //   ],
+  // );
 
   useEffect(() => {
     notify(notifyCurrentPage);
@@ -76,13 +76,13 @@ const ProcessOrderTable = () => {
                 <div className="p2p_header_row flex justify-between items-center mb-6">
                   <div>
                     <h2 className="p2p_main_title text-[#BD7F10]">
-                      P2P Platform
+                      {t("p2pplatform")}
                     </h2>
                     <h3 className="p2p_main_title text-[#ffff]">
-                      Order History
+                      {t("OrderHistory")}
                     </h3>
                     <span className="p2p_subtitle text-[#BD7F10]">
-                      Order details with time stamp and order details.
+                      {t("OrderHistorydetals")}
                     </span>
                   </div>
                   {/* <div className="flex space-x-4">
@@ -175,14 +175,16 @@ const ProcessOrderTable = () => {
                               onClick={() => navchatpage(item.link)}
                               className="border-t border-white/5 align-middle transition-colors hover:bg-white/[0.02]"
                             >
-                              <td className="table-flex opt-term">{i + 1}</td>
-                              <td className="opt-term font_14 table_center_text">
+                              <td className="table-flex opt-term pl-2">
+                                {i + 1}
+                              </td>
+                              <td className="opt-term font_14 table_center_text px-4 py-2">
                                 {Moment(item.createdAt).format("lll")}
                               </td>
-                              <td className="opt-term font_14 table_center_text">
+                              <td className="opt-term font_14 table_center_text px-4 py-2">
                                 {item.from_user_name}
                               </td>
-                              <td className="table_center_text text-white">
+                              <td className="table_center_text text-white px-4 py-2">
                                 <div className="opt-action-normal">
                                   {item.message}
                                 </div>

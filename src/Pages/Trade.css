@@ -150,7 +150,8 @@ a {
   height: auto;
   justify-content: space-around;
   /* border-right: 0px solid #fff; */
-  margin-right: 24px;
+  margin-right: 20px;
+  padding-right: 14px;
   margin-left: 8px;
   height: 48px;
   border-right-width: 1px;
@@ -1815,6 +1816,7 @@ a {
 @media only screen and (max-width: 480px) {
   .subHeader {
     padding-bottom: 24px !important;
+    margin-top: 60px !important;
   }
 }
 

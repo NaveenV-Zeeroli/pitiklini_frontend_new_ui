@@ -19,21 +19,21 @@ const MyOrdersTable = () => {
   const [p2pOrders, setp2pOrders, p2pOrdersref] = useState([]);
   const [p2pcurrentpage, setp2pcurrentpage, p2pcurrentpageref] = useState(1);
   const [p2ptotalpages, setp2pTotalpages, p2ptotalpageref] = useState(0);
-  usePageLeaveConfirm(
-    "Are you sure you want to leave P2P?",
-    "/myorders",
-    true,
-    [
-      "/p2p/order/:id",
-      "/processorders",
-      "/myhistory",
-      "/p2p/chat/:id",
-      "/p2p",
-      "/p2p/dispute/:id",
-      "/postad",
-      "/Paymentmethod",
-    ],
-  );
+  // usePageLeaveConfirm(
+  //   "Are you sure you want to leave P2P?",
+  //   "/myorders",
+  //   true,
+  //   [
+  //     "/p2p/order/:id",
+  //     "/processorders",
+  //     "/myhistory",
+  //     "/p2p/chat/:id",
+  //     "/p2p",
+  //     "/p2p/dispute/:id",
+  //     "/postad",
+  //     "/Paymentmethod",
+  //   ],
+  // );
 
   useEffect(() => {
     getp2pOrders(1); // Load first page initially
@@ -82,13 +82,13 @@ const MyOrdersTable = () => {
                 <div className="p2p_header_row flex justify-between items-center mb-6">
                   <div>
                     <h2 className="p2p_main_title text-[#BD7F10]">
-                      P2P Platform
+                      {t("p2pplatform")}
                     </h2>
                     <h3 className="p2p_main_title text-[#ffff]">
-                      Order History
+                      {t("OrderHistory")}
                     </h3>
                     <span className="p2p_subtitle text-[#BD7F10]">
-                      Order details with time stamp and order details
+                      {t("OrderHistorydetals")}
                     </span>
                   </div>
                   {/* <div className="flex space-x-4">

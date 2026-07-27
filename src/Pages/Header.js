@@ -6,7 +6,7 @@ import UserIcon from "../assets/account.webp";
 import Avatar from "../assets/svg/avatar.svg";
 import Moment from "moment";
 import { socket } from "../context/socket";
-import HeaderLogo from "../assets/header_logo.svg";
+// import HeaderLogo from "../assets/header_logo.svg";
 import GlobalIcon from "../assets/icons/global.svg";
 import Asset from "../assets/svg/asset.svg";
 
@@ -96,12 +96,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const HeaderLogo =
+  "https://res.cloudinary.com/daafoiwvn/image/upload/v1740223665/douzop14nbi4ztg6yj74.webp";
+
 const Header = () => {
   useEffect(() => {
-    // console.log("header inside comes ->");
+    console.log("header inside comes ->");
     getSitedata();
     // let socket_token = localStorage.getItem("socketToken");
     let socket_token = sessionStorage.getItem("socketToken");
+    // console.log("socket_token ->",socket_token);
     if (
       socket_token == null ||
       socket_token == undefined ||
@@ -109,11 +113,16 @@ const Header = () => {
     ) {
       return;
     }
-    let socketsplit = socket_token?.split("_");
+    let socketsplit = socket_token?.split(`"_`);
     socket.connect();
     socket.off("socketResponse");
     socket.on("socketResponse" + socketsplit[0], function (res) {
+      console.log("socketResponse ressss header-->>", res);
       if (res.Reason == "notify") {
+        toast.success(res.Message, {
+          toastId: "3",
+        });
+      } else if (res.Reason == "notifysingle") {
         toast.success(res.Message, {
           toastId: "3",
         });
@@ -130,9 +139,10 @@ const Header = () => {
       socket.on("updatenotifications", async (response) => {
         // console.log("updatenotifications socket -->>",response);
         setnotification(response.data.notification);
-        if (response.data.status > 0) {
-          setHasUnread(true);
-        }
+        setHasUnread(response.data.status > 0);
+        // if (response.data.status > 0) {
+        //   setHasUnread(true);
+        // }
       });
     }
   }, [0]);
@@ -142,6 +152,7 @@ const Header = () => {
   const [loginCheck, setloginCheck] = useState(false);
   const [profileData, setprofileData] = useState("");
   const [notification, setnotification] = useState("");
+  const [popupNotifications, setPopupNotifications] = useState([]);
   const [hasUnread, setHasUnread] = useState(false);
   const [siteData, setSiteData] = useState("");
   const [loaderSite, setLoaderSite] = useState(true);
@@ -365,16 +376,40 @@ const Header = () => {
   // };
 
   const handleBellClick = async () => {
-    setIsNotifyOpen((prev) => !prev);
+    // setIsNotifyOpen((prev) => !prev);
+    const opening = !isNotifyOpen;
+    if (opening) {
+      // Freeze the current notifications for this popup
+      console.log("notification==>>", notification);
+        setPopupNotifications(notification);
+    }
+    setIsNotifyOpen(opening);
+
+    if (opening && hasUnread) {
+      try {
+        var data = {
+          apiUrl: apiService.notifyStateChange,
+        };
+        var resp = await postMethod(data);
+        if (resp.status) {
+          setHasUnread(false); // Remove the bell indicator
+        }
+      } catch (error) { }
+    }
+  };
+
+  const handleNotificationClick = async (id) => {
     try {
-      var data = {
-        apiUrl: apiService.notifyStateChange,
-      };
-      var resp = await postMethod(data);
-      if (resp.status) {
-        setHasUnread(false); // Remove the bell indicator
-      }
-    } catch (error) {}
+      await postMethod({
+        apiUrl: apiService.notificationViewed,
+
+        payload: {
+          notificationId: id,
+        },
+      });
+
+      setPopupNotifications((prev) => prev.filter((item) => item._id !== id));
+    } catch (err) {}
   };
 
   const obfuscateEmail = (email) => {
@@ -503,14 +538,19 @@ const Header = () => {
                           </ul>
                         </div> */}
 
-                        <a
+                        {/* <a
                           href="/trade/BTC_USDT"
                           color="inherit"
+                          className="contact_button px-4 uppercase font-bold"
+                        > */}
+                        <Link
+                          to="/trade/BTC_USDT"
                           className="contact_button px-4 uppercase font-bold"
                         >
                           {/* Market */}
                           {t("spot")}
-                        </a>
+                        </Link>
+                        {/* </a> */}
                         <Link
                           to="/market"
                           color="inherit"
@@ -608,395 +648,409 @@ const Header = () => {
                   {/* {isAuthenticated ? ""  */}
 
                   <div className="ml-auto flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1 sm:gap-x-2.5 md:gap-3">
-                  <div className="relative" ref={languageRef2}>
-                    {/* Trigger */}
-                    <button
-                      onClick={toggleDropdown}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition hover:bg-gray sm:h-10 sm:w-10"
-                    >
-                      <img
-                        src={GlobalIcon}
-                        alt="language"
-                        className="w-5 h-5"
-                      />
-                    </button>
-
-                    {/* Dropdown */}
-                    {isDropdownOpen && (
-                     <div className="absolute right-0 sm:right-0 left-1/2 sm:left-auto -translate-x-1/2 sm:translate-x-0 mt-10 w-[90vw] max-w-[220px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-5 z-50">
-                        {/* Title */}
-                        <p className="text-primary text-center text-lg font-semibold mb-5 font-ibm">
-                          Languages
-                        </p>
-
-                        {/* Options */}
-                        <div className="flex flex-col gap-3">
-                          {/* English */}
-                          <button
-                            onClick={() => handleLanguageChange("en")}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
-                              i18n.language === "en"
-                                ? "bg-gray text-secondary"
-                                : "text-secondary10 hover:bg-gray"
-                            }`}
-                          >
-                            <img
-                              src={usa}
-                              alt="USA"
-                              className="w-8 h-8 rounded-full"
-                            />
-                            <span className="font-ibm text-sm">English</span>
-                          </button>
-
-                          {/* Spanish */}
-                          <button
-                            onClick={() => handleLanguageChange("es")}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
-                              i18n.language === "es"
-                                ? "bg-gray text-secondary"
-                                : "text-secondary10 hover:bg-gray"
-                            }`}
-                          >
-                            <img
-                              src={spain}
-                              alt="Spain"
-                              className="w-8 h-8 rounded-full"
-                            />
-                            <span className="font-ibm text-sm">Español</span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* notification bell */}
-                  {loginCheck ? (
-                    <div className="relative" ref={mobileNotifyRef}>
-                      {/* Bell Button */}
+                    <div className="relative" ref={languageRef2}>
+                      {/* Trigger */}
                       <button
-                        onClick={() => handleBellClick()}
-                        className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition hover:bg-gray sm:h-10 sm:w-10"
-                      >
-                        <span className="text-primary text-lg">
-                          <i className="bi bi-bell"></i>
-                        </span>
-
-                        {/* Unread Indicator */}
-                        {hasUnread && (
-                          <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
-                        )}
-                      </button>
-
-                      {/* Dropdown */}
-                      {isNotifyOpen && (
-                       <div className="absolute right-0 sm:right-0 left-1/2 sm:left-auto -translate-x-1/2 sm:translate-x-0 mt-10 w-[90vw] max-w-[320px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-5 z-50">
-                          {/* Header */}
-                          <div className="flex items-center justify-between mb-4">
-                            <p className="text-secondary text-sm font-ibm">
-                              {notification?.length || 0}{" "}
-                              {t("newNotifications")}
-                            </p>
-
-                            <button
-                              onClick={notifyNav}
-                              className="text-primary text-sm font-medium hover:underline"
-                            >
-                              {t("viewAll")}
-                            </button>
-                          </div>
-
-                          {/* Notifications List */}
-                          <div className="flex flex-col gap-4 max-h-[260px] overflow-y-auto">
-                            {notification && notification.length > 0 ? (
-                              notification.map((options, i) => (
-                                <Link
-                                  key={i}
-                                  to={
-                                    options.link === ""
-                                      ? "/notificationHistory"
-                                      : options.link
-                                  }
-                                  className="flex gap-3 p-2 rounded-lg hover:bg-gray transition"
-                                >
-                                  {/* Dot */}
-                                  <div className="w-2 h-2 mt-2 rounded-full bg-primary"></div>
-
-                                  {/* Content */}
-                                  <div>
-                                    <p className="text-secondary text-sm font-medium line-clamp-1">
-                                      {options.message}
-                                    </p>
-
-                                    <p className="text-secondary10 text-[11px] mt-1">
-                                      {Moment(options.createdAt).fromNow()}
-                                    </p>
-                                  </div>
-                                </Link>
-                              ))
-                            ) : (
-                              <p className="text-secondary10 text-sm text-center py-6">
-                                {t("noNotifications")}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* View All Button */}
-                          {notification && notification.length > 0 && (
-                            <button
-                              onClick={notifyNav}
-                              className="w-full mt-5 bg-primary text-black py-2.5 rounded-lg font-medium hover:opacity-90 transition"
-                            >
-                              {t("viewAll")}
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {loginCheck ? (
-                    <div className="relative" ref={assetRef}>
-                      {/* Button */}
-                      <button
-                        onClick={() => setIsAssetOpen((prev) => !prev)}
+                        onClick={toggleDropdown}
                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition hover:bg-gray sm:h-10 sm:w-10"
                       >
-                        <img src={Asset} alt="Asset" className="w-5 h-5" />
+                        <img
+                          src={GlobalIcon}
+                          alt="language"
+                          className="w-5 h-5"
+                        />
                       </button>
 
                       {/* Dropdown */}
-                      {isAssetOpen && (
-                        <div className="absolute right-0 sm:right-0 left-1/2 sm:left-auto -translate-x-1/2 sm:translate-x-0 mt-10 w-[90vw] max-w-[220px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-4 z-50">
+                      {isDropdownOpen && (
+                        <div className="absolute right-0 sm:right-0 left-1/2 sm:left-auto -translate-x-1/2 sm:translate-x-0 mt-10 w-[90vw] max-w-[220px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-5 z-50">
+                          {/* Title */}
+                          <p className="text-primary text-center text-lg font-semibold mb-5 font-ibm">
+                            Languages
+                          </p>
+
+                          {/* Options */}
                           <div className="flex flex-col gap-3">
-                            <Link to="/assets" className="nav-trade-links">
-                              <div className="nav-trade-wrapper flex items-center gap-2">
-                                <img
-                                  src={require("../assets/icons/overview-assets.webp")}
-                                  alt="overview"
-                                />
-                                <div className="flex justify-between w-full items-center">
-                                  {t("overview")}
-                                  <i className="bi bi-arrow-right"></i>
-                                </div>
-                              </div>
-                            </Link>
-
-                            <Link to="/spotassets" className="nav-trade-links">
-                              <div className="nav-trade-wrapper flex items-center gap-2">
-                                <img
-                                  src={require("../assets/icons/spot-assets.webp")}
-                                  alt="spot"
-                                />
-                                <div className="flex justify-between w-full items-center">
-                                  {t("spotAssets")}
-                                  <i className="bi bi-arrow-right"></i>
-                                </div>
-                              </div>
-                            </Link>
-
-                            <Link
-                              to="/fundingassets"
-                              className="nav-trade-links"
+                            {/* English */}
+                            <button
+                              onClick={() => handleLanguageChange("en")}
+                              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                                i18n.language === "en"
+                                  ? "bg-gray text-secondary"
+                                  : "text-secondary10 hover:bg-gray"
+                              }`}
                             >
-                              <div className="nav-trade-wrapper flex items-center gap-2">
-                                <img
-                                  src={require("../assets/icons/funding-assets.webp")}
-                                  alt="funding"
-                                />
-                                <div className="flex justify-between w-full items-center">
-                                  {t("fundingAssets")}
-                                  <i className="bi bi-arrow-right"></i>
-                                </div>
-                              </div>
-                            </Link>
+                              <img
+                                src={usa}
+                                alt="USA"
+                                className="w-8 h-8 rounded-full"
+                              />
+                              <span className="font-ibm text-sm">English</span>
+                            </button>
+
+                            {/* Spanish */}
+                            <button
+                              onClick={() => handleLanguageChange("es")}
+                              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                                i18n.language === "es"
+                                  ? "bg-gray text-secondary"
+                                  : "text-secondary10 hover:bg-gray"
+                              }`}
+                            >
+                              <img
+                                src={spain}
+                                alt="Spain"
+                                className="w-8 h-8 rounded-full"
+                              />
+                              <span className="font-ibm text-sm">Español</span>
+                            </button>
                           </div>
                         </div>
                       )}
                     </div>
-                  ) : null}
-                  {/* <IconButton
+
+                    {/* notification bell */}
+                    {loginCheck ? (
+                      <div className="relative" ref={mobileNotifyRef}>
+                        {/* Bell Button */}
+                        <button
+                          onClick={() => handleBellClick()}
+                          className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition hover:bg-gray sm:h-10 sm:w-10"
+                        >
+                          <span className="text-primary text-lg">
+                            <i className="bi bi-bell"></i>
+                          </span>
+
+                          {/* Unread Indicator */}
+                          {hasUnread && (
+                            <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+                          )}
+                        </button>
+
+                        {/* Dropdown */}
+                        {isNotifyOpen && (
+                          <div className="absolute right-0 sm:right-0 left-1/2 sm:left-auto -translate-x-1/2 sm:translate-x-0 mt-10 w-[90vw] max-w-[320px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-5 z-50">
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-4">
+                              <p className="text-secondary text-sm font-ibm">
+                                {notification?.length || 0}{" "}
+                                {t("newNotifications")}
+                              </p>
+
+                              <button
+                                onClick={notifyNav}
+                                className="text-primary text-sm font-medium hover:underline"
+                              >
+                                {t("viewAll")}
+                              </button>
+                            </div>
+
+                            {/* Notifications List */}
+                            <div className="flex flex-col gap-4 max-h-[260px] overflow-y-auto">
+                              {/* {notification && notification.length > 0 ? (
+                                notification.map((options, i) => ( */}
+                              {popupNotifications &&
+                              popupNotifications.length > 0 ? (
+                                popupNotifications.map((options, i) => (
+                                  <Link
+                                    key={i}
+                                    to={
+                                      options.link === ""
+                                        ? "/notificationHistory"
+                                        : options.link
+                                    }
+                                    onClick={() =>
+                                      handleNotificationClick(options._id)
+                                    }
+                                    className="flex gap-3 p-2 rounded-lg hover:bg-gray transition"
+                                  >
+                                    {/* Dot */}
+                                    <div className="w-2 h-2 mt-2 rounded-full bg-primary"></div>
+
+                                    {/* Content */}
+                                    <div>
+                                      <p className="text-secondary text-sm font-medium line-clamp-1">
+                                        {options.message}
+                                      </p>
+
+                                      <p className="text-secondary10 text-[11px] mt-1">
+                                        {Moment(options.createdAt).fromNow()}
+                                      </p>
+                                    </div>
+                                  </Link>
+                                ))
+                              ) : (
+                                <p className="text-secondary10 text-sm text-center py-6">
+                                  {t("noNotifications")}
+                                </p>
+                              )}
+                            </div>
+
+                            {/* View All Button */}
+                            {/* {notification && notification.length > 0 && ( */}
+                            {popupNotifications &&
+                              popupNotifications.length > 0 && (
+                                <button
+                                  onClick={notifyNav}
+                                  className="w-full mt-5 bg-primary text-black py-2.5 rounded-lg font-medium hover:opacity-90 transition"
+                                >
+                                  {t("viewAll")}
+                                </button>
+                              )}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      ""
+                    )}
+
+                    {/* {loginCheck ? (
+                      <div className="relative" ref={assetRef}> */}
+                    {/* Button */}
+                    {/* <button
+                          onClick={() => setIsAssetOpen((prev) => !prev)}
+                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition hover:bg-gray sm:h-10 sm:w-10"
+                        >
+                          <img src={Asset} alt="Asset" className="w-5 h-5" />
+                        </button> */}
+
+                    {/* Dropdown */}
+                    {/* {isAssetOpen && (
+                          <div className="absolute right-0 sm:right-0 left-1/2 sm:left-auto -translate-x-1/2 sm:translate-x-0 mt-10 w-[90vw] max-w-[220px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-4 z-50">
+                            <div className="flex flex-col gap-3"> */}
+                    {/* <Link to="/assets" className="nav-trade-links">
+                                <div className="nav-trade-wrapper flex items-center gap-2">
+                                  <img
+                                    src={require("../assets/icons/overview-assets.webp")}
+                                    alt="overview"
+                                  />
+                                  <div className="flex justify-between w-full items-center">
+                                    {t("overview")}
+                                    <i className="bi bi-arrow-right"></i>
+                                  </div>
+                                </div>
+                              </Link> */}
+
+                    {/* <Link
+                                to="/spotassets"
+                                className="nav-trade-links"
+                              >
+                                <div className="nav-trade-wrapper flex items-center gap-2">
+                                  <img
+                                    src={require("../assets/icons/spot-assets.webp")}
+                                    alt="spot"
+                                  />
+                                  <div className="flex justify-between w-full items-center">
+                                    {t("spotAssets")}
+                                    <i className="bi bi-arrow-right"></i>
+                                  </div>
+                                </div>
+                              </Link>
+
+                              <Link
+                                to="/fundingassets"
+                                className="nav-trade-links"
+                              >
+                                <div className="nav-trade-wrapper flex items-center gap-2">
+                                  <img
+                                    src={require("../assets/icons/funding-assets.webp")}
+                                    alt="funding"
+                                  />
+                                  <div className="flex justify-between w-full items-center">
+                                    {t("fundingAssets")}
+                                    <i className="bi bi-arrow-right"></i>
+                                  </div>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : null} */}
+                    {/* <IconButton
                     edge="start"
                     color="inherit"
                     aria-label="menu"
                     className={` m-0 p-0 ${classes.profileButton}`}
                   > */}
-                  {/* user profile */}
-                  <>
-                    {loginCheck ? (
-                      <div className="relative" ref={profileRef}>
-                        {/* Profile Button */}
-                        <div
-                          onClick={handleProfileClick}
-                          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#23262F] bg-[#23262F] transition hover:opacity-80 sm:h-11 sm:w-11 md:h-[44px] md:w-[44px]"
-                        >
-                          <img
-                            src={Avatar}
-                            alt="Profile"
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.target.src = require("../assets/icons/profile_dark.webp");
-                            }}
-                          />
-                        </div>
+                    {/* user profile */}
+                    <>
+                      {loginCheck ? (
+                        <div className="relative" ref={profileRef}>
+                          {/* Profile Button */}
+                          <div
+                            onClick={handleProfileClick}
+                            className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#23262F] bg-[#23262F] transition hover:opacity-80 sm:h-11 sm:w-11 md:h-[44px] md:w-[44px]"
+                          >
+                            <img
+                              src={Avatar}
+                              alt="Profile"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.src = require("../assets/icons/profile_dark.webp");
+                              }}
+                            />
+                          </div>
 
-                        {/* Dropdown (UNCHANGED CONTENT) */}
-                        {isProfileOpen && (
-                        <div className="absolute right-2 sm:right-0 mt-10 w-[90vw] sm:w-[300px] max-w-[300px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-4 z-50">
-                            {/* <div className="frame-container"> */}
-                            {/* user details */}
-                            <div className="user-details">
-                              <img
-                                src={UserIcon}
-                                alt="usericon"
-                                className="user-img"
-                              />
-                              <div className="details">
-                                <span className="details-mail">
-                                  {obfuscateEmail(profileData.email)}
-                                </span>
-                                <span className="details-udi">
-                                  {t("UID")}:{profileData.uuid}
-                                  <i
-                                    className="bi bi-copy cursor-pointer"
-                                    onClick={() => copy(profileData.uuid)}
-                                  ></i>
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* links */}
-                            <ul className="links">
-                              <li>
-                                <Link to="/dashboard" className="link-content">
-                                  <span>{t("dashboard")}</span>
-                                  <span className="text-yellow hover-show">
-                                    <i className="bi bi-chevron-right"></i>
+                          {/* Dropdown (UNCHANGED CONTENT) */}
+                          {isProfileOpen && (
+                            <div className="absolute right-2 nowheader_poppp sm:right-0 mt-8 w-[90vw] sm:w-[300px] max-w-[300px] rounded-2xl bg-[#18191D] border border-gray shadow-xl p-4 z-50">
+                              {/* <div className="frame-container"> */}
+                              {/* user details */}
+                              <div className="user-details">
+                                <img
+                                  src={UserIcon}
+                                  alt="usericon"
+                                  className="user-img"
+                                />
+                                <div className="details">
+                                  <span className="details-mail">
+                                    {obfuscateEmail(profileData.email)}
                                   </span>
-                                </Link>
-                              </li>
+                                  <span className="details-udi">
+                                    {t("UID")}:{profileData.uuid}
+                                    <i
+                                      className="bi bi-copy cursor-pointer"
+                                      onClick={() => copy(profileData.uuid)}
+                                    ></i>
+                                  </span>
+                                </div>
+                              </div>
 
-                              <li>
-                                <Link to="/security" className="link-content">
-                                  <div className="header_new_chng">
-                                    <span>{t("security")}</span>
-                                    <div>
-                                      {profileData.tfastatus == 0 &&
-                                      profileData.AntiphisingEnabledStatus ==
-                                        0 ? (
-                                        <p>
-                                          <span className="low-clr mx-1">
-                                            {t("low")}
-                                          </span>
-                                          <i className="ri-shield-keyhole-line low-clr"></i>
-                                        </p>
-                                      ) : profileData.tfastatus == 0 ||
+                              {/* links */}
+                              <ul className="links">
+                                <li>
+                                  <Link
+                                    to="/dashboard"
+                                    className="link-content"
+                                  >
+                                    <span>{t("dashboard")}</span>
+                                    <span className="text-yellow hover-show">
+                                      <i className="bi bi-chevron-right"></i>
+                                    </span>
+                                  </Link>
+                                </li>
+
+                                <li>
+                                  <Link to="/security" className="link-content">
+                                    <div className="header_new_chng">
+                                      <span>{t("security")}</span>
+                                      <div>
+                                        {profileData.tfastatus == 0 &&
                                         profileData.AntiphisingEnabledStatus ==
                                           0 ? (
-                                        <p>
-                                          <span className="mid-clr mx-1">
-                                            {t("medium")}
-                                          </span>
-                                          <i className="ri-shield-keyhole-line mid-clr"></i>
-                                        </p>
-                                      ) : (
-                                        <p>
-                                          <span className="high-clr mx-1">
-                                            {t("high")}
-                                          </span>
-                                          <i className="ri-shield-keyhole-line high-clr"></i>
-                                        </p>
-                                      )}
+                                          <p>
+                                            <span className="low-clr mx-1">
+                                              {t("low")}
+                                            </span>
+                                            <i className="ri-shield-keyhole-line low-clr"></i>
+                                          </p>
+                                        ) : profileData.tfastatus == 0 ||
+                                          profileData.AntiphisingEnabledStatus ==
+                                            0 ? (
+                                          <p>
+                                            <span className="mid-clr mx-1">
+                                              {t("medium")}
+                                            </span>
+                                            <i className="ri-shield-keyhole-line mid-clr"></i>
+                                          </p>
+                                        ) : (
+                                          <p>
+                                            <span className="high-clr mx-1">
+                                              {t("high")}
+                                            </span>
+                                            <i className="ri-shield-keyhole-line high-clr"></i>
+                                          </p>
+                                        )}
+                                      </div>
                                     </div>
-                                  </div>
-                                  <span className="text-yellow hover-show">
-                                    <i className="bi bi-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
+                                    <span className="text-yellow hover-show">
+                                      <i className="bi bi-chevron-right"></i>
+                                    </span>
+                                  </Link>
+                                </li>
 
-                              <li>
-                                <Link to="/kyc" className="link-content">
-                                  <div className="header_new_chng">
-                                    <span>{t("identification")}</span>
-                                    <div>
-                                      {profileData.kycstatus == 1 ? (
-                                        <p>
-                                          <span className="high-clr mx-1">
-                                            {t("verified")}
-                                          </span>
-                                          <i className="bi bi-check-circle high-clr"></i>
-                                        </p>
-                                      ) : (
-                                        <p>
-                                          <span className="low-clr mx-1">
-                                            {t("notverified")}
-                                          </span>
-                                          <i className="bi bi-x-circle low-clr"></i>
-                                        </p>
-                                      )}
+                                <li>
+                                  <Link to="/kyc" className="link-content">
+                                    <div className="header_new_chng">
+                                      <span>{t("identification")}</span>
+                                      <div>
+                                        {profileData.kycstatus == 1 ? (
+                                          <p>
+                                            <span className="high-clr mx-1">
+                                              {t("verified")}
+                                            </span>
+                                            <i className="bi bi-check-circle high-clr"></i>
+                                          </p>
+                                        ) : (
+                                          <p>
+                                            <span className="low-clr mx-1">
+                                              {t("notverified")}
+                                            </span>
+                                            <i className="bi bi-x-circle low-clr"></i>
+                                          </p>
+                                        )}
+                                      </div>
                                     </div>
-                                  </div>
-                                  <span className="text-yellow hover-show">
-                                    <i className="bi bi-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
+                                    <span className="text-yellow hover-show">
+                                      <i className="bi bi-chevron-right"></i>
+                                    </span>
+                                  </Link>
+                                </li>
 
-                              <li>
-                                <Link to="/withdraw" className="link-content">
-                                  <span>{t("withdrawal")}</span>
-                                  <span className="text-yellow hover-show">
-                                    <i className="bi bi-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
+                                <li>
+                                  <Link to="/withdraw" className="link-content">
+                                    <span>{t("withdrawal")}</span>
+                                    <span className="text-yellow hover-show">
+                                      <i className="bi bi-chevron-right"></i>
+                                    </span>
+                                  </Link>
+                                </li>
 
-                              <li>
-                                <Link
-                                  to="/depositHistory"
-                                  className="link-content"
-                                >
-                                  <span>{t("history")}</span>
-                                  <span className="text-yellow hover-show">
-                                    <i className="bi bi-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
+                                <li>
+                                  <Link
+                                    to="/depositHistory"
+                                    className="link-content"
+                                  >
+                                    <span>{t("history")}</span>
+                                    <span className="text-yellow hover-show">
+                                      <i className="bi bi-chevron-right"></i>
+                                    </span>
+                                  </Link>
+                                </li>
 
-                              <li>
-                                <Link to="/support" className="link-content">
-                                  <span>{t("support")}</span>
-                                  <span className="text-yellow hover-show">
-                                    <i className="bi bi-chevron-right"></i>
-                                  </span>
-                                </Link>
-                              </li>
-                            </ul>
+                                <li>
+                                  <Link to="/support" className="link-content">
+                                    <span>{t("support")}</span>
+                                    <span className="text-yellow hover-show">
+                                      <i className="bi bi-chevron-right"></i>
+                                    </span>
+                                  </Link>
+                                </li>
+                              </ul>
 
-                            {/* logout */}
-                            <div
-                              className="btn-wrapper security-link cursor-pointer"
-                              onClick={logout}
-                            >
-                              <span className="user-btn">{t("logout")}</span>
-                              <img
-                                src={require("../assets/icons/logout.webp")}
-                                alt="logoutimg"
-                                className="logout-img"
-                              />
+                              {/* logout */}
+                              <div
+                                className="btn-wrapper security-link cursor-pointer"
+                                onClick={logout}
+                              >
+                                <span className="user-btn">{t("logout")}</span>
+                                <img
+                                  src={require("../assets/icons/logout.webp")}
+                                  alt="logoutimg"
+                                  className="logout-img"
+                                />
+                              </div>
+                              {/* </div> */}
                             </div>
-                            {/* </div> */}
-                          </div>
-                        )}
-                      </div>
-                    ) : null}
-                  </>
-                  {/* download */}
-                  {/* <div className="relative" ref={languageRef1}> */}
-                  {/* Trigger dropdown on click */}
-                  {/* <Link className="mr-4" onClick={toggleDropdown}>
+                          )}
+                        </div>
+                      ) : null}
+                    </>
+                    {/* download */}
+                    {/* <div className="relative" ref={languageRef1}> */}
+                    {/* Trigger dropdown on click */}
+                    {/* <Link className="mr-4" onClick={toggleDropdown}>
                         <img
                           src={require("../assets/Globe.png")}
                           width="28px"
@@ -1004,8 +1058,8 @@ const Header = () => {
                         />
                       </Link> */}
 
-                  {/* Dropdown menu */}
-                  {/* {isDropdownOpen && (
+                    {/* Dropdown menu */}
+                    {/* {isDropdownOpen && (
                         <ul className="globe-lists">
                           <li
                             className="globe-options"
@@ -1022,14 +1076,14 @@ const Header = () => {
                         </ul>
                       )}
                     </div> */}
-                  {/* <Link className="contact_button nav-primary-icons" to="">
+                    {/* <Link className="contact_button nav-primary-icons" to="">
                       <span className="header-profile-wrap dark_display_none nav-primary-icons ">
                         <i class="bi bi-download"></i>
                       </span>
                     </Link> */}
 
-                  {/* notification bell */}
-                  {/* {loginCheck ? (
+                    {/* notification bell */}
+                    {/* {loginCheck ? (
                       <div
                         className={`btn-group more-wrapper${isNotifyOpen ? " show" : ""}`}
                         ref={notifyRef}
@@ -1040,12 +1094,12 @@ const Header = () => {
                           aria-expanded={isNotifyOpen}
                           onClick={handleBellClick}
                         > */}
-                  {/* <img
+                    {/* <img
                             src={require("../assets/icons/bell.webp")}
                             className="moons"
                             width="30px"
                           /> */}
-                  {/* 
+                    {/* 
                           <span className="header-profile-wrap dark_display_none nav-primary-icons">
                             <i class="bi bi-bell"></i>
                           </span>
@@ -1095,8 +1149,8 @@ const Header = () => {
                       ""
                     )} */}
 
-                  <>
-                    {/* <h6
+                    <>
+                      {/* <h6
                         aria-controls="simple-menu"
                         aria-haspopup="true"
                         className=" head-drops"
@@ -1109,7 +1163,7 @@ const Header = () => {
                         />
                       </h6> */}
 
-                    {/* <Menu
+                      {/* <Menu
                         id="simple-menu"
                         anchorEl={anchorEl}
                         keepMounted
@@ -1121,26 +1175,26 @@ const Header = () => {
                           <span className="mx-3 cus">Disconnect</span>{" "}
                         </MenuItem>
                       </Menu> */}
-                  </>
+                    </>
 
-                  {/* <MenuIcon
+                    {/* <MenuIcon
                       className={`meus ${classes.mobileMenuButton}`}
                       onClick={handleMobileMenuOpen}
                     />
                   </IconButton> */}
-                  <IconButton
-                    edge="start"
-                    aria-label="menu"
-                    className={`${classes.mobileMenuButton} !ml-0 !mr-0 shrink-0`}
-                    style={{ color: "#B87A13" }}
-                    onClick={handleMobileMenuOpen}
-                  >
-                    <MenuIcon />
-                  </IconButton>
+                    <IconButton
+                      edge="start"
+                      aria-label="menu"
+                      className={`${classes.mobileMenuButton} !ml-0 !mr-0 shrink-0`}
+                      style={{ color: "#B87A13" }}
+                      onClick={handleMobileMenuOpen}
+                    >
+                      <MenuIcon />
+                    </IconButton>
                   </div>
 
                   <div
-                    className={`flex justify-center rounded-[8px] px-4 ml-4 bg-primary text-black ${classes.appBarItems}`}
+                    className={`flex justify-center rounded-[8px] px-2 ml-4 bg-primary text-black ${classes.appBarItems}`}
                   >
                     {!loginCheck && (
                       <div className="flex items-center gap-2">
@@ -1485,7 +1539,7 @@ const Header = () => {
                         <span>{t("recharge")}</span>
                       </Link>
                     </ListItem>
-                    <ListItem button className="drawa mobile-sidebar-item">
+                    {/* <ListItem button className="drawa mobile-sidebar-item">
                       <Link
                         to="/spotassets"
                         className="mobile-sidebar-link"
@@ -1494,7 +1548,7 @@ const Header = () => {
                         <i className="ri-wallet-3-line mobile-sidebar-icon"></i>
                         <span>{t("asset")}</span>
                       </Link>
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem button className="drawa mobile-sidebar-item">
                       <Link
                         to="/security"
@@ -1535,6 +1589,16 @@ const Header = () => {
                         <span>{t("withdrawal")}</span>
                       </Link>
                     </ListItem>
+                    <ListItem button className="drawa mobile-sidebar-item">
+                      <Link
+                        to="/deposit"
+                        className="mobile-sidebar-link"
+                        onClick={handleMobileMenuClose}
+                      >
+                        <i className="ri-download-2-line mobile-sidebar-icon"></i>
+                        <span>{t("deposit")}</span>
+                      </Link>
+                    </ListItem>
                     <ListItem
                       button
                       className="drawa mobile-sidebar-item"
@@ -1568,7 +1632,9 @@ const Header = () => {
                             onClick={handleMobileMenuClose}
                           >
                             <i className="ri-wallet-line mobile-sidebar-icon"></i>
-                            <span>{t("depositHistory", "Deposit History")}</span>
+                            <span>
+                              {t("depositHistory", "Deposit History")}
+                            </span>
                           </Link>
                         </ListItem>
                         <ListItem button className="drawa mobile-sidebar-item">
@@ -1578,7 +1644,9 @@ const Header = () => {
                             onClick={handleMobileMenuClose}
                           >
                             <i className="ri-arrow-down-line mobile-sidebar-icon"></i>
-                            <span>{t("withdrawHistory", "Withdraw History")}</span>
+                            <span>
+                              {t("withdrawHistory", "Withdraw History")}
+                            </span>
                           </Link>
                         </ListItem>
                         <ListItem button className="drawa mobile-sidebar-item">
@@ -1588,7 +1656,12 @@ const Header = () => {
                             onClick={handleMobileMenuClose}
                           >
                             <i className="ri-switch-line mobile-sidebar-icon"></i>
-                            <span>{t("internal_transfer_history", "Internal Transfer History")}</span>
+                            <span>
+                              {t(
+                                "internal_transfer_history",
+                                "Internal Transfer History",
+                              )}
+                            </span>
                           </Link>
                         </ListItem>
                         <ListItem button className="drawa mobile-sidebar-item">
@@ -1618,7 +1691,9 @@ const Header = () => {
                             onClick={handleMobileMenuClose}
                           >
                             <i className="ri-close-circle-line mobile-sidebar-icon"></i>
-                            <span>{t("cancelorderHistory", "Cancel Order History")}</span>
+                            <span>
+                              {t("cancelorderHistory", "Cancel Order History")}
+                            </span>
                           </Link>
                         </ListItem>
                         <ListItem button className="drawa mobile-sidebar-item">
@@ -1638,7 +1713,9 @@ const Header = () => {
                             onClick={handleMobileMenuClose}
                           >
                             <i className="ri-notification-line mobile-sidebar-icon"></i>
-                            <span>{t("notificationHistory", "Notification History")}</span>
+                            <span>
+                              {t("notificationHistory", "Notification History")}
+                            </span>
                           </Link>
                         </ListItem>
                       </div>

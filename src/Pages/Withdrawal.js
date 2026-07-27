@@ -56,12 +56,12 @@ const Dashboard = () => {
   const [counter, setCounter] = useState(120);
 
   // usePageLeaveConfirm();
-  usePageLeaveConfirm(
-    "Are you sure you want to leave Withdrawal?",
-    "/withdraw",
-    true,
-    [],
-  );
+  // usePageLeaveConfirm(
+  //   "Are you sure you want to leave Withdrawal?",
+  //   "/withdraw",
+  //   true,
+  //   [],
+  // );
 
   useEffect(() => {
     if (counter > 0) {
@@ -1940,7 +1940,7 @@ const Dashboard = () => {
                                 </h3>
                                 </div> */}
 
-                        <div className="flex min-w-0 flex-col gap-8 lg:flex-row lg:gap-10">
+                        <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:gap-6">
                           <div className="w-full min-w-0 max-w-full rounded-2xl border border-gray-800/80 bg-black p-4 shadow-xl sm:p-5 lg:w-7/12 lg:max-w-none lg:flex-none">
                             <VerticalStepper
                               steps={withdrawSteps}
